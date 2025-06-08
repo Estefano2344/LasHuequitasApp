@@ -39,4 +39,7 @@
 
     <string name="puntuacion">4.5</string>
     <string name="resenas">2 reseñas</string>
+    <string name="nombre_usuario">Nombre Usuario</string>
+    <string name="correo_ejemplo_com">correo@ejemplo.com</string>
+    <string name="cerrar_sesi_n">Cerrar sesión</string>
 </resources>
