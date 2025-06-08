@@ -13,6 +13,10 @@
         android:theme="@style/Theme.LasHuequitasApp"
         tools:targetApi="31">
         <activity
+            android:name=".PerfilActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".RecuperarContrasenaActivity"
             android:exported="false" />
         <activity
