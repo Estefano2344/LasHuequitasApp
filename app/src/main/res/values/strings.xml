@@ -22,14 +22,9 @@
     <string name="cerrar">Cerrar</string>
 
 
-    <string name="opciones">Opciones</string>
-    <string name="buscar_restaurantes">Buscar restaurantes o platillos</string>
-    <string name="recomendados">Recomendados</string>
-    <string name="populares">Populares</string>
-    <string name="home">Inicio</string>
-    <string name="postear">Postear</string>
-    <string name="favoritos">Favoritos</string>
-    <string name="perfil">Perfil</string>
+
+    <string name="Name_Home">LasHueQuitas</string>
+
     <string name="restaurante_uno">Restaurante Uno</string>
     <string name="restaurante_dos">Restaurante Dos</string>
     <string name="restaurante_tres">Restaurante tres</string>
@@ -42,4 +37,14 @@
     <string name="nombre_usuario">Nombre Usuario</string>
     <string name="correo_ejemplo_com">correo@ejemplo.com</string>
     <string name="cerrar_sesi_n">Cerrar sesión</string>
+
+
+    <string name="opciones">Opciones</string>
+    <string name="buscar_restaurantes">Buscar por restaurantes o platillos</string>
+    <string name="recomendados">Recomendados</string>
+    <string name="populares">Populares</string>
+    <string name="home">Inicio</string>
+    <string name="postear">Postear</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="perfil">Perfil</string>
 </resources>

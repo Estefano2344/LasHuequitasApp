@@ -43,14 +43,15 @@
 
                 <TextView
                     android:id="@+id/appNameTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="316dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:gravity="center"
+                    android:text="@string/Name_Home"
                     android:textColor="@color/black"
                     android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/plus_jakarta_sans"
-                    android:layout_marginEnd="16dp"/>
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="0dp"
@@ -84,8 +85,8 @@
                 android:drawableLeft="@drawable/search"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:hint="@string/buscar_restaurantes"
-                android:paddingStart="44dp"
-                android:textColor="@color/brown_textFillFields_percentRating" />
+                android:paddingStart="16dp"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Título Recomendados -->
@@ -161,7 +162,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -171,7 +172,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -217,7 +218,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -227,7 +228,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -237,11 +238,10 @@
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:background="@drawable/restaurante3"
+                        android:background="@drawable/restaurante2"
                         android:scaleType="centerCrop"
                         android:src="@drawable/restaurante3" />
 
@@ -272,7 +272,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -282,10 +282,17 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/restaurante3"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/restaurante3" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -362,7 +369,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -372,7 +379,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -418,7 +425,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -428,7 +435,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -473,7 +480,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/puntuacion"
                             android:textSize="14sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"/>
@@ -483,7 +490,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/resenas"
                             android:textSize="13sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                             android:fontFamily="@font/plus_jakarta_sans"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -496,8 +503,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/barra_sup_inf"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
+            app:itemIconTint="@color/brown_icons"
+            app:itemTextColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+            app:itemTextAppearanceActive="@style/BottomNavText"
+            app:itemTextAppearanceInactive="@style/BottomNavText"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
