@@ -1,0 +1,75 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PantallaInicioActivity">
+
+    <!-- Nombre de la app -->
+
+    <!-- Imagen de extremo a extremo en el centro -->
+    <TextView
+        android:id="@+id/textoPantallaInicioTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoPantallaInicioTitulo"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Texto descriptivo debajo de la imagen -->
+    <ImageView
+        android:id="@+id/imagenPantallaInicio"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/imagenpantallainicio"
+        app:layout_constraintBottom_toTopOf="@id/textoInferiorPantallaInicio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textoPantallaInicioTitulo" />
+
+    <TextView
+        android:id="@+id/textoInferiorPantallaInicio"
+        android:layout_width="309dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoInferiorPantallaInicio"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imagenPantallaInicio" />
+
+    <!-- Botón Comenzar debajo del texto -->
+    <Button
+        android:id="@+id/textButtonComenzar"
+        android:layout_width="254dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="48dp"
+        android:backgroundTint="@color/orange_buttons_filledStars"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textButtonComenzar"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textoInferiorPantallaInicio" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

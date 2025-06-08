@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/nav_populares"
+        android:icon="@drawable/popular"
+        android:title="@string/populares"/>
+    <item
+        android:id="@+id/nav_postear"
+        android:icon="@drawable/postear"
+        android:title="@string/postear"/>
+    <item
+        android:id="@+id/nav_favoritos"
+        android:icon="@drawable/favoritos"
+        android:title="@string/favoritos"/>
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/perfil"
+        android:title="@string/perfil"/>
+</menu>

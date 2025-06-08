@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_fields">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/tituloRecuperar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:text="@string/textoIngresaE"
+            android:textColor="#1c160d"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/campoEmailRC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_fields"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:hint="@string/textoEmail"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/brown_textFillFields_percentRating" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Nueva Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nuevaPasswordTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textoNuevaCon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_fields"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:hint="@string/textoNuevaC"
+                android:inputType="textPassword"
+                android:textColor="@color/brown_textFillFields_percentRating" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Repetir Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/repetirPasswordTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textoRepetirC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_fields"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:hint="@string/textoRepetirC"
+                android:inputType="textPassword"
+                android:textColor="@color/brown_textFillFields_percentRating" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón Actualizar -->
+        <Button
+            android:id="@+id/botonActualizar"
+            android:layout_width="315dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#f29b21"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:text="@string/textoActualizar"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarRecuperarC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/barra_sup_inf"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIcon="@drawable/flecha_atras"/>
+
+    <TextView
+        android:id="@+id/toolbarTitle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignTop="@id/toolbarRecuperarC"
+        android:layout_alignBottom="@id/toolbarRecuperarC"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:gravity="center"
+        android:text="@string/textRecuperarC"
+        android:textColor="#1c160d"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

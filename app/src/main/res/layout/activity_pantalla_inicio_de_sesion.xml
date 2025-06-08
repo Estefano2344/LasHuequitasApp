@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_fields"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Título pequeño -->
+
+    <!-- Título grande -->
+    <TextView
+        android:id="@+id/textLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textInicioDeSesion"
+        android:textColor="#1c160d"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textoBienvenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoBienvenido"
+        android:textColor="#1c160d"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <!-- Usuario/Email -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usuarioTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/campoUsuarioEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_fields"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:hint="@string/textoUsuarioEmail"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/brown_textFillFields_percentRating" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Contraseña -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/campoContraseña"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_fields"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:hint="@string/textoContraseña"
+            android:inputType="textPassword"
+            android:textColor="@color/brown_textFillFields_percentRating" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Olvidaste tu contraseña -->
+
+    <!-- Botón Iniciar Sesión -->
+
+    <TextView
+        android:id="@+id/textoOlvidasteC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoOlvidasteC"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- ¿Eres nuevo en Las HueQuitas? -->
+    <Button
+        android:id="@+id/botonIniciarSesion"
+        android:layout_width="344dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#f29b21"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoBotonIniciarSesion"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Crea una cuenta aquí -->
+    <TextView
+        android:id="@+id/textoEresNuevo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoEresNuevo"
+        android:textColor="#1c160d"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textoCrearCuenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/textoCrearCuenta"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

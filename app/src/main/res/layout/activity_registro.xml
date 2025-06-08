@@ -57,7 +57,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nombreEditText"
@@ -79,7 +79,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/apellidoEditText"
@@ -101,10 +101,10 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailEditText"
+                android:id="@+id/campoEmailRC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -124,10 +124,10 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordEditText"
+                android:id="@+id/campoContraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contrasena"
@@ -147,10 +147,10 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usuarioEditText"
+                android:id="@+id/campoUsuarioEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/usuario"

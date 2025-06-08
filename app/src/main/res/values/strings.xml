@@ -39,4 +39,50 @@
     <string name="title_calificacion">Calificación</string>
     <string name="btn_subir">Subir</string>
     <string name="back_button">Volver</string>
+    <string name="textoPantallaInicioTitulo">Las HueQuitas</string>
+    <string name="textoInferiorPantallaInicio">Descubre, califica y comparte experiencias</string>
+    <string name="textButtonComenzar">Comenzar</string>
+    <string name="textInicioDeSesion">Inicio de Sesión</string>
+    <string name="textoBienvenido">¡Bienvenido de nuevo!</string>
+    <string name="textoUsuarioEmail">Usuario/Email</string>
+    <string name="textoContraseña">Contraseña</string>
+    <string name="textoOlvidasteC">¿Olvidaste tu contraseña?</string>
+    <string name="textoBotonIniciarSesion">Iniciar Sesión</string>
+    <string name="textoEresNuevo">¿Eres nuevo en Las HueQuitas?</string>
+    <string name="textoCrearCuenta">Crea una cuenta aquí</string>
+    <string name="textRecuperarC">Recuperar Contraseña</string>
+    <string name="textoIngresaE">Ingresa tu Email</string>
+    <string name="textoEmail">Email</string>
+    <string name="textoNuevaC">Nueva Contraseña</string>
+    <string name="textoRepetirC">Repetir Contraseña</string>
+    <string name="textoActualizar">Actualizar</string>
+
+
+
+    <string name="Name_Home">LasHueQuitas</string>
+
+    <string name="restaurante_uno">Restaurante Uno</string>
+    <string name="restaurante_dos">Restaurante Dos</string>
+    <string name="restaurante_tres">Restaurante tres</string>
+    <string name="restaurante_cuatro">Restaurante Cuatro</string>
+    <string name="restaurante_cinco">Restaurante Cinco</string>
+    <string name="restaurante_seis">Restaurante Seis</string>
+
+    <string name="puntuacion">4.5</string>
+    <string name="resenas">2 reseñas</string>
+    <string name="nombre_usuario">Nombre Usuario</string>
+    <string name="correo_ejemplo_com">correo@ejemplo.com</string>
+    <string name="cerrar_sesi_n">Cerrar sesión</string>
+
+
+    <string name="opciones">Opciones</string>
+    <string name="buscar_restaurantes">Buscar por restaurantes o platillos</string>
+    <string name="recomendados">Recomendados</string>
+    <string name="populares">Populares</string>
+    <string name="home">Inicio</string>
+    <string name="postear">Postear</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="perfil">Perfil</string>
+
+    <string name="search_hint">Restaurantes o platillos</string>
 </resources>
