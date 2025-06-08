@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.core.view.GravityCompat
 import android.widget.ImageView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 
 
@@ -30,6 +31,17 @@ class HomeActivity : AppCompatActivity() {
         }
         findViewById<TextInputEditText>(R.id.searchEditText).setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
+        }
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_perfil -> {
+                    startActivity(Intent(this, PerfilActivity::class.java))
+                    true
+                }
+                else -> false
+            }
         }
     }
 }
