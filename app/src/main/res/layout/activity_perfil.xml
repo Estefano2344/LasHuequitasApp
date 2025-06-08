@@ -84,7 +84,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Reseñas y estrellas -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,7 +135,7 @@
 
                 <Button
                     android:id="@+id/editProfileButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:backgroundTint="@color/orange_buttons_filledStars"
@@ -144,6 +143,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/editarPerfil"
+                    android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
