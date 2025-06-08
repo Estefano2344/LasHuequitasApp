@@ -2,46 +2,43 @@ package com.proano.estefano.lashuequitasapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.core.view.GravityCompat
-import android.widget.ImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.textfield.TextInputEditText
 
-
-class HomeActivity : AppCompatActivity() {
+class PerfilActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_perfil)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val opciones = findViewById<ImageView>(R.id.opcionesImageView)
-        opciones.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-        findViewById<TextInputEditText>(R.id.searchEditText).setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java))
-        }
-
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_perfil -> {
-                    startActivity(Intent(this, PerfilActivity::class.java))
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
                     true
                 }
                 else -> false
             }
+        }
+        val closeProfile = findViewById<ImageView>(R.id.closeProfile)
+        closeProfile.setOnClickListener {
+            finish()
+        }
+
+        val editProfileButton = findViewById<Button>(R.id.editProfileButton)
+        editProfileButton.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
         }
     }
 }

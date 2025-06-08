@@ -58,7 +58,6 @@
     <string name="textoActualizar">Actualizar</string>
 
 
-
     <string name="Name_Home">LasHueQuitas</string>
 
     <string name="restaurante_uno">Restaurante Uno</string>
@@ -85,4 +84,25 @@
     <string name="perfil">Perfil</string>
 
     <string name="search_hint">Restaurantes o platillos</string>
+
+    <string name="usuarioNombre">Jombriel Guerra</string>
+    <string name="jombriel">Jombriel</string>
+    <string name="guerra">Guerra</string>
+    <string name="usuarioEmail">jombguerra@gmail.com</string>
+    <string name="usuarioUsername">jombriel.newblood.69</string>
+    <string name="resenasPerfil">12 Reseñas</string>
+    <string name="cantidadEstrellas">48</string>
+    <string name="recibidas">Recibidas</string>
+    <string name="editarPerfil">Editar Perfil</string>
+    <string name="preferencias">Preferencias</string>
+    <string name="resenasRecientes">Reseñas recientes</string>
+    <string name="previewResena">¡Excelente comida y atención!</string>
+    <string name="subirImagen">Subir Imagen</string>
+    <string name="agregaFotoPerfil">Agrega una foto de perfil</string>
+    <string name="agregarComentario">Agregar comentario</string>
+    <string name="calificarResena">Calificar Reseña</string>
+    <string name="escribeTuComentario">Escribe tu comentario...</string>
+
+
+
 </resources>
