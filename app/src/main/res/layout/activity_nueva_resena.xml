@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/white">
+
+            <!-- Campos de texto -->
+            <EditText
+                android:id="@+id/nombreRestaurante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_nombre_restaurante"
+                android:padding="12dp"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:background="@drawable/border_edittext"/>
+
+            <EditText
+                android:id="@+id/ubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_ubicacion"
+                android:padding="12dp"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:background="@drawable/border_edittext"
+                android:layout_marginTop="16dp"/>
+
+            <Spinner
+                android:id="@+id/rango_precio"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_edittext"
+                android:drawableEnd="@drawable/ic_dropdown_arrow" /> <!-- Este es el ícono de la flecha hacia abajo -->
+
+            <Spinner
+                android:id="@+id/tipo_comida"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/spinner_background"
+                android:drawableEnd="@drawable/ic_dropdown_arrow" /> <!-- Icono a la derecha -->
+
+            <!-- Título de la Reseña -->
+            <EditText
+                android:id="@+id/tituloResenaEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_titulo_resena"
+                android:padding="12dp"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:background="@drawable/border_edittext"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Calificación -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/star1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/estrella"
+                    android:layout_marginEnd="4dp"/>
+
+                <ImageView
+                    android:id="@+id/star2"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/estrella"
+                    android:layout_marginEnd="4dp"/>
+
+                <ImageView
+                    android:id="@+id/star3"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/estrella"
+                    android:layout_marginEnd="4dp"/>
+
+                <ImageView
+                    android:id="@+id/star4"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/estrella"
+                    android:layout_marginEnd="4dp"/>
+
+                <ImageView
+                    android:id="@+id/star5"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/estrella" />
+            </LinearLayout>
+
+            <!-- Subir Imagen -->
+            <LinearLayout
+                android:id="@+id/imagenLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="150dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_dotted"
+                android:padding="16dp"
+                android:clickable="true">
+
+                <!-- Texto dentro del área de imagen -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subir Imagen"
+                    android:textSize="18sp"
+                    android:textColor="@color/brown_textFillFields_percentRating"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agrega una foto de tu comida"
+                    android:textSize="16sp"
+                    android:textColor="@color/brown_textFillFields_percentRating"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!-- Subir -->
+            <Button
+                android:id="@+id/btnSubir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_subir"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_background"
+                android:layout_marginTop="24dp"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

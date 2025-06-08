@@ -20,4 +20,22 @@
     <string name="arabe">Árabe</string>
     <string name="registrarme">Registrarme</string>
     <string name="cerrar">Cerrar</string>
+    <!--  Rango de Precio  -->
+    <string-array name="rango_precio">
+        <item>Barato</item>
+        <item>Moderado</item>
+        <item>Caro</item>
+    </string-array>
+    <!--  Tipo de Comida  -->
+    <string-array name="tipo_comida">
+        <item>Mexicana</item>
+        <item>Italiana</item>
+        <item>Rápida</item>
+        <item>Vegetariana</item>
+    </string-array>
+    <string name="hint_titulo_resena">Titulo Resena</string>
+    <string name="hint_nombre_restaurante">Nombre Restaurante</string>
+    <string name="hint_ubicacion">Ubicación</string>
+    <string name="btn_subir">Subir</string>
+    <string name="back_button">Volver</string>
 </resources>
