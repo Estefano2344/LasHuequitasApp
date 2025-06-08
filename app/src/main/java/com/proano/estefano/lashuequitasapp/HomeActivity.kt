@@ -1,5 +1,6 @@
 package com.proano.estefano.lashuequitasapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.core.view.GravityCompat
 import android.widget.ImageView
+import com.google.android.material.textfield.TextInputEditText
+
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +27,9 @@ class HomeActivity : AppCompatActivity() {
         val opciones = findViewById<ImageView>(R.id.opcionesImageView)
         opciones.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
+        }
+        findViewById<TextInputEditText>(R.id.searchEditText).setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
         }
     }
 }

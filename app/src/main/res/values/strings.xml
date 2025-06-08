@@ -22,7 +22,6 @@
     <string name="cerrar">Cerrar</string>
 
 
-
     <string name="Name_Home">LasHueQuitas</string>
 
     <string name="restaurante_uno">Restaurante Uno</string>
@@ -47,4 +46,6 @@
     <string name="postear">Postear</string>
     <string name="favoritos">Favoritos</string>
     <string name="perfil">Perfil</string>
+
+    <string name="search_hint">Restaurantes o platillos</string>
 </resources>
