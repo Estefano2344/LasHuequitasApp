@@ -8,5 +8,6 @@
     <color name="brown_reviewsDescription_textIcons_profileDetails">#8C7859</color>
     <color name="brown_icons">#82696B</color>
     <color name="orange_ratingRestaurantTransparent">#E8DECF</color>
+    <color name="fill_buttons">#F2EDE8</color>
 
 </resources>
