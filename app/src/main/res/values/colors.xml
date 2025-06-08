@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="orange_buttons_filledStars">#F29C21</color>
+    <color name="brown_textFillFields_percentRating">#9C784A</color>
+    <color name="barra_sup_inf">#E3DEDE</color>
+    <color name="brown_reviewsDescription_textIcons_profileDetails">#8C7859</color>
+    <color name="brown_icons">#82696B</color>
+    <color name="orange_ratingRestaurantTransparent">#E8DECF</color>
+
 </resources>
