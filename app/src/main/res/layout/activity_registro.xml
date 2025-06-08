@@ -57,7 +57,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nombreEditText"
@@ -79,7 +79,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/apellidoEditText"
@@ -101,7 +101,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/campoEmailRC"
@@ -124,7 +124,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/campoContraseña"
@@ -147,7 +147,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+            app:boxBackgroundColor="@color/fill_buttons">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/campoUsuarioEmail"

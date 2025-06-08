@@ -10,5 +10,7 @@
     <color name="brown_icons">#82696B</color>
     F2EDE8<color name="background_fields">#F2EDE8</color>
     <color name="orange_ratingRestaurantTransparent">#E8DECF</color>
+    <color name="fill_buttons">#F2EDE8</color>
+    <color name="lateral_frame">#F5EDE8</color>
 
 </resources>
