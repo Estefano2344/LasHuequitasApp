@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="30dp"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Encabezado superior -->
+        <LinearLayout
+            android:id="@+id/headerLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/cerrarImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/cerrar"
+                android:src="@drawable/cerrar" />
+
+            <TextView
+                android:id="@+id/crearCuentaTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="@string/crear_una_cuenta"
+                android:textColor="#1c160d"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Nombre -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nombreTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nombreEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:fontFamily="@font/plus_jakarta_sans"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Apellido -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/apellidoTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/apellidoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/apellido"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:fontFamily="@font/plus_jakarta_sans"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:fontFamily="@font/plus_jakarta_sans"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contrasena"
+                android:inputType="textPassword"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:fontFamily="@font/plus_jakarta_sans"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Usuario -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usuarioTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usuarioEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/usuario"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:fontFamily="@font/plus_jakarta_sans"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Preferencias gastronómicas -->
+        <TextView
+            android:id="@+id/preferenciasTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preferencias_gastronomicas"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            android:textColor="#1c160d"
+            android:fontFamily="@font/plus_jakarta_sans" />
+
+        <!-- Subtítulo pequeño -->
+        <TextView
+            android:id="@+id/subtituloPlatillosTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cuentanos_sobre_platillos"
+            android:textSize="13sp"
+            android:textColor="#1c160d"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/plus_jakarta_sans" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/preferenciasChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:singleSelection="false"
+            app:chipSpacing="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/italianaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/italiana"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/mexicanaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mexicana"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chinaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/china"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/japonesaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/japonesa"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/ecuatorianaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ecuatoriana"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/peruanaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peruana"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/rapidaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rapida"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/costenaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/costena"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/venezolanaChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/venezolana"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/arabeChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/arabe"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/orange_ratingRestaurantTransparent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/plus_jakarta_sans"
+                app:chipCornerRadius="24dp"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Botón Registrarme -->
+        <Button
+            android:id="@+id/registrarmeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#f29b21"
+            android:text="@string/registrarme"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/plus_jakarta_sans"/>
+    </LinearLayout>
+</ScrollView>

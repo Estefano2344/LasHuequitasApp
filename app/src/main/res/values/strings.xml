@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">LasHuequitasApp</string>
+    <string name="crear_una_cuenta">Crear una Cuenta</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="email">Email</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="usuario">Usuario</string>
+    <string name="preferencias_gastronomicas">Preferencias gastronómicas</string>
+    <string name="cuentanos_sobre_platillos">Cuéntanos un poco sobre tus platillos favoritos</string>
+    <string name="italiana">Italiana</string>
+    <string name="mexicana">Mexicana</string>
+    <string name="china">China</string>
+    <string name="japonesa">Japonesa</string>
+    <string name="ecuatoriana">Ecuatoriana</string>
+    <string name="peruana">Peruana</string>
+    <string name="rapida">Rápida</string>
+    <string name="costena">Costeña</string>
+    <string name="venezolana">Venezolana</string>
+    <string name="arabe">Árabe</string>
+    <string name="registrarme">Registrarme</string>
+    <string name="cerrar">Cerrar</string>
 </resources>
