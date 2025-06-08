@@ -85,4 +85,15 @@
     <string name="perfil">Perfil</string>
 
     <string name="search_hint">Restaurantes o platillos</string>
+
+    <string name="usuarioNombre">Jombriel Guerra</string>
+    <string name="resenasPerfil">12 Reseñas</string>
+    <string name="cantidadEstrellas">48</string>
+    <string name="recibidas">Recibidas</string>
+    <string name="editarPerfil">Editar Perfil</string>
+    <string name="preferencias">Preferencias</string>
+    <string name="resenasRecientes">Reseñas recientes</string>
+    <string name="previewResena">¡Excelente comida y atención!</string>
+
+
 </resources>
