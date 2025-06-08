@@ -99,6 +99,9 @@
     <string name="previewResena">¡Excelente comida y atención!</string>
     <string name="subirImagen">Subir Imagen</string>
     <string name="agregaFotoPerfil">Agrega una foto de perfil</string>
+    <string name="agregarComentario">Agregar comentario</string>
+    <string name="calificarResena">Calificar Reseña</string>
+    <string name="escribeTuComentario">Escribe tu comentario...</string>
 
 
 
