@@ -3,33 +3,27 @@ package com.proano.estefano.lashuequitasapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.widget.Toolbar
 
-class RegistroActivity : AppCompatActivity() {
+class RecuperarContrasenaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_registro)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setContentView(R.layout.activity_recuperar_contrasena)
 
-        // Listener para el botón Registrarme
-        findViewById<Button>(R.id.registrarmeButton).setOnClickListener {
+        // Listener para la flecha del toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbarRecuperarC)
+        toolbar.setNavigationOnClickListener {
             val intent = Intent(this, PantallaInicioDeSesionActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
         }
 
-        // Listener para el icono de la X (cerrar)
-        findViewById<ImageView>(R.id.cerrarImageView).setOnClickListener {
+        // Listener para el botón Actualizar
+        findViewById<Button>(R.id.botonActualizar).setOnClickListener {
             val intent = Intent(this, PantallaInicioDeSesionActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)

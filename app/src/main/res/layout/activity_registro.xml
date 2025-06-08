@@ -104,7 +104,7 @@
             app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailEditText"
+                android:id="@+id/campoEmailRC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -127,7 +127,7 @@
             app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordEditText"
+                android:id="@+id/campoContraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contrasena"
@@ -150,7 +150,7 @@
             app:boxBackgroundColor="@color/orange_ratingRestaurantTransparent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usuarioEditText"
+                android:id="@+id/campoUsuarioEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/usuario"

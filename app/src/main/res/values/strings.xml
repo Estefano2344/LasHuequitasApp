@@ -20,4 +20,22 @@
     <string name="arabe">Árabe</string>
     <string name="registrarme">Registrarme</string>
     <string name="cerrar">Cerrar</string>
+    <string name="textoPantallaInicioTitulo">Las HueQuitas</string>
+    <string name="textoInferiorPantallaInicio">Descubre, califica y comparte experiencias</string>
+    <string name="textButtonComenzar">Comenzar</string>
+    <string name="textInicioDeSesion">Inicio de Sesión</string>
+    <string name="textoBienvenido">¡Bienvenido de nuevo!</string>
+    <string name="textoUsuarioEmail">Usuario/Email</string>
+    <string name="textoContraseña">Contraseña</string>
+    <string name="textoOlvidasteC">¿Olvidaste tu contraseña?</string>
+    <string name="textoBotonIniciarSesion">Iniciar Sesión</string>
+    <string name="textoEresNuevo">¿Eres nuevo en Las HueQuitas?</string>
+    <string name="textoCrearCuenta">Crea una cuenta aquí</string>
+    <string name="textRecuperarC">Recuperar Contraseña</string>
+    <string name="textoIngresaE">Ingresa tu Email</string>
+    <string name="textoEmail">Email</string>
+    <string name="textoNuevaC">Nueva Contraseña</string>
+    <string name="textoRepetirC">Repetir Contraseña</string>
+    <string name="textoActualizar">Actualizar</string>
+
 </resources>
