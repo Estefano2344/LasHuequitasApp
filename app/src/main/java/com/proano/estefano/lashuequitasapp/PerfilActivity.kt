@@ -2,6 +2,7 @@ package com.proano.estefano.lashuequitasapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,12 @@ class PerfilActivity : AppCompatActivity() {
         val closeProfile = findViewById<ImageView>(R.id.closeProfile)
         closeProfile.setOnClickListener {
             finish()
+        }
+
+        val editProfileButton = findViewById<Button>(R.id.editProfileButton)
+        editProfileButton.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            startActivity(intent)
         }
     }
 }
