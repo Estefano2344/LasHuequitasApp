@@ -36,6 +36,7 @@
     <string name="hint_titulo_resena">Titulo Resena</string>
     <string name="hint_nombre_restaurante">Nombre Restaurante</string>
     <string name="hint_ubicacion">Ubicación</string>
+    <string name="title_calificacion">Calificación</string>
     <string name="btn_subir">Subir</string>
     <string name="back_button">Volver</string>
 </resources>
