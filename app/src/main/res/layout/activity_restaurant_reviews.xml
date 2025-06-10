@@ -84,7 +84,9 @@
                     android:layout_height="40dp"
                     android:src="@drawable/avatar_julia"
                     android:contentDescription="@string/nombre_usuario"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_mask"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -169,7 +171,9 @@
                     android:layout_height="40dp"
                     android:src="@drawable/avatar_jose"
                     android:contentDescription="@string/nombre_usuario"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_mask"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -254,7 +258,9 @@
                     android:layout_height="40dp"
                     android:src="@drawable/avatar_laura"
                     android:contentDescription="@string/nombre_usuario"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_mask"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="0dp"

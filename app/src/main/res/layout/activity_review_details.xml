@@ -129,7 +129,9 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/perfilexam"
-                    android:contentDescription="@string/usuarioNombre"/>
+                    android:contentDescription="@string/usuarioNombre"
+                    android:background="@drawable/circle_mask"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -183,7 +185,9 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/avatar_alejandro"
-                    android:contentDescription="@string/nombre_usuario"/>
+                    android:contentDescription="@string/nombre_usuario"
+                    android:background="@drawable/circle_mask"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -223,6 +227,35 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
 
+            <!-- Botón + texto "Agregar Comentario" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="24dp">
+
+                <ImageButton
+                    android:id="@+id/btnAddComment"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_circle"
+                    android:src="@drawable/comentario"
+                    android:contentDescription="@string/add_comment"
+                    app:tint="@color/brown_icons"
+                    android:padding="12dp"
+                    android:scaleType="centerInside"/>
+
+                <TextView
+                    android:id="@+id/tvAddComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:text="@string/add_comment"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"/>
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
