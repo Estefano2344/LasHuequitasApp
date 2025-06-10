@@ -1,6 +1,8 @@
 package com.proano.estefano.lashuequitasapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,11 @@ class ReviewDetailsActivity : AppCompatActivity() {
         // Cerrar Activity al pulsar la flecha de atrás
         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             finish()
+        }
+
+        // botón añadir comentario
+        findViewById<ImageButton>(R.id.btnAddComment).setOnClickListener {
+            startActivity(Intent(this, AddCommentActivity::class.java))
         }
     }
 }
