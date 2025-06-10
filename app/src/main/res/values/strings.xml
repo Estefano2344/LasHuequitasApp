@@ -124,5 +124,14 @@
     <string name="laura_name">Laura Montenegro</string>
     <string name="laura_time">hace 6 días</string>
     <string name="laura_desc">La atención fue amable, pero el plato principal no cumplió mis expectativas. La comida estaba fría y seca. Quizá fue un mal día del chef.</string>
-    <string name="review_title">Reseñas</string>
+    <string name="reviews_title">Reseñas</string>
+    <string name="review_title">Reseña</string>
+    <string name="title_review">Sabores como los de casa</string>
+    <string name="desc_review">A pesar de la apariencia un tanto “extraña” de la comida, refiriéndome a su presentación, logró sorprenderme, fue como aquellos sánduches que hacía mi mamá para llevar a la escuela, fue una experiencia muy conmovedora.</string>
+    <string name="comments">Comentarios</string>
+    <string name="time_user_jombriel">2d</string>
+    <string name="jombriel_reply">Concuerdo contigo. Sus sánduches siempre me han logrado sorprender.</string>
+    <string name="alejandro_user">Alejandro Vargas</string>
+    <string name="time_user_alejandro">1d</string>
+    <string name="alejandro_reply">¿En serio son tan buenos? Supongo que me daré el tiempo de ir a probarlos.</string>
 </resources>
