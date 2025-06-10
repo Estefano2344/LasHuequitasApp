@@ -19,6 +19,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,47 +28,39 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".ReviewDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".RestaurantDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".RestaurantReviewsActivity"
             android:exported="false" />
-
         <activity
             android:name=".NuevoComentarioActivity"
             android:exported="true" />
-
         <activity
             android:name=".EditarPerfilActivity"
             android:exported="true" />
-
         <activity
             android:name=".PerfilActivity"
             android:exported="true" />
-
         <activity
             android:name=".RecuperarContrasenaActivity"
             android:exported="false" />
-
         <activity
             android:name=".PantallaInicioDeSesionActivity"
             android:exported="true" />
-
         <activity
             android:name=".SearchActivity"
             android:exported="false" />
-
         <activity
             android:name=".RegistroActivity"
             android:exported="true" />
-
         <activity
             android:name=".NuevaResenaActivity"
             android:exported="true" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true" />
