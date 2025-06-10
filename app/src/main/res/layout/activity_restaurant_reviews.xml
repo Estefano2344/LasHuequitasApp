@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:gravity="center"
-                android:text="@string/review_title"
+                android:text="@string/reviews_title"
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
