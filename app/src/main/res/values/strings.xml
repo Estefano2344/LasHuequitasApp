@@ -115,4 +115,14 @@
     <string name="reviews_Restaurante_2">· 89 reseñas</string>
     <string name="califcacion_Restuarante_3">4.0</string>
     <string name="reviews_Restaurante_3">· 120 reseñas</string>
+    <string name="julia_name">Julia Pérez</string>
+    <string name="julia_time">hace 2 meses</string>
+    <string name="julia_desc">¡La comida estaba absolutamente deliciosa! Pedí la pasta carbonara y estaba cocinada a la perfección. El servicio también fue excelente, y el personal fue muy amable y atento. Recomiendo ampliamente este restaurante.</string>
+    <string name="jose_name">José Armas</string>
+    <string name="jose_time">hace 2 semanas</string>
+    <string name="jose_desc">Tuve una experiencia fantástica en este restaurante. La comida estaba deliciosa y el ambiente era agradable. El único inconveniente fue que el servicio fue un poco lento, pero en general, lo recomiendo.</string>
+    <string name="laura_name">Laura Montenegro</string>
+    <string name="laura_time">hace 6 días</string>
+    <string name="laura_desc">La atención fue amable, pero el plato principal no cumplió mis expectativas. La comida estaba fría y seca. Quizá fue un mal día del chef.</string>
+    <string name="review_title">Reseñas</string>
 </resources>
