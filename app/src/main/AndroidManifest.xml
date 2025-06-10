@@ -12,60 +12,64 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LasHuequitasApp"
         tools:targetApi="31">
-        <activity
-            android:name=".NuevoComentarioActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".EditarPerfilActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".PerfilActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".RecuperarContrasenaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PantallaInicioDeSesionActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".RegistroActivity"
-            android:exported="true" />
+        <!-- Punto de entrada de la app -->
         <activity
             android:name=".PantallaInicioActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Actividades secundarias -->
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RestaurantDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RestaurantReviewsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NuevoComentarioActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".EditarPerfilActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".PerfilActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".RecuperarContrasenaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".PantallaInicioDeSesionActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RegistroActivity"
+            android:exported="true" />
+
         <activity
             android:name=".NuevaResenaActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+            android:exported="true" />
 
         <activity
             android:name=".MainActivity"
             android:exported="true" />
     </application>
-
 </manifest>
