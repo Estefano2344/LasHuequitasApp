@@ -16,7 +16,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_restaurant_detail)
 
         // Ajuste de inset para edge-to-edge
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
