@@ -12,8 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LasHuequitasApp"
         tools:targetApi="31">
-
-        <!-- Punto de entrada de la app -->
+        <activity
+            android:name=".PopularesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FavoritosActivity"
+            android:exported="false" /> <!-- Punto de entrada de la app -->
         <activity
             android:name=".PantallaInicioActivity"
             android:exported="true">
@@ -22,9 +26,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Actividades secundarias -->
+        </activity> <!-- Actividades secundarias -->
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
@@ -65,4 +67,5 @@
             android:name=".MainActivity"
             android:exported="true" />
     </application>
+
 </manifest>

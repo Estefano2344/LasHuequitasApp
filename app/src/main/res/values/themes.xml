@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.LasHuequitasApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- Estilo base sin ActionBar -->
+    <style name="Base.Theme.LasHuequitasApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/barra_sup_inf</item>
         <item name="colorPrimaryVariant">@color/brown_textFillFields_percentRating</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -9,34 +9,12 @@
         <item name="colorSecondaryVariant">@color/brown_reviewsDescription_textIcons_profileDetails</item>
         <item name="colorOnSecondary">@color/white</item>
 
-        <item name="actionBarTheme">@style/ThemeOverlay.App.ActionBarLight</item>
-
-        <item name="actionBarStyle">@style/Widget.App.ActionBar</item>
-
-
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
         <item name="buttonBarButtonStyle">@style/Widget.App.Button</item>
         <item name="android:buttonStyle">@style/Widget.App.Button</item>
-
     </style>
 
     <style name="Theme.LasHuequitasApp" parent="Base.Theme.LasHuequitasApp"/>
-
-    <style name="ThemeOverlay.App.ActionBarLight" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="colorControlNormal">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
-    </style>
-
-    <style name="Widget.App.ActionBar" parent="Widget.MaterialComponents.ActionBar.Solid">
-        <item name="displayOptions">showTitle</item>
-        <item name="titleTextStyle">@style/ToolbarTitleAppearance</item>
-    </style>
-
-    <style name="ToolbarTitleAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/black</item> </style>
 
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/orange_buttons_filledStars</item>

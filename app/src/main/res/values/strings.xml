@@ -36,7 +36,12 @@
     <string name="hint_titulo_resena">Titulo Resena</string>
     <string name="hint_nombre_restaurante">Nombre Restaurante</string>
     <string name="hint_ubicacion">Ubicación</string>
+    <string name="hint_subir_imagen">Subir Imagen</string>
     <string name="title_calificacion">Calificación</string>
+    <string name="title_subir">Agrega una foto de tu comida</string>
+    <string name="title_populares">Populares</string>
+    <string name="hintPrecio">$$ • Rápida</string>
+    <string name="hintPrecio2">$ • Rápida</string>
     <string name="btn_subir">Subir</string>
     <string name="back_button">Volver</string>
     <string name="textoPantallaInicioTitulo">Las HueQuitas</string>
@@ -60,15 +65,27 @@
 
     <string name="Name_Home">LasHueQuitas</string>
 
-    <string name="restaurante_uno">Restaurante Uno</string>
+    <string name="restaurante_uno">Queso Te Sirva de Experiencia</string>
     <string name="restaurante_dos">Restaurante Dos</string>
     <string name="restaurante_tres">Restaurante tres</string>
     <string name="restaurante_cuatro">Restaurante Cuatro</string>
     <string name="restaurante_cinco">Restaurante Cinco</string>
     <string name="restaurante_seis">Restaurante Seis</string>
+    <string name="restaurante_siete">Como en Casa Restaurante"</string>
+    <string name="restaurante_ocho">Date Un Gusto Restaurant"</string>
+    <string name="restaurante_nueve">El Botero Coffee Bar"</string>
+    <string name="restaurante_diez">Pizzería Los Tios"</string>
+    <string name="nueva_resena">Nueva Reseña</string>
+    <string name="cantidad_resenas1">54 reseñas</string>
+    <string name="puntuacion2">4.2</string>
+    <string name="puntuacion3">4.8</string>
+
 
     <string name="puntuacion">4.5</string>
     <string name="resenas">2 reseñas</string>
+    <string name="resenas2">87 reseñas</string>
+    <string name="resenas3">157 reseñas</string>
+    <string name="resenas4">215 reseñas</string>
     <string name="nombre_usuario">Nombre Usuario</string>
     <string name="correo_ejemplo_com">correo@ejemplo.com</string>
     <string name="cerrar_sesi_n">Cerrar sesión</string>
@@ -105,6 +122,7 @@
     <string name="restaurantes_recomendados">Restaurantes recomendados</string>
     <string name="restaurant">Restaurante</string>
     <string name="view_review">Ver Reseñas</string>
+    <string name="view_restaurantes">Ver Restaurantes</string>
     <string name="_5">5</string>
     <string name="_50">50%</string>
     <string name="_4">4</string>
