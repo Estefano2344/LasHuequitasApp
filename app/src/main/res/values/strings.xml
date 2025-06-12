@@ -66,11 +66,11 @@
     <string name="Name_Home">LasHueQuitas</string>
 
     <string name="restaurante_uno">Queso Te Sirva de Experiencia</string>
-    <string name="restaurante_dos">Restaurante Dos</string>
-    <string name="restaurante_tres">Restaurante tres</string>
-    <string name="restaurante_cuatro">Restaurante Cuatro</string>
-    <string name="restaurante_cinco">Restaurante Cinco</string>
-    <string name="restaurante_seis">Restaurante Seis</string>
+    <string name="restaurante_dos">Restaurante San Francisco</string>
+    <string name="restaurante_tres">Restaurante Las Cuadras</string>
+    <string name="restaurante_cuatro">Cafetería El Diavolo</string>
+    <string name="restaurante_cinco">San Luis Coffe Bar</string>
+    <string name="restaurante_seis">Restarurante La Floresta</string>
     <string name="restaurante_siete">Como en Casa Restaurante"</string>
     <string name="restaurante_ocho">Date Un Gusto Restaurant"</string>
     <string name="restaurante_nueve">El Botero Coffee Bar"</string>
