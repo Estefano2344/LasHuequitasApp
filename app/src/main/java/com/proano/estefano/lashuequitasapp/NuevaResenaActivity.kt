@@ -1,14 +1,14 @@
 package com.proano.estefano.lashuequitasapp
 
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.net.Uri
 
 class NuevaResenaActivity : AppCompatActivity() {
 
@@ -20,67 +20,45 @@ class NuevaResenaActivity : AppCompatActivity() {
     private lateinit var tituloResena: EditText
     private lateinit var btnSubirImagen: LinearLayout
     private lateinit var btnSubir: Button
-    private lateinit var imagenSubida: ImageView
-    private lateinit var stars: Array<ImageView>
 
-    // Variable para la imagen seleccionada
+    // Variable para la imagen seleccionada (aunque no se usará por ahora)
     private var selectedImageUri: Uri? = null
 
-    // Manejo de resultados para seleccionar imagen
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            selectedImageUri = data?.data
-            selectedImageUri?.let {
-                imagenSubida.setImageURI(it)
-                imagenSubida.visibility = ImageView.VISIBLE  // Hacer visible la imagen seleccionada
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nueva_resena)
 
-        // Configurar la barra superior (ActionBar)
-        supportActionBar?.apply {
-            title = "Nueva Reseña"  // Título de la actividad
-            setDisplayHomeAsUpEnabled(true)  // Mostrar el botón de retroceso
+        // Ajuste de inset para edge-to-edge sobre el root correcto
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
 
-        // Vincular vistas
+        // Configuración de vistas
         nombreRestaurante = findViewById(R.id.nombreRestaurante)
         ubicacion = findViewById(R.id.ubicacion)
-        rangoPrecio = findViewById(R.id.rango_precio) // Corregido el ID aquí
-        tipoComida = findViewById(R.id.tipo_comida) // Corregido el ID aquí
+        rangoPrecio = findViewById(R.id.rango_precio)
+        tipoComida = findViewById(R.id.tipo_comida)
         tituloResena = findViewById(R.id.tituloResenaEdit)
-        btnSubirImagen = findViewById(R.id.imagenLayout)  // Corregido el ID aquí
+        btnSubirImagen = findViewById(R.id.imagenLayout)
         btnSubir = findViewById(R.id.btnSubir)
 
-        // Estrellas
-        stars = arrayOf(
-            findViewById(R.id.star1),
-            findViewById(R.id.star2),
-            findViewById(R.id.star3),
-            findViewById(R.id.star4),
-            findViewById(R.id.star5)
-        )
-
-        // Configurar el Spinner para "Rango de Precio"
+        // Configurar Spinners para "Rango de Precio" y "Tipo de Comida"
         val rangoAdapter = ArrayAdapter.createFromResource(
             this, R.array.rango_precio, android.R.layout.simple_spinner_item
         )
         rangoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         rangoPrecio.adapter = rangoAdapter
 
-        // Configurar el Spinner para "Tipo de Comida"
         val tipoAdapter = ArrayAdapter.createFromResource(
             this, R.array.tipo_comida, android.R.layout.simple_spinner_item
         )
         tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         tipoComida.adapter = tipoAdapter
 
-        // Manejar la acción de "Subir Imagen"
+        // Manejar la acción de "Subir Imagen" (solo abre la galería, pero no hace nada con la imagen)
         btnSubirImagen.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -102,14 +80,6 @@ class NuevaResenaActivity : AppCompatActivity() {
             val rango = rangoPrecio.selectedItem.toString()
             val tipo = tipoComida.selectedItem.toString()
 
-            // Simulando las estrellas de calificación
-            var calificacion = 0
-            for (i in stars.indices) {
-                if (stars[i].alpha == 1f) {
-                    calificacion++
-                }
-            }
-
             // Aquí puedes guardar los datos o realizar otra acción
             Toast.makeText(this, "Reseña guardada con éxito", Toast.LENGTH_SHORT).show()
 
@@ -117,12 +87,48 @@ class NuevaResenaActivity : AppCompatActivity() {
             clearFields()
         }
 
-        // Interacción con las estrellas de calificación
-        stars.forEachIndexed { index, imageView ->
-            imageView.setOnClickListener {
-                for (i in stars.indices) {
-                    stars[i].alpha = if (i <= index) 1f else 0.3f
+        // Cerrar la actividad cuando se haga clic en el botón de retroceso
+        findViewById<ImageView>(R.id.closeProfile).setOnClickListener {
+            finish()
+        }
+
+        // Configuración del Bottom Navigation
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                // Navegar a la actividad de inicio (HomeActivity)
+                R.id.nav_home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()  // Cierra la actividad actual (NuevaResenaActivity)
+                    true
                 }
+                // Navegar a la pantalla de populares (PopularesActivity)
+                R.id.nav_populares -> {
+                    val intent = Intent(this, PopularesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()  // Cierra la actividad actual (NuevaResenaActivity)
+                    true
+                }
+                // Navegar a la pantalla de favoritos (FavoritosActivity)
+                R.id.nav_favoritos -> {
+                    val intent = Intent(this, FavoritosActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()  // Cierra la actividad actual (NuevaResenaActivity)
+                    true
+                }
+                // Navegar a la pantalla del perfil (PerfilActivity)
+                R.id.nav_perfil -> {
+                    val intent = Intent(this, PerfilActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()  // Cierra la actividad actual (NuevaResenaActivity)
+                    true
+                }
+                else -> false
             }
         }
     }
@@ -133,9 +139,17 @@ class NuevaResenaActivity : AppCompatActivity() {
         ubicacion.text.clear()
         tituloResena.text.clear()
         selectedImageUri = null
-        imagenSubida.setImageURI(null)  // Limpiar la imagen
-        imagenSubida.visibility = ImageView.GONE  // Hacer invisible la imagen seleccionada
-        stars.forEach { it.alpha = 0.3f }  // Limpiar las estrellas
+    }
+
+    // Manejo de resultados de la galería para seleccionar imagen
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+            selectedImageUri = data?.data
+            selectedImageUri?.let {
+                // Aquí podrías manejar la imagen seleccionada (aunque no se usa por ahora)
+            }
+        }
     }
 
     // Retroceso en la barra de acciones
