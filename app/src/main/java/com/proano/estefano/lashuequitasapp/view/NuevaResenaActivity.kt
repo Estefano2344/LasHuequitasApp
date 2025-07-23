@@ -1,4 +1,4 @@
-package com.proano.estefano.lashuequitasapp
+package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.net.Uri
+import com.proano.estefano.lashuequitasapp.R
 
 class NuevaResenaActivity : AppCompatActivity() {
 

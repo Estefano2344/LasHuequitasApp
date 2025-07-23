@@ -1,10 +1,11 @@
-package com.proano.estefano.lashuequitasapp
+package com.proano.estefano.lashuequitasapp.view
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.proano.estefano.lashuequitasapp.R
 
 class AddCommentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

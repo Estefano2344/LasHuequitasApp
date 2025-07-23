@@ -1,4 +1,4 @@
-package com.proano.estefano.lashuequitasapp
+package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import android.widget.ImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
+import com.proano.estefano.lashuequitasapp.R
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
