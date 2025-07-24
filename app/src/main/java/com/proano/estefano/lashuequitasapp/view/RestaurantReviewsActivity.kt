@@ -29,7 +29,7 @@ class RestaurantReviewsActivity : AppCompatActivity() {
     private lateinit var layoutNoReviews: LinearLayout
     private lateinit var tvToolbarTitle: TextView
 
-    private var restaurantName: String = ""
+    private var nombreRestaurante: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +50,9 @@ class RestaurantReviewsActivity : AppCompatActivity() {
         setupListeners()
 
         // Obtener el nombre del restaurante desde el Intent
-        restaurantName = intent.getStringExtra("restaurant_name") ?: ""
-        tvToolbarTitle.text = "Reseñas - $restaurantName"
+
+        nombreRestaurante = intent.getStringExtra("RESTAURANT_NAME") ?: ""
+        tvToolbarTitle.text = "Reseñas - $nombreRestaurante"
 
         // Cargar las reseñas
         loadReviews()
@@ -148,8 +149,8 @@ class RestaurantReviewsActivity : AppCompatActivity() {
     }
 
     private fun loadReviews() {
-        if (restaurantName.isNotEmpty()) {
-            resenaViewModel.getResenasByRestauranteName(restaurantName)
+        if (nombreRestaurante.isNotEmpty()) {
+            resenaViewModel.getResenasByRestauranteName(nombreRestaurante)
         } else {
             // Si no hay nombre específico, cargar todas las reseñas
             resenaViewModel.getAllResenas()
