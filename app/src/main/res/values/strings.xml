@@ -122,6 +122,7 @@
     <string name="restaurantes_recomendados">Restaurantes recomendados</string>
     <string name="restaurant">Restaurante</string>
     <string name="view_review">Ver Reseñas</string>
+    <string name="view_review_details">Ver Reseña</string>
     <string name="view_restaurantes">Ver Restaurantes</string>
     <string name="_5">5</string>
     <string name="_50">50%</string>
@@ -153,4 +154,6 @@
     <string name="time_user_alejandro">1d</string>
     <string name="alejandro_reply">¿En serio son tan buenos? Supongo que me daré el tiempo de ir a probarlos.</string>
     <string name="add_comment">Agregar comentario</string>
+    <string name="no_reviews_icon">No hay reseñas disponibles</string>
+
 </resources>

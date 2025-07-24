@@ -1,4 +1,4 @@
-package com.proano.estefano.lashuequitasapp
+package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.proano.estefano.lashuequitasapp.R
 
 class FavoritosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

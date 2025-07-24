@@ -1,4 +1,4 @@
-package com.proano.estefano.lashuequitasapp
+package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.proano.estefano.lashuequitasapp.R
 
-class PopularesActivity : AppCompatActivity() {
+class PerfilActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_populares)
+        setContentView(R.layout.activity_perfil)
 
         // Ajuste de inset para edge-to-edge sobre el root correcto
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -23,33 +24,25 @@ class PopularesActivity : AppCompatActivity() {
             insets
         }
 
-        // Cerrar Activity al pulsar la flecha de atrás
-        findViewById<ImageView>(R.id.closeProfile).setOnClickListener {
-            finish()
-        }
-
-        // Configurar el botón para "Ver Restaurante"
-        val btnVerRestaurante1 = findViewById<Button>(R.id.btnVerRestaurante1)
-        btnVerRestaurante1.setOnClickListener {
-            val intent = Intent(this, RestaurantDetailActivity::class.java)
-            startActivity(intent) // Navegar a RestaurantDetailActivity
-        }
-
-        // Configuración del Bottom Navigation
+        // Configuración de Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 // Navegar a la actividad de inicio (HomeActivity)
                 R.id.nav_home -> {
+                    // Aquí cerramos la actividad actual y navegamos a HomeActivity
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (PopularesActivity)
+                    finish()  // Finaliza la actividad actual
                     true
                 }
                 // Navegar a la pantalla de populares (PopularesActivity)
                 R.id.nav_populares -> {
-                    // Ya estamos en la pantalla de populares, no hacer nada
+                    val intent = Intent(this, PopularesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()  // Cierra la actividad actual (FavoritosActivity)
                     true
                 }
                 // Navegar a la pantalla para postear una reseña (NuevaResenaActivity)
@@ -57,7 +50,7 @@ class PopularesActivity : AppCompatActivity() {
                     val intent = Intent(this, NuevaResenaActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (PopularesActivity)
+                    finish()  // Finaliza la actividad actual
                     true
                 }
                 // Navegar a la pantalla de favoritos (FavoritosActivity)
@@ -70,14 +63,24 @@ class PopularesActivity : AppCompatActivity() {
                 }
                 // Navegar a la pantalla del perfil (PerfilActivity)
                 R.id.nav_perfil -> {
-                    val intent = Intent(this, PerfilActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()  // Cierra la actividad actual (PopularesActivity)
+                    // Ya estamos en la pantalla de perfil, no hacer nada
                     true
                 }
                 else -> false
             }
+        }
+
+        // Botón de cerrar la actividad al pulsar el ícono de cerrar (flechita)
+        val closeProfile = findViewById<ImageView>(R.id.closeProfile)
+        closeProfile.setOnClickListener {
+            finish() // Finaliza la actividad (cierra la pantalla actual)
+        }
+
+        // Botón de edición de perfil
+        val editProfileButton = findViewById<Button>(R.id.editProfileButton)
+        editProfileButton.setOnClickListener {
+            val intent = Intent(this, EditarPerfilActivity::class.java) // Navegar a la actividad de edición de perfil
+            startActivity(intent)
         }
     }
 }

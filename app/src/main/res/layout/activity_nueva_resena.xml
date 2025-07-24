@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"> <!-- Added id="main" here -->
+    android:id="@+id/main">
 
     <!-- ScrollView para el contenido -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginBottom="?attr/actionBarSize"> <!-- Evitar que se solape con la barra inferior -->
+        android:layout_marginBottom="?attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,16 +42,38 @@
             <Spinner
                 android:id="@+id/rango_precio"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" android:layout_marginTop="16dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/border_edittext_spinner"
                 android:paddingEnd="40dp" />
 
             <Spinner
                 android:id="@+id/tipo_comida"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" android:layout_marginTop="16dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/border_edittext_spinner"
                 android:paddingEnd="40dp" />
+
+            <!-- Calificación con estrellas -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calificación"
+                android:textSize="16sp"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:layout_marginTop="16dp"/>
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:rating="0"
+                android:layout_gravity="center_horizontal"
+                android:progressTint="@color/brown_icons" />
 
             <!-- Título de la Reseña -->
             <EditText
@@ -65,6 +87,14 @@
                 android:layout_marginTop="16dp"/>
 
             <!-- Subir Imagen -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fotografías"
+                android:textSize="16sp"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:layout_marginTop="16dp"/>
+
             <LinearLayout
                 android:id="@+id/imagenLayout"
                 android:layout_width="match_parent"
@@ -72,13 +102,23 @@
                 android:minHeight="150dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/border_dotted"
                 android:padding="16dp"
                 android:clickable="true">
 
+                <!-- Vista previa de la imagen seleccionada -->
+                <ImageView
+                    android:id="@+id/imagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    android:contentDescription="Vista previa de la imagen"/>
+
                 <!-- Texto dentro del área de imagen -->
                 <TextView
+                    android:id="@+id/textImagen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/hint_subir_imagen"
@@ -87,14 +127,58 @@
                     android:layout_marginBottom="8dp"
                     android:gravity="center"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Botones para subir imágenes -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_subir"
-                    android:textSize="16sp"
-                    android:textColor="@color/brown_textFillFields_percentRating"
-                    android:gravity="center"/>
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp">
+
+                    <Button
+                        android:id="@+id/btnCamara"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cámara"
+                        android:textColor="@color/white"
+                        android:background="@drawable/btn_background"
+                        android:layout_marginEnd="4dp"/>
+
+                    <Button
+                        android:id="@+id/btnGaleria"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Galería"
+                        android:textColor="@color/white"
+                        android:background="@drawable/btn_background"
+                        android:layout_marginStart="4dp"/>
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- RecyclerView para mostrar múltiples imágenes -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="100dp"
+                android:visibility="gone"/>
+
+            <!-- Comentarios/Descripción de la reseña -->
+            <EditText
+                android:id="@+id/comentariosResena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Escribe tu opinión..."
+                android:padding="12dp"
+                android:minLines="3"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:textColor="@color/brown_textFillFields_percentRating"
+                android:background="@drawable/border_edittext"
+                android:layout_marginTop="16dp"/>
 
             <!-- Subir -->
             <Button

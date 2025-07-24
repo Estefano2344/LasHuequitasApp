@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:id="@+id/ivAuthorAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/avatar_julia"
+            android:contentDescription="@string/nombre_usuario"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_mask"
+            android:clipToOutline="true"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tvReviewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="Título de la reseña"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvReviewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="Hace 2 días"
+                android:textSize="14sp"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:rating="5"
+        android:isIndicator="true"
+        style="?attr/ratingBarStyleIndicator"
+        android:progressTint="@color/orange_buttons_filledStars"
+        android:secondaryProgressTint="@color/orange_ratingRestaurantTransparent"
+        android:progressTintMode="src_in"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:transformPivotX="0dp"
+        android:transformPivotY="0dp"/>
+
+    <TextView
+        android:id="@+id/tvReviewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="Esta es una preview del comentario de la reseña..."
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvTipoComida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:padding="6dp"
+            android:text="Italiana"
+            android:textColor="@color/brown_textFillFields_percentRating"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvRangoPrecio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:padding="6dp"
+            android:text="$$"
+            android:textColor="@color/brown_textFillFields_percentRating"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvUbicacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Centro"
+            android:textSize="12sp"
+            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:gravity="end"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnViewFullReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/plus_jakarta_sans"
+        android:text="@string/view_review_details"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/orange_buttons_filledStars"
+        app:cornerRadius="24dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/barra_sup_inf"/>
+
+</LinearLayout>

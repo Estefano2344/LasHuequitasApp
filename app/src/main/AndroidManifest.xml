@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
 
     <application
         android:allowBackup="true"
@@ -13,13 +21,13 @@
         android:theme="@style/Theme.LasHuequitasApp"
         tools:targetApi="31">
         <activity
-            android:name=".PopularesActivity"
+            android:name=".view.PopularesActivity"
             android:exported="false" />
         <activity
-            android:name=".FavoritosActivity"
+            android:name=".view.FavoritosActivity"
             android:exported="false" /> <!-- Punto de entrada de la app -->
         <activity
-            android:name=".PantallaInicioActivity"
+            android:name=".view.PantallaInicioActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,43 +36,43 @@
             </intent-filter>
         </activity> <!-- Actividades secundarias -->
         <activity
-            android:name=".HomeActivity"
+            android:name=".view.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewDetailsActivity"
+            android:name=".view.ReviewDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".RestaurantDetailActivity"
+            android:name=".view.RestaurantDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".RestaurantReviewsActivity"
+            android:name=".view.RestaurantReviewsActivity"
             android:exported="false" />
         <activity
-            android:name=".NuevoComentarioActivity"
+            android:name=".view.NuevoComentarioActivity"
             android:exported="true" />
         <activity
-            android:name=".EditarPerfilActivity"
+            android:name=".view.EditarPerfilActivity"
             android:exported="true" />
         <activity
-            android:name=".PerfilActivity"
+            android:name=".view.PerfilActivity"
             android:exported="true" />
         <activity
-            android:name=".RecuperarContrasenaActivity"
+            android:name=".view.RecuperarContrasenaActivity"
             android:exported="false" />
         <activity
-            android:name=".PantallaInicioDeSesionActivity"
+            android:name=".view.PantallaInicioDeSesionActivity"
             android:exported="true" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".view.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistroActivity"
+            android:name=".view.RegistroActivity"
             android:exported="true" />
         <activity
-            android:name=".NuevaResenaActivity"
+            android:name=".view.NuevaResenaActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true" />
     </application>
 
