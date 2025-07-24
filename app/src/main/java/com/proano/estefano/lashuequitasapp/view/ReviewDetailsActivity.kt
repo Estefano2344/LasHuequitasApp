@@ -17,6 +17,10 @@ import com.proano.estefano.lashuequitasapp.model.entities.Resena
 import com.proano.estefano.lashuequitasapp.viewmodel.ResenaViewModel
 import java.io.File
 import android.graphics.BitmapFactory
+import android.view.View
+import android.widget.ProgressBar
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReviewDetailsActivity : AppCompatActivity() {
 
@@ -24,6 +28,13 @@ class ReviewDetailsActivity : AppCompatActivity() {
     private lateinit var tvReviewTitle: TextView
     private lateinit var tvReviewDescription: TextView
     private lateinit var ivReviewImage: ImageView
+    private lateinit var tvRestaurantName: TextView
+    private lateinit var tvReviewDateDetail: TextView
+    private lateinit var tvTipoComidaDetail: TextView
+    private lateinit var tvRangoPrecioDetail: TextView
+    private lateinit var tvUbicacionDetail: TextView
+    private lateinit var ratingBarDetail: androidx.appcompat.widget.AppCompatRatingBar
+    private lateinit var progressBar: ProgressBar
 
     private var resenaId: Long = -1
 
@@ -60,6 +71,13 @@ class ReviewDetailsActivity : AppCompatActivity() {
         tvReviewTitle = findViewById(R.id.tvReviewTitle)
         tvReviewDescription = findViewById(R.id.tvReviewDescription)
         ivReviewImage = findViewById(R.id.ivReviewImage)
+        tvRestaurantName = findViewById(R.id.tvRestaurantName)
+        tvReviewDateDetail = findViewById(R.id.tvReviewDateDetail)
+        tvTipoComidaDetail = findViewById(R.id.tvTipoComidaDetail)
+        tvRangoPrecioDetail = findViewById(R.id.tvRangoPrecioDetail)
+        tvUbicacionDetail = findViewById(R.id.tvUbicacionDetail)
+        ratingBarDetail = findViewById(R.id.ratingBarDetail)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     private fun setupViewModel() {
@@ -117,7 +135,10 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun loadReviewDetails() {
+        progressBar.visibility = View.VISIBLE
+
         resenaViewModel.getResenaById(resenaId).observe(this) { resena ->
+            progressBar.visibility = View.GONE
             resena?.let {
                 displayReviewDetails(it)
             } ?: run {
@@ -129,6 +150,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
         // Observar errores
         resenaViewModel.error.observe(this) { error ->
             error?.let {
+                progressBar.visibility = View.GONE
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
                 resenaViewModel.clearError()
             }
@@ -136,8 +158,19 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun displayReviewDetails(resena: Resena) {
+        // Información principal de la reseña
         tvReviewTitle.text = resena.tituloResena
         tvReviewDescription.text = resena.comentarios
+
+        // Información del restaurante
+        tvRestaurantName.text = resena.nombreRestaurante
+        tvTipoComidaDetail.text = resena.tipoComida
+        tvRangoPrecioDetail.text = resena.rangoPrecio
+        tvUbicacionDetail.text = resena.ubicacion
+        ratingBarDetail.rating = resena.calificacion
+
+        // Formatear y mostrar fecha
+        tvReviewDateDetail.text = formatDate(resena.fechaCreacion)
 
         // Cargar la primera imagen si existe
         if (resena.imagenes.isNotEmpty()) {
@@ -160,6 +193,17 @@ class ReviewDetailsActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
             // Mantener la imagen por defecto si hay error
+        }
+    }
+
+    private fun formatDate(dateString: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val date = inputFormat.parse(dateString)
+            date?.let { outputFormat.format(it) } ?: dateString
+        } catch (e: Exception) {
+            dateString
         }
     }
 }
