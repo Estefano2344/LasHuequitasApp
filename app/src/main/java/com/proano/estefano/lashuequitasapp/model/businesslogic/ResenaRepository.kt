@@ -31,8 +31,8 @@ class ResenaRepository(private val context: Context) {
                 put(DatabaseHelper.COLUMN_COMENTARIOS, resena.comentarios)
                 put(DatabaseHelper.COLUMN_AUTOR_ID, resena.autorId)
                 put(DatabaseHelper.COLUMN_FECHA_CREACION, resena.fechaCreacion)
-                // Aunque Resena tiene una columna 'imagenes', la lógica aquí guarda en la tabla separada.
-                // Si la columna 'imagenes' en Resena se usará para URLs, podrías concatenarlas aquí.
+
+
             }
 
             val resenaId = db.insert(DatabaseHelper.TABLE_RESENAS, null, resenaValues)
@@ -112,6 +112,8 @@ class ResenaRepository(private val context: Context) {
             )
 
             while (cursor.moveToNext()) {
+                val resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID))
+                val imagenesRutas = getImagenesByResenaId(resenaId)
                 val resena = Resena(
                     id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)),
                     nombreRestaurante = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE)),
@@ -122,8 +124,8 @@ class ResenaRepository(private val context: Context) {
                     tituloResena = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITULO_RESENA)),
                     comentarios = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIOS)) ?: "",
                     autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_AUTOR_ID)),
-                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION))
-                    // La columna 'imagenes' en Resena no se usa directamente aquí, se obtienen de ImagenResena
+                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION)),
+                    imagenes = imagenesRutas.joinToString(",")
                 )
                 resenas.add(resena)
             }
@@ -149,6 +151,8 @@ class ResenaRepository(private val context: Context) {
             )
 
             while (cursor.moveToNext()) {
+                val resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID))
+                val imagenesRutas = getImagenesByResenaId(resenaId)
                 val resena = Resena(
                     id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)),
                     nombreRestaurante = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE)),
@@ -159,7 +163,8 @@ class ResenaRepository(private val context: Context) {
                     tituloResena = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITULO_RESENA)),
                     comentarios = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIOS)) ?: "",
                     autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_AUTOR_ID)),
-                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION))
+                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION)),
+                    imagenes = imagenesRutas.joinToString(",")
                 )
                 resenas.add(resena)
             }
@@ -199,5 +204,91 @@ class ResenaRepository(private val context: Context) {
         }
 
         return imagenes
+    }
+
+    fun getResenaById(resenaId: Long): Resena? {
+        val db = dbHelper.readableDatabase
+        var resena: Resena? = null
+
+        try {
+            val cursor = db.query(
+                DatabaseHelper.TABLE_RESENAS,
+                null,
+                "${DatabaseHelper.COLUMN_RESENA_ID} = ?",
+                arrayOf(resenaId.toString()),
+                null, null, null
+            )
+
+            if (cursor.moveToFirst()) {
+                // Obtener las imágenes de esta reseña
+                val imagenesRutas = getImagenesByResenaId(resenaId)
+
+                resena = Resena(
+                    id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)),
+                    nombreRestaurante = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE)),
+                    ubicacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UBICACION)),
+                    rangoPrecio = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RANGO_PRECIO)),
+                    tipoComida = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TIPO_COMIDA)),
+                    calificacion = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CALIFICACION)),
+                    tituloResena = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITULO_RESENA)),
+                    comentarios = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIOS)) ?: "",
+                    autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_AUTOR_ID)),
+                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION)),
+                    imagenes = imagenesRutas.joinToString(",")
+                )
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+
+        return resena
+    }
+
+    fun buscarResenasPorNombreRestaurante(textoBusqueda: String): List<Resena> {
+        val resenas = mutableListOf<Resena>()
+        val db = dbHelper.readableDatabase
+
+        try {
+            val cursor = db.query(
+                DatabaseHelper.TABLE_RESENAS,
+                null,
+                "${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE} LIKE ?", // Búsqueda parcial
+                arrayOf("%$textoBusqueda%"), // % permite buscar texto que contenga la palabra
+                null, null,
+                "${DatabaseHelper.COLUMN_FECHA_CREACION} DESC"
+            )
+
+            while (cursor.moveToNext()) {
+                val resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID))
+
+                // Obtener las imágenes de esta reseña
+                val imagenesRutas = getImagenesByResenaId(resenaId)
+
+                val resena = Resena(
+                    id = resenaId,
+                    nombreRestaurante = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE)),
+                    ubicacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_UBICACION)),
+                    rangoPrecio = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RANGO_PRECIO)),
+                    tipoComida = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TIPO_COMIDA)),
+                    calificacion = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CALIFICACION)),
+                    tituloResena = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITULO_RESENA)),
+                    comentarios = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIOS)) ?: "",
+                    autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_AUTOR_ID)),
+                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FECHA_CREACION)),
+                    imagenes = imagenesRutas.joinToString(",")
+                )
+                resenas.add(resena)
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+
+        return resenas
     }
 }
