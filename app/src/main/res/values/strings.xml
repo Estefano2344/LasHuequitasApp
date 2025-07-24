@@ -153,4 +153,6 @@
     <string name="time_user_alejandro">1d</string>
     <string name="alejandro_reply">¿En serio son tan buenos? Supongo que me daré el tiempo de ir a probarlos.</string>
     <string name="add_comment">Agregar comentario</string>
+    <string name="no_reviews_icon">No hay reseñas disponibles</string>
+
 </resources>
