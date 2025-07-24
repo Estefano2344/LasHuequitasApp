@@ -51,6 +51,17 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- ProgressBar para carga -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Contenido desplazable -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -70,162 +81,170 @@
             android:paddingEnd="16dp"
             android:paddingBottom="16dp">
 
+            <!-- Información del restaurante -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvRestaurantName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:text="Nombre del Restaurante"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/ratingBarDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.1"
+                    android:rating="5"
+                    android:isIndicator="true"
+                    style="?attr/ratingBarStyleIndicator"
+                    android:progressTint="@color/orange_buttons_filledStars"
+                    android:secondaryProgressTint="@color/orange_ratingRestaurantTransparent"
+                    android:progressTintMode="src_in"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"/>
+            </LinearLayout>
+
+            <!-- Tags del restaurante -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvTipoComidaDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:padding="6dp"
+                    android:text="Italiana"
+                    android:textColor="@color/brown_textFillFields_percentRating"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvRangoPrecioDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:padding="6dp"
+                    android:text="$$"
+                    android:textColor="@color/brown_textFillFields_percentRating"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvUbicacionDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Centro"
+                    android:textSize="12sp"
+                    android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+                    android:fontFamily="@font/plus_jakarta_sans"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
             <!-- Imagen principal de la reseña -->
             <ImageView
                 android:id="@+id/ivReviewImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/review_ham_photo"/>
+                android:src="@drawable/review_ham_photo" />
 
             <!-- Título de la reseña -->
             <TextView
                 android:id="@+id/tvReviewTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:text="@string/title_review"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
+            <!-- Fecha de la reseña -->
+            <TextView
+                android:id="@+id/tvReviewDateDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:text="Hace 2 días"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+                android:textSize="14sp"/>
+
             <!-- Descripción de la reseña -->
             <TextView
                 android:id="@+id/tvReviewDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:text="@string/desc_review"
                 android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:lineSpacingExtra="4dp"/>
 
             <!-- Sección Comentarios -->
             <TextView
                 android:id="@+id/tvCommentsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:text="@string/comments"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
-            <!-- Comentario 1 -->
+            <!-- Contenedor dinámico para comentarios -->
             <LinearLayout
+                android:id="@+id/comentariosContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="16dp">
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"/>
 
-                <ImageView
-                    android:id="@+id/ivAvatarComment1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/perfilexam"
-                    android:contentDescription="@string/usuarioNombre"
-                    android:background="@drawable/circle_mask"
-                    android:clipToOutline="true"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:id="@+id/tvCommenterName1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/usuarioNombre"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvCommentDate1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/time_user_jombriel"
-                        android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
+            <!-- Mensaje cuando no hay comentarios -->
             <TextView
-                android:id="@+id/tvCommentText1"
+                android:id="@+id/tvNoComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/jombriel_reply"
-                android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:text="No hay comentarios aún. ¡Sé el primero en comentar!"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:gravity="center"
+                android:visibility="gone"/>
 
-            <!-- Comentario 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- ProgressBar para comentarios -->
+            <ProgressBar
+                android:id="@+id/progressBarComments"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="16dp">
-
-                <ImageView
-                    android:id="@+id/ivAvatarComment2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/avatar_alejandro"
-                    android:contentDescription="@string/nombre_usuario"
-                    android:background="@drawable/circle_mask"
-                    android:clipToOutline="true"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:id="@+id/tvCommenterName2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/alejandro_user"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvCommentDate2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/time_user_alejandro"
-                        android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvCommentText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/alejandro_reply"
-                android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
 
             <!-- Botón + texto "Agregar Comentario" -->
             <LinearLayout

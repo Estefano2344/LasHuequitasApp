@@ -128,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/plus_jakarta_sans"
-        android:text="@string/view_review"
+        android:text="@string/view_review_details"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:backgroundTint="@color/orange_buttons_filledStars"
