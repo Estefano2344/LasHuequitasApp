@@ -1,4 +1,3 @@
-// Archivo: RestaurantReviewsActivity.kt
 package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
@@ -18,100 +17,85 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
-import com.proano.estefano.lashuequitasapp.model.entities.Resena
 import com.proano.estefano.lashuequitasapp.view.ReviewAdapter
 import com.proano.estefano.lashuequitasapp.viewmodel.ResenaViewModel
 
 class RestaurantReviewsActivity : AppCompatActivity() {
 
     private lateinit var resenaViewModel: ResenaViewModel
-    private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var reviewsAdapter: ReviewAdapter
+    private lateinit var recyclerViewReviews: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var layoutNoReviews: LinearLayout
-    private var nombreRestaurante: String = ""
+    private lateinit var tvToolbarTitle: TextView
+
+    private var restaurantName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_restaurant_reviews)
 
-        // Edge-to-edge padding
+        // Ajuste de inset para edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Obtener el nombre del restaurante del Intent
-        nombreRestaurante = intent.getStringExtra("RESTAURANT_NAME") ?: ""
-
-        // Inicializar ViewModel
-        resenaViewModel = ViewModelProvider(this)[ResenaViewModel::class.java]
-
-        // Inicializar vistas
-        recyclerView = findViewById(R.id.recyclerViewReviews)
-        progressBar = findViewById(R.id.progressBar)
-        layoutNoReviews = findViewById(R.id.layoutNoReviews)
-
-        // Configurar RecyclerView
+        initViews()
+        setupViewModel()
         setupRecyclerView()
+        setupObservers()
+        setupListeners()
 
-        // Configurar UI (incluyendo la barra superior y navegación inferior)
-        setupUI()
+        // Obtener el nombre del restaurante desde el Intent
+        restaurantName = intent.getStringExtra("restaurant_name") ?: ""
+        tvToolbarTitle.text = "Reseñas - $restaurantName"
 
-        // Observar los datos del ViewModel
-        observeViewModel()
-
-        // Cargar las reseñas del restaurante
-        if (nombreRestaurante.isNotEmpty()) {
-            resenaViewModel.getResenasByRestauranteName(nombreRestaurante)
-        } else {
-            Toast.makeText(this, "Error: Nombre de restaurante no encontrado", Toast.LENGTH_SHORT).show()
-        }
+        // Cargar las reseñas
+        loadReviews()
     }
 
-    // Corrección 1: Esta función ahora está fuera de onCreate()
+    private fun initViews() {
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews)
+        progressBar = findViewById(R.id.progressBar)
+        layoutNoReviews = findViewById(R.id.layoutNoReviews)
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitle)
+    }
+
+    private fun setupViewModel() {
+        resenaViewModel = ViewModelProvider(this)[ResenaViewModel::class.java]
+    }
+
     private fun setupRecyclerView() {
-        reviewAdapter = ReviewAdapter { resena ->
-            // Navegar a los detalles de la reseña
+        reviewsAdapter = ReviewAdapter { resena ->
+            // Callback cuando se presiona "Ver reseña completa"
             val intent = Intent(this, ReviewDetailsActivity::class.java)
-            intent.putExtra("RESENA_ID", resena.id)
-            intent.putExtra("RESTAURANT_NAME", nombreRestaurante) // Pasa el nombre para ReviewDetails
+            intent.putExtra("resena_id", resena.id)
             startActivity(intent)
         }
 
-        recyclerView.apply {
+        recyclerViewReviews.apply {
             layoutManager = LinearLayoutManager(this@RestaurantReviewsActivity)
-            adapter = reviewAdapter
+            adapter = reviewsAdapter
         }
     }
 
-    private fun setupUI() {
-        // Actualizar el título con el nombre del restaurante
-        val tvToolbarTitle = findViewById<TextView>(R.id.tvToolbarTitle)
-        tvToolbarTitle.text = if (nombreRestaurante.isNotEmpty()) {
-            "Reseñas de $nombreRestaurante"
-        } else {
-            "Reseñas"
-        }
-
-        // Flecha de volver
-        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
-            finish()
-        }
-
-        // Configuración del Bottom Navigation
-        setupBottomNavigation()
-    }
-
-    private fun observeViewModel() {
+    private fun setupObservers() {
         // Observar las reseñas
         resenaViewModel.resenas.observe(this) { resenas ->
-            mostrarResenas(resenas)
+            if (resenas.isNotEmpty()) {
+                reviewsAdapter.updateResenas(resenas)
+                recyclerViewReviews.visibility = View.VISIBLE
+                layoutNoReviews.visibility = View.GONE
+            } else {
+                recyclerViewReviews.visibility = View.GONE
+                layoutNoReviews.visibility = View.VISIBLE
+            }
         }
 
-        // Observar estado de carga
+        // Observar el estado de carga
         resenaViewModel.isLoading.observe(this) { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
@@ -125,22 +109,13 @@ class RestaurantReviewsActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarResenas(resenas: List<Resena>) {
-        if (resenas.isEmpty()) {
-            // Mostrar mensaje de que no hay reseñas usando el layout predefinido
-            recyclerView.visibility = View.GONE
-            layoutNoReviews.visibility = View.VISIBLE
-        } else {
-            // Mostrar las reseñas en el RecyclerView
-            layoutNoReviews.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
-            reviewAdapter.updateResenas(resenas)
+    private fun setupListeners() {
+        // Botón de retroceso
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
         }
-    }
 
-    // Corrección 2: Eliminado el código suelto y la función redundante mostrarMensajeSinResenas()
-
-    private fun setupBottomNavigation() {
+        // Configuración del Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -152,8 +127,7 @@ class RestaurantReviewsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_populares -> {
-                    // Si esta actividad no debería ser el destino final, considera finish()
-                    // Si ya estás en populares o similar, no hagas nada
+                    startActivity(Intent(this, PopularesActivity::class.java))
                     true
                 }
                 R.id.nav_postear -> {
@@ -170,6 +144,15 @@ class RestaurantReviewsActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun loadReviews() {
+        if (restaurantName.isNotEmpty()) {
+            resenaViewModel.getResenasByRestauranteName(restaurantName)
+        } else {
+            // Si no hay nombre específico, cargar todas las reseñas
+            resenaViewModel.getAllResenas()
         }
     }
 }
