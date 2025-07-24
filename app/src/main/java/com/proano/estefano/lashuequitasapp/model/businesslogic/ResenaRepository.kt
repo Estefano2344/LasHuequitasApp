@@ -255,7 +255,7 @@ class ResenaRepository(private val context: Context) {
             val cursor = db.query(
                 DatabaseHelper.TABLE_RESENAS,
                 null,
-                "${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE} LIKE ?", // Búsqueda parcial
+                "LOWER(${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE}) LIKE LOWER(?)", // Búsqueda parcial
                 arrayOf("%$textoBusqueda%"), // % permite buscar texto que contenga la palabra
                 null, null,
                 "${DatabaseHelper.COLUMN_FECHA_CREACION} DESC"
