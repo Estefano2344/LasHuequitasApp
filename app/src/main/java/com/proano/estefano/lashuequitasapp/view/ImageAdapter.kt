@@ -8,12 +8,14 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.proano.estefano.lashuequitasapp.R
 
-
-class ImageAdapter(private val imageList: List<Uri>) :
-    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(
+    private val imageList: MutableList<Uri>,
+    private val onImageRemove: ((Int) -> Unit)? = null
+) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageItem)
+        val removeButton: ImageView? = view.findViewById(R.id.removeImage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -24,7 +26,18 @@ class ImageAdapter(private val imageList: List<Uri>) :
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.imageView.setImageURI(imageList[position])
+
+        // Configurar botón de eliminar si existe
+        holder.removeButton?.setOnClickListener {
+            onImageRemove?.invoke(position)
+        }
     }
 
     override fun getItemCount() = imageList.size
+
+    fun updateImages(newImages: List<Uri>) {
+        imageList.clear()
+        imageList.addAll(newImages)
+        notifyDataSetChanged()
+    }
 }
