@@ -215,117 +215,36 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
-            <!-- Comentario 1 -->
+            <!-- Contenedor dinámico para comentarios -->
             <LinearLayout
+                android:id="@+id/comentariosContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"/>
 
-                <ImageView
-                    android:id="@+id/ivAvatarComment1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/perfilexam"
-                    android:contentDescription="@string/usuarioNombre"
-                    android:background="@drawable/circle_mask"
-                    android:clipToOutline="true"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:id="@+id/tvCommenterName1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/usuarioNombre"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvCommentDate1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/time_user_jombriel"
-                        android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
+            <!-- Mensaje cuando no hay comentarios -->
             <TextView
-                android:id="@+id/tvCommentText1"
+                android:id="@+id/tvNoComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/jombriel_reply"
-                android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:text="No hay comentarios aún. ¡Sé el primero en comentar!"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:gravity="center"
+                android:visibility="gone"/>
 
-            <!-- Comentario 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- ProgressBar para comentarios -->
+            <ProgressBar
+                android:id="@+id/progressBarComments"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <ImageView
-                    android:id="@+id/ivAvatarComment2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/avatar_alejandro"
-                    android:contentDescription="@string/nombre_usuario"
-                    android:background="@drawable/circle_mask"
-                    android:clipToOutline="true"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:id="@+id/tvCommenterName2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/alejandro_user"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvCommentDate2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:text="@string/time_user_alejandro"
-                        android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvCommentText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/alejandro_reply"
-                android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
 
             <!-- Botón + texto "Agregar Comentario" -->
             <LinearLayout

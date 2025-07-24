@@ -41,6 +41,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_IMAGEN_RESENA_ID = "resena_id"
         const val COLUMN_RUTA_IMAGEN = "ruta_imagen"
         const val COLUMN_ORDEN = "orden"
+
+        // Tabla de comentarios
+        const val TABLE_COMENTARIOS = "comentarios"
+        const val COLUMN_COMENTARIO_ID = "id"
+        const val COLUMN_COMENTARIO_RESENA_ID = "resena_id"
+        const val COLUMN_COMENTARIO_AUTOR_ID = "autor_id"
+        const val COLUMN_COMENTARIO_CONTENIDO = "contenido"
+        const val COLUMN_COMENTARIO_FECHA_CREACION = "fecha_creacion"
+
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -81,12 +90,27 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             $COLUMN_ORDEN INTEGER DEFAULT 0,
             FOREIGN KEY($COLUMN_IMAGEN_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID)
         )
+        
     """.trimIndent()
+        val createComentariosTable = """
+        CREATE TABLE $TABLE_COMENTARIOS (
+            $COLUMN_COMENTARIO_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_COMENTARIO_RESENA_ID INTEGER NOT NULL,
+            $COLUMN_COMENTARIO_AUTOR_ID INTEGER NOT NULL,
+            $COLUMN_COMENTARIO_CONTENIDO TEXT NOT NULL,
+            $COLUMN_COMENTARIO_FECHA_CREACION TEXT NOT NULL,
+            FOREIGN KEY($COLUMN_COMENTARIO_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID),
+            FOREIGN KEY($COLUMN_COMENTARIO_AUTOR_ID) REFERENCES $TABLE_USERS($COLUMN_ID)
+        )
+    """.trimIndent()
+
+
         // Ejecutar las sentencias SQL para crear las tablas
         try {
             db.execSQL(createUsersTable)
             db.execSQL(createResenasTable)
             db.execSQL(createImagenesResenasTable)
+            db.execSQL(createComentariosTable)
         } catch (e: Exception) {
             Log.e("DB_ERROR", "Error al crear las tablas", e)
         }
@@ -97,6 +121,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USERS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENAS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_IMAGENES_RESENAS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_COMENTARIOS")
         onCreate(db)
     }
     override fun onConfigure(db: SQLiteDatabase) {
