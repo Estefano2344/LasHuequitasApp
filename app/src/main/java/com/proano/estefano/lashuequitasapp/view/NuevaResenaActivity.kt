@@ -16,12 +16,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
+import com.proano.estefano.lashuequitasapp.viewmodel.NuevaResenaViewModel
+import com.proano.estefano.lashuequitasapp.viewmodel.SaveResenaResult
 
 class NuevaResenaActivity : AppCompatActivity() {
+
+    // ViewModel
+    private lateinit var viewModel: NuevaResenaViewModel
+    private lateinit var sessionManager: SessionManager
 
     // Definir las vistas
     private lateinit var nombreRestaurante: EditText
@@ -40,26 +48,54 @@ class NuevaResenaActivity : AppCompatActivity() {
     private lateinit var btnCamara: Button
     private lateinit var btnGaleria: Button
 
+    // Adaptador para las imágenes
+    private lateinit var imageAdapter: ImageAdapter
+
     // Constantes para permisos y solicitudes
     private val CAMERA_PERMISSION_REQUEST = 100
-    private val STORAGE_PERMISSION_REQUEST = 101
+    private val STORAGE_PERMISSION_REQUEST = 101 // Usado para READ_EXTERNAL_STORAGE o READ_MEDIA_IMAGES
 
     // Variables para las imágenes
-    private var imageUri: Uri? = null
-    private val imagesList = ArrayList<Uri>()
+    private var imageUri: Uri? = null // Para almacenar la URI de la imagen capturada por la cámara
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nueva_resena)
 
-        // Ajuste de inset para edge-to-edge sobre el root correcto
+        // Inicializar ViewModel y SessionManager
+        viewModel = ViewModelProvider(this)[NuevaResenaViewModel::class.java]
+        sessionManager = SessionManager(this)
+
+        // Verificar si el usuario está logueado
+        if (!sessionManager.isLoggedIn()) {
+            navigateToLogin()
+            return
+        }
+
+        // Ajuste de inset para edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Configuración de vistas
+        // Inicializar vistas
+        initViews()
+
+        // Configurar observadores
+        setupObservers()
+
+        // Configurar listeners
+        setupListeners()
+
+        // Configurar Spinners
+        setupSpinners()
+
+        // Configurar RecyclerView
+        setupRecyclerView()
+    }
+
+    private fun initViews() {
         nombreRestaurante = findViewById(R.id.nombreRestaurante)
         ubicacion = findViewById(R.id.ubicacion)
         rangoPrecio = findViewById(R.id.rango_precio)
@@ -73,110 +109,138 @@ class NuevaResenaActivity : AppCompatActivity() {
         btnCamara = findViewById(R.id.btnCamara)
         btnGaleria = findViewById(R.id.btnGaleria)
         recyclerViewImages = findViewById(R.id.recyclerViewImages)
+        // Asegúrate de que el ID `main` exista en tu layout XML raíz para el ajuste de insets.
+        // Si no existe, reemplázalo con el ID de tu vista raíz.
+    }
 
-        // Configurar RecyclerView para múltiples imágenes
-        recyclerViewImages.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        // Aquí necesitarás crear un adaptador personalizado para las imágenes
-        // recyclerViewImages.adapter = ImageAdapter(imagesList)
+    private fun setupObservers() {
+        // Observar el resultado del guardado
+        viewModel.saveResult.observe(this) { result ->
+            when (result) {
+                is SaveResenaResult.Success -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                    clearFields()
+                    // Opcional: navegar de vuelta al home
+                    navigateToHome()
+                }
+                is SaveResenaResult.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
-        // Configurar Spinners para "Rango de Precio" y "Tipo de Comida"
+        // Observar el estado de carga
+        viewModel.isLoading.observe(this) { isLoading ->
+            btnSubir.isEnabled = !isLoading
+            if (isLoading) {
+                btnSubir.text = "Guardando..."
+            } else {
+                btnSubir.text = getString(R.string.btn_subir)
+            }
+        }
+
+        // Observar la lista de imágenes
+        viewModel.imagesList.observe(this) { images ->
+            imageAdapter.updateImages(images)
+            updateImageVisibility(images)
+        }
+    }
+
+    private fun setupListeners() {
+        // Listener para el botón de guardar
+        btnSubir.setOnClickListener {
+            guardarResena()
+        }
+
+        // Listeners para botones de imagen
+        btnCamara.setOnClickListener {
+            checkCameraPermission()
+        }
+
+        btnGaleria.setOnClickListener {
+            checkStoragePermission()
+        }
+
+        // Cerrar la actividad
+        findViewById<ImageView>(R.id.closeProfile).setOnClickListener {
+            finish()
+        }
+
+        // Bottom Navigation
+        setupBottomNavigation()
+    }
+
+    private fun setupSpinners() {
+        // Configurar Spinner para "Rango de Precio"
         val rangoAdapter = ArrayAdapter.createFromResource(
             this, R.array.rango_precio, android.R.layout.simple_spinner_item
         )
         rangoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         rangoPrecio.adapter = rangoAdapter
 
+        // Configurar Spinner para "Tipo de Comida"
         val tipoAdapter = ArrayAdapter.createFromResource(
             this, R.array.tipo_comida, android.R.layout.simple_spinner_item
         )
         tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         tipoComida.adapter = tipoAdapter
+    }
 
-        // Configurar botón de cámara
-        btnCamara.setOnClickListener {
-            checkCameraPermission()
+    private fun setupRecyclerView() {
+        imageAdapter = ImageAdapter(mutableListOf()) { position ->
+            viewModel.removeImage(position)
         }
+        recyclerViewImages.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewImages.adapter = imageAdapter
+    }
 
-        // Configurar botón de galería
-        btnGaleria.setOnClickListener {
-            checkStoragePermission()
-        }
+    private fun guardarResena() {
+        val nombre = nombreRestaurante.text.toString()
+        val ubicacionTexto = ubicacion.text.toString()
+        val titulo = tituloResena.text.toString()
+        val comentarios = comentariosResena.text.toString()
+        val calificacion = ratingBar.rating
+        val rango = rangoPrecio.selectedItem.toString()
+        val tipo = tipoComida.selectedItem.toString()
+        val images = viewModel.imagesList.value ?: mutableListOf()
 
-        // Manejar la acción de "Subir"
-        btnSubir.setOnClickListener {
-            val nombre = nombreRestaurante.text.toString()
-            val ubicacionTexto = ubicacion.text.toString()
-            val titulo = tituloResena.text.toString()
-            val comentarios = comentariosResena.text.toString()
-            val calificacion = ratingBar.rating
+        viewModel.guardarResena(
+            nombreRestaurante = nombre,
+            ubicacion = ubicacionTexto,
+            rangoPrecio = rango,
+            tipoComida = tipo,
+            calificacion = calificacion,
+            tituloResena = titulo,
+            comentarios = comentarios,
+            imageUris = images
+        )
+    }
 
-            if (nombre.isEmpty() || ubicacionTexto.isEmpty() || titulo.isEmpty()) {
-                Toast.makeText(this, "Por favor complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+    private fun updateImageVisibility(images: List<Uri>) {
+        if (images.isNotEmpty()) {
+            // Mostrar la primera imagen en el preview
+            imagePreview.visibility = View.VISIBLE
+            imagePreview.setImageURI(images.first())
+            textImagen.visibility = View.GONE
+
+            // Mostrar RecyclerView si hay más de una imagen
+            if (images.size > 1) {
+                recyclerViewImages.visibility = View.VISIBLE
+            } else {
+                recyclerViewImages.visibility = View.GONE
             }
-
-            // Obtener el rango de precio y tipo de comida seleccionados
-            val rango = rangoPrecio.selectedItem.toString()
-            val tipo = tipoComida.selectedItem.toString()
-
-            // Aquí puedes guardar los datos o realizar otra acción
-            // También puedes usar la calificación (calificacion) y las imágenes (imagesList)
-            Toast.makeText(this, "Reseña guardada con éxito", Toast.LENGTH_SHORT).show()
-
-            // Volver a la actividad anterior o limpiar los campos
-            clearFields()
-        }
-
-        // Cerrar la actividad cuando se haga clic en el botón de retroceso
-        findViewById<ImageView>(R.id.closeProfile).setOnClickListener {
-            finish()
-        }
-
-        // Configuración del Bottom Navigation
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                // Navegar a la actividad de inicio (HomeActivity)
-                R.id.nav_home -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                // Navegar a la pantalla de populares (PopularesActivity)
-                R.id.nav_populares -> {
-                    val intent = Intent(this, PopularesActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                // Navegar a la pantalla de favoritos (FavoritosActivity)
-                R.id.nav_favoritos -> {
-                    val intent = Intent(this, FavoritosActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                // Navegar a la pantalla del perfil (PerfilActivity)
-                R.id.nav_perfil -> {
-                    val intent = Intent(this, PerfilActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                    true
-                }
-                else -> false
-            }
+        } else {
+            imagePreview.visibility = View.GONE
+            textImagen.visibility = View.VISIBLE
+            recyclerViewImages.visibility = View.GONE
         }
     }
 
-    // Comprobar y solicitar permisos de cámara
+    // === MÉTODOS DE PERMISOS Y CÁMARA ===
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
-            PackageManager.PERMISSION_GRANTED) {
+            PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.CAMERA),
@@ -187,12 +251,12 @@ class NuevaResenaActivity : AppCompatActivity() {
         }
     }
 
-    // Comprobar y solicitar permisos de almacenamiento
     private fun checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Para Android 13+ usamos READ_MEDIA_IMAGES
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) !=
-                PackageManager.PERMISSION_GRANTED) {
+                PackageManager.PERMISSION_GRANTED
+            ) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
@@ -204,7 +268,8 @@ class NuevaResenaActivity : AppCompatActivity() {
         } else {
             // Para versiones anteriores
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
+                PackageManager.PERMISSION_GRANTED
+            ) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
@@ -216,21 +281,16 @@ class NuevaResenaActivity : AppCompatActivity() {
         }
     }
 
-    // Abrir la cámara
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "Nueva Imagen")
         values.put(MediaStore.Images.Media.DESCRIPTION, "De la cámara")
-
         imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-
         cameraLauncher.launch(cameraIntent)
     }
 
-    // Abrir la galería
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryLauncher.launch(intent)
@@ -240,7 +300,7 @@ class NuevaResenaActivity : AppCompatActivity() {
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             imageUri?.let {
-                addImageToCollection(it)
+                viewModel.addImage(it)
             }
         }
     }
@@ -250,27 +310,8 @@ class NuevaResenaActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
             data?.data?.let { uri ->
-                addImageToCollection(uri)
+                viewModel.addImage(uri)
             }
-        }
-    }
-
-    // Añadir imagen a la colección
-    private fun addImageToCollection(uri: Uri) {
-        imagesList.add(uri)
-
-        // Mostrar la vista previa
-        imagePreview.visibility = View.VISIBLE
-        imagePreview.setImageURI(uri)
-
-        // Ocultar el texto informativo
-        textImagen.visibility = View.GONE
-
-        // Si hay más de una imagen, mostrar el RecyclerView
-        if (imagesList.size > 1) {
-            recyclerViewImages.visibility = View.VISIBLE
-            // Notificar al adaptador sobre cambios
-            // (adapter as? ImageAdapter)?.notifyDataSetChanged()
         }
     }
 
@@ -281,7 +322,6 @@ class NuevaResenaActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         when (requestCode) {
             CAMERA_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -300,22 +340,67 @@ class NuevaResenaActivity : AppCompatActivity() {
         }
     }
 
-    // Limpiar los campos después de subir la reseña
+    private fun setupBottomNavigation() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    navigateToHome()
+                    true
+                }
+                R.id.nav_populares -> {
+                    val intent = Intent(this, PopularesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_favoritos -> {
+                    val intent = Intent(this, FavoritosActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_perfil -> {
+                    val intent = Intent(this, PerfilActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
     private fun clearFields() {
         nombreRestaurante.text.clear()
         ubicacion.text.clear()
         tituloResena.text.clear()
         comentariosResena.text.clear()
         ratingBar.rating = 0f
-        imagesList.clear()
-        imagePreview.visibility = View.GONE
-        textImagen.visibility = View.VISIBLE
-        recyclerViewImages.visibility = View.GONE
+        rangoPrecio.setSelection(0)
+        tipoComida.setSelection(0)
+        viewModel.clearImages()
     }
 
-    // Retroceso en la barra de acciones
+    private fun navigateToLogin() {
+        val intent = Intent(this, PantallaInicioDeSesionActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToHome() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed() // Usar onBackPressedDispatcher para API 33+
         return true
     }
 }
