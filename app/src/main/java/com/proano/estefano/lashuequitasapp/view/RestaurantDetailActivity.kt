@@ -3,6 +3,7 @@ package com.proano.estefano.lashuequitasapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
 
 class RestaurantDetailActivity : AppCompatActivity() {
+
+    // Variable para almacenar el nombre del restaurante
+    private var nombreRestaurante: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,47 +29,56 @@ class RestaurantDetailActivity : AppCompatActivity() {
             insets
         }
 
+        // Obtener el nombre del restaurante del Intent o del TextView
+        nombreRestaurante = intent.getStringExtra("RESTAURANT_NAME") ?: ""
+
+        // Si no viene del Intent, obtenerlo del TextView (para casos de datos estáticos)
+        if (nombreRestaurante.isEmpty()) {
+            val tvTitle = findViewById<TextView>(R.id.tvTitle)
+            nombreRestaurante = tvTitle.text.toString()
+        }
+
         // 1) Cerrar al pulsar la flecha
         val closeDetail = findViewById<ImageView>(R.id.closeDetail)
         closeDetail.setOnClickListener {
             finish()
         }
 
-        // 2) Ir a RestaurantReviewsActivity
+        // 2) Ir a RestaurantReviewsActivity pasando el nombre del restaurante
         val btnViewReviews = findViewById<MaterialButton>(R.id.btnViewReviews)
         btnViewReviews.setOnClickListener {
             val intent = Intent(this, RestaurantReviewsActivity::class.java)
+            // IMPORTANTE: Pasar el nombre del restaurante
+            intent.putExtra("RESTAURANT_NAME", nombreRestaurante)
             startActivity(intent)
         }
 
         // Configuración del Bottom Navigation
+        setupBottomNavigation()
+    }
+
+    private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                // Navegar a la actividad de inicio (HomeActivity)
                 R.id.nav_home -> {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (PopularesActivity)
+                    finish()
                     true
                 }
-                // Navegar a la pantalla de populares (PopularesActivity)
                 R.id.nav_populares -> {
-                    // Ya estamos en la pantalla de populares, no hacer nada
                     true
                 }
-                // Navegar a la pantalla para postear una reseña (NuevaResenaActivity)
                 R.id.nav_postear -> {
                     startActivity(Intent(this, NuevaResenaActivity::class.java))
                     true
                 }
-                // Navegar a la pantalla de favoritos (FavoritosActivity)
                 R.id.nav_favoritos -> {
                     startActivity(Intent(this, FavoritosActivity::class.java))
                     true
                 }
-                // Navegar a la pantalla del perfil (PerfilActivity)
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     true
