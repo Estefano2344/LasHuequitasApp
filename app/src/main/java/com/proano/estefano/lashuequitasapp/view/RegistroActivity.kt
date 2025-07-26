@@ -2,7 +2,6 @@ package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -22,7 +21,6 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var viewModel: RegistroViewModel
 
-    // Referencias a las vistas
     private lateinit var nombreEditText: TextInputEditText
     private lateinit var apellidoEditText: TextInputEditText
     private lateinit var emailEditText: TextInputEditText
@@ -41,17 +39,12 @@ class RegistroActivity : AppCompatActivity() {
             insets
         }
 
-        // Inicializar ViewModel
         viewModel = ViewModelProvider(this)[RegistroViewModel::class.java]
 
-        // Inicializar vistas
         initViews()
-
-        // Configurar observadores
         setupObservers()
-
-        // Configurar listeners
         setupListeners()
+        setupChipColorFeedback() // ← NUEVO
     }
 
     private fun initViews() {
@@ -65,12 +58,10 @@ class RegistroActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observar el resultado del registro
         viewModel.registroResult.observe(this) { result ->
             when (result) {
                 is RegistroResult.Success -> {
                     Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
-                    // Navegar a la pantalla de inicio de sesión
                     val intent = Intent(this, PantallaInicioDeSesionActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -82,19 +73,13 @@ class RegistroActivity : AppCompatActivity() {
             }
         }
 
-        // Observar el estado de carga
         viewModel.isLoading.observe(this) { isLoading ->
             registrarmeButton.isEnabled = !isLoading
-            if (isLoading) {
-                registrarmeButton.text = "Registrando..."
-            } else {
-                registrarmeButton.text = getString(R.string.registrarme)
-            }
+            registrarmeButton.text = if (isLoading) "Registrando..." else getString(R.string.registrarme)
         }
     }
 
     private fun setupListeners() {
-        // Listener para el botón Registrarme
         registrarmeButton.setOnClickListener {
             val nombre = nombreEditText.text.toString()
             val apellido = apellidoEditText.text.toString()
@@ -106,7 +91,6 @@ class RegistroActivity : AppCompatActivity() {
             viewModel.registrarUsuario(nombre, apellido, email, password, usuario, preferencias)
         }
 
-        // Listener para el icono de cerrar
         findViewById<ImageView>(R.id.cerrarImageView).setOnClickListener {
             val intent = Intent(this, PantallaInicioDeSesionActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -117,14 +101,25 @@ class RegistroActivity : AppCompatActivity() {
 
     private fun getSelectedPreferences(): List<String> {
         val selectedPreferences = mutableListOf<String>()
-
         for (i in 0 until preferenciasChipGroup.childCount) {
             val chip = preferenciasChipGroup.getChildAt(i) as Chip
             if (chip.isChecked) {
                 selectedPreferences.add(chip.text.toString())
             }
         }
-
         return selectedPreferences
+    }
+
+    private fun setupChipColorFeedback() {
+        for (i in 0 until preferenciasChipGroup.childCount) {
+            val chip = preferenciasChipGroup.getChildAt(i) as Chip
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    chip.setChipBackgroundColorResource(R.color.orange_buttons_filledStars)
+                } else {
+                    chip.setChipBackgroundColorResource(R.color.orange_ratingRestaurantTransparent)
+                }
+            }
+        }
     }
 }
