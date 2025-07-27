@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_marginEnd="6dp">
+
+    <ImageView
+        android:id="@+id/restaurantImageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_restaurant" /> <TextView
+    android:id="@+id/restaurantNameTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="15sp"
+    android:textStyle="bold"
+    android:gravity="start"
+    android:layout_marginTop="8dp"
+    android:fontFamily="@font/plus_jakarta_sans"
+    tools:text="Restaurant Name" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/estrellah" />
+
+        <TextView
+            android:id="@+id/restaurantRatingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/plus_jakarta_sans"
+            tools:text="4.5" />
+
+        <TextView
+            android:id="@+id/restaurantReviewCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+            android:fontFamily="@font/plus_jakarta_sans"
+            tools:text="(120 Reseñas)" />
+    </LinearLayout>
+</LinearLayout>

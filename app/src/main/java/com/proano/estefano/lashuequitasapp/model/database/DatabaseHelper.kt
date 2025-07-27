@@ -9,7 +9,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "lashuequitas.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3 // Incremented database version
 
         // Tabla de usuarios
         const val TABLE_USERS = "users"
@@ -50,6 +50,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_COMENTARIO_CONTENIDO = "contenido"
         const val COLUMN_COMENTARIO_FECHA_CREACION = "fecha_creacion"
 
+        // Nueva tabla para Restaurantes
+        const val TABLE_RESTAURANTS = "restaurants"
+        const val COLUMN_RESTAURANT_ID = "id"
+        const val COLUMN_RESTAURANT_NAME = "name"
+        const val COLUMN_RESTAURANT_IMAGE_URL = "image_url" // This will store the drawable name, e.g., "restaurante1"
+        const val COLUMN_RESTAURANT_RATING = "rating"
+        const val COLUMN_RESTAURANT_REVIEW_COUNT = "review_count"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -104,6 +111,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         )
     """.trimIndent()
 
+        // Nueva tabla para Restaurantes
+        val CREATE_RESTAURANTS_TABLE = """
+            CREATE TABLE $TABLE_RESTAURANTS (
+                $COLUMN_RESTAURANT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_RESTAURANT_NAME TEXT NOT NULL,
+                $COLUMN_RESTAURANT_IMAGE_URL TEXT NOT NULL,
+                $COLUMN_RESTAURANT_RATING REAL NOT NULL,
+                $COLUMN_RESTAURANT_REVIEW_COUNT INTEGER NOT NULL
+            )
+        """.trimIndent()
 
         // Ejecutar las sentencias SQL para crear las tablas
         try {
@@ -111,22 +128,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             db.execSQL(createResenasTable)
             db.execSQL(createImagenesResenasTable)
             db.execSQL(createComentariosTable)
+            db.execSQL(CREATE_RESTAURANTS_TABLE) // Execute the new table creation
         } catch (e: Exception) {
             Log.e("DB_ERROR", "Error al crear las tablas", e)
         }
-
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USERS")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENAS")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_IMAGENES_RESENAS")
+        // Drop all existing tables
         db.execSQL("DROP TABLE IF EXISTS $TABLE_COMENTARIOS")
-        onCreate(db)
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_IMAGENES_RESENAS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENAS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_USERS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_RESTAURANTS") // Drop the new table on upgrade
+        onCreate(db) // Recreate all tables
     }
+
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.setForeignKeyConstraintsEnabled(true)
     }
-
 }
