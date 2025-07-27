@@ -50,6 +50,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_COMENTARIO_CONTENIDO = "contenido"
         const val COLUMN_COMENTARIO_FECHA_CREACION = "fecha_creacion"
 
+        // Tabla favoritos
+        const val TABLE_FAVORITOS = "favoritos"
+        const val COLUMN_FAVORITO_ID = "id"
+        const val COLUMN_FAVORITO_USER_ID = "user_id"
+        const val COLUMN_FAVORITO_RESENA_ID = "resena_id"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -104,6 +109,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         )
     """.trimIndent()
 
+        val createFavoritosTable = """
+    CREATE TABLE $TABLE_FAVORITOS (
+        $COLUMN_FAVORITO_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $COLUMN_FAVORITO_USER_ID INTEGER NOT NULL,
+        $COLUMN_FAVORITO_RESENA_ID INTEGER NOT NULL,
+        FOREIGN KEY($COLUMN_FAVORITO_USER_ID) REFERENCES $TABLE_USERS($COLUMN_ID),
+        FOREIGN KEY($COLUMN_FAVORITO_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID)
+    )
+""".trimIndent()
 
         // Ejecutar las sentencias SQL para crear las tablas
         try {
@@ -111,6 +125,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             db.execSQL(createResenasTable)
             db.execSQL(createImagenesResenasTable)
             db.execSQL(createComentariosTable)
+            db.execSQL(createFavoritosTable)
         } catch (e: Exception) {
             Log.e("DB_ERROR", "Error al crear las tablas", e)
         }
@@ -122,6 +137,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENAS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_IMAGENES_RESENAS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_COMENTARIOS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_FAVORITOS")
         onCreate(db)
     }
     override fun onConfigure(db: SQLiteDatabase) {
