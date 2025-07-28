@@ -3,13 +3,14 @@ package com.proano.estefano.lashuequitasapp.model.businesslogic
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor // Agregado: Importación para Cursor
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.util.Log // Agregado: Importación para Log
+import android.util.Log
 import com.proano.estefano.lashuequitasapp.model.database.DatabaseHelper
 import com.proano.estefano.lashuequitasapp.model.entities.Resena
-import com.proano.estefano.lashuequitasapp.model.entities.Restaurant // Importación ya existente
+import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
+import com.proano.estefano.lashuequitasapp.model.entities.User
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -19,16 +20,43 @@ import java.util.*
 class ResenaRepository(private val context: Context) {
     private val dbHelper = DatabaseHelper(context)
 
-    // --- Existing Resena operations (keep them as they are) ---
+    // Método para obtener un usuario por ID (necesario para las preferencias)
+    fun getUserById(userId: Long): User? {
+        val db = dbHelper.readableDatabase
+        var user: User? = null
+        val cursor = db.query(
+            DatabaseHelper.TABLE_USERS,
+            null,
+            "${DatabaseHelper.COLUMN_ID} = ?",
+            arrayOf(userId.toString()),
+            null, null, null
+        )
 
-    fun insertResena(resena: Resena, imageUris: List<Uri>): Long { // Cambiado a Long para devolver el ID
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val id = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID))
+                val nombre = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE))
+                val apellido = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO))
+                val email = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EMAIL))
+                val password = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PASSWORD))
+                val usuario = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO))
+                val preferencias = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PREFERENCIAS)) ?: ""
+                user = User(id, nombre, apellido, email, password, usuario, preferencias)
+            }
+        }
+        cursor?.close()
+        db.close()
+        return user
+    }
+
+    // --- Operaciones de Reseña ---
+    fun insertResena(resena: Resena, imageUris: List<Uri>): Long {
         val db = dbHelper.writableDatabase
-        var resenaId: Long = -1L // Inicializar con un valor que indique fallo
+        var resenaId: Long = -1L
 
-        try {
+        return try {
             db.beginTransaction()
 
-            // Insertar la reseña
             val resenaValues = ContentValues().apply {
                 put(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE, resena.nombreRestaurante)
                 put(DatabaseHelper.COLUMN_UBICACION, resena.ubicacion)
@@ -39,17 +67,13 @@ class ResenaRepository(private val context: Context) {
                 put(DatabaseHelper.COLUMN_COMENTARIOS, resena.comentarios)
                 put(DatabaseHelper.COLUMN_AUTOR_ID, resena.autorId)
                 put(DatabaseHelper.COLUMN_FECHA_CREACION, resena.fechaCreacion)
-                // Nota: COLUMN_IMAGENES en Resena es un String, si guardas URLs aquí, es diferente
-                // a la tabla de IMAGENES_RESENAS. Asegúrate de la consistencia deseada.
             }
 
             resenaId = db.insert(DatabaseHelper.TABLE_RESENAS, null, resenaValues)
 
             if (resenaId != -1L) {
-                // Guardar las imágenes en el almacenamiento interno de la app
                 val imagesPaths = saveImages(imageUris, resenaId)
 
-                // Insertar las rutas de imágenes en la tabla de imágenes
                 imagesPaths.forEachIndexed { index, imagePath ->
                     val imageValues = ContentValues().apply {
                         put(DatabaseHelper.COLUMN_IMAGEN_RESENA_ID, resenaId)
@@ -58,22 +82,23 @@ class ResenaRepository(private val context: Context) {
                     }
                     db.insert(DatabaseHelper.TABLE_IMAGENES_RESENAS, null, imageValues)
                 }
-
                 db.setTransactionSuccessful()
+                resenaId
+            } else {
+                -1L
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            -1L
         } finally {
             db.endTransaction()
             db.close()
         }
-        return resenaId
     }
 
     private fun saveImages(imageUris: List<Uri>, resenaId: Long): List<String> {
         val imagePaths = mutableListOf<String>()
 
-        // Crear directorio para las imágenes si no existe
         val imagesDir = File(context.filesDir, "resenas_images")
         if (!imagesDir.exists()) {
             imagesDir.mkdirs()
@@ -98,7 +123,6 @@ class ResenaRepository(private val context: Context) {
                 e.printStackTrace()
             }
         }
-
         return imagePaths
     }
 
@@ -140,7 +164,6 @@ class ResenaRepository(private val context: Context) {
         } finally {
             db.close()
         }
-
         return resenas
     }
 
@@ -179,7 +202,6 @@ class ResenaRepository(private val context: Context) {
         } finally {
             db.close()
         }
-
         return resenas
     }
 
@@ -207,7 +229,6 @@ class ResenaRepository(private val context: Context) {
         } finally {
             db.close()
         }
-
         return imagenes
     }
 
@@ -225,9 +246,7 @@ class ResenaRepository(private val context: Context) {
             )
 
             if (cursor.moveToFirst()) {
-                // Obtener las imágenes de esta reseña
                 val imagenesRutas = getImagenesByResenaId(resenaId)
-
                 resena = Resena(
                     id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)),
                     nombreRestaurante = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE)),
@@ -248,7 +267,6 @@ class ResenaRepository(private val context: Context) {
         } finally {
             db.close()
         }
-
         return resena
     }
 
@@ -260,16 +278,14 @@ class ResenaRepository(private val context: Context) {
             val cursor = db.query(
                 DatabaseHelper.TABLE_RESENAS,
                 null,
-                "LOWER(${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE}) LIKE LOWER(?)", // Búsqueda parcial
-                arrayOf("%$textoBusqueda%"), // % permite buscar texto que contenga la palabra
+                "LOWER(${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE}) LIKE LOWER(?)",
+                arrayOf("%$textoBusqueda%"),
                 null, null,
                 "${DatabaseHelper.COLUMN_FECHA_CREACION} DESC"
             )
 
             while (cursor.moveToNext()) {
                 val resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID))
-
-                // Obtener las imágenes de esta reseña
                 val imagenesRutas = getImagenesByResenaId(resenaId)
 
                 val resena = Resena(
@@ -293,60 +309,18 @@ class ResenaRepository(private val context: Context) {
         } finally {
             db.close()
         }
-
         return resenas
     }
 
-    fun buscarRestaurantsPorNombre(textoBusqueda: String): List<Restaurant> {
-        val restaurants = mutableListOf<Restaurant>()
-        val db = dbHelper.readableDatabase
-
-        try {
-            val cursor = db.query(
-                DatabaseHelper.TABLE_RESTAURANTS,
-                null,
-                "LOWER(${DatabaseHelper.COLUMN_RESTAURANT_NAME}) LIKE LOWER(?)", // Búsqueda parcial por nombre de restaurante
-                arrayOf("%$textoBusqueda%"), // % permite buscar texto que contenga la palabra
-                null, null,
-                "${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC" // Puedes ordenar como prefieras
-            )
-
-            cursor?.use {
-                while (it.moveToNext()) {
-                    val idIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_ID)
-                    val nameIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_NAME)
-                    val imageUrlIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
-                    val ratingIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_RATING)
-                    val reviewCountIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
-
-                    if (idIndex != -1 && nameIndex != -1 && imageUrlIndex != -1 && ratingIndex != -1 && reviewCountIndex != -1) {
-                        val id = it.getLong(idIndex)
-                        val name = it.getString(nameIndex)
-                        val imageUrl = it.getString(imageUrlIndex)
-                        val rating = it.getFloat(ratingIndex)
-                        val reviewCount = it.getInt(reviewCountIndex)
-                        restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount))
-                    } else {
-                        Log.e("ResenaRepository", "One or more columns not found in buscarRestaurantsPorNombre")
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            db.close()
-        }
-
-        return restaurants
-    }
-
-    fun insertRestaurant(restaurant: Restaurant): Long { // Cambiado a Long para devolver el ID
+    // --- Operaciones de Restaurante ---
+    fun insertRestaurant(restaurant: Restaurant): Long {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(DatabaseHelper.COLUMN_RESTAURANT_NAME, restaurant.name)
             put(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL, restaurant.imageUrl)
             put(DatabaseHelper.COLUMN_RESTAURANT_RATING, restaurant.rating)
             put(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT, restaurant.reviewCount)
+            put(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE, restaurant.foodType)
         }
         val id = db.insert(DatabaseHelper.TABLE_RESTAURANTS, null, values)
         db.close()
@@ -360,6 +334,7 @@ class ResenaRepository(private val context: Context) {
             put(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL, restaurant.imageUrl)
             put(DatabaseHelper.COLUMN_RESTAURANT_RATING, restaurant.rating)
             put(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT, restaurant.reviewCount)
+            put(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE, restaurant.foodType)
         }
         val rowsAffected = db.update(
             DatabaseHelper.TABLE_RESTAURANTS,
@@ -383,23 +358,20 @@ class ResenaRepository(private val context: Context) {
         )
         cursor?.use {
             if (it.moveToFirst()) {
-                // Es importante verificar que las columnas existan en el cursor
-                val idIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_ID)
-                val nameIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_NAME)
-                val imageUrlIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
-                val ratingIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_RATING)
-                val reviewCountIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val idIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                val nameIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                val imageUrlIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                val ratingIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                val reviewCountIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val foodTypeIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
 
-                if (idIndex != -1 && nameIndex != -1 && imageUrlIndex != -1 && ratingIndex != -1 && reviewCountIndex != -1) {
-                    val id = it.getLong(idIndex)
-                    val restaurantName = it.getString(nameIndex)
-                    val imageUrl = it.getString(imageUrlIndex)
-                    val rating = it.getFloat(ratingIndex)
-                    val reviewCount = it.getInt(reviewCountIndex)
-                    restaurant = Restaurant(id, restaurantName, imageUrl, rating, reviewCount)
-                } else {
-                    Log.e("ResenaRepository", "One or more columns not found in getRestaurantByName")
-                }
+                val id = it.getLong(idIndex)
+                val restaurantName = it.getString(nameIndex)
+                val imageUrl = it.getString(imageUrlIndex)
+                val rating = it.getFloat(ratingIndex)
+                val reviewCount = it.getInt(reviewCountIndex)
+                val foodType = it.getString(foodTypeIndex)
+                restaurant = Restaurant(id, restaurantName, imageUrl, rating, reviewCount, foodType)
             }
         }
         cursor?.close()
@@ -407,46 +379,7 @@ class ResenaRepository(private val context: Context) {
         return restaurant
     }
 
-    fun getRecommendedRestaurants(): List<Restaurant> {
-        val restaurants = mutableListOf<Restaurant>()
-        val db = dbHelper.readableDatabase
-        val cursor: Cursor? = db.query(
-            DatabaseHelper.TABLE_RESTAURANTS,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC, ${DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT} DESC", // Ordenar por calificación y luego por conteo de reseñas
-            "5" // Limitar a 5 para "recomendados"
-        )
-
-        cursor?.use {
-            while (it.moveToNext()) {
-                val idIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_ID)
-                val nameIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_NAME)
-                val imageUrlIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
-                val ratingIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_RATING)
-                val reviewCountIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
-
-                if (idIndex != -1 && nameIndex != -1 && imageUrlIndex != -1 && ratingIndex != -1 && reviewCountIndex != -1) {
-                    val id = it.getLong(idIndex)
-                    val name = it.getString(nameIndex)
-                    val imageUrl = it.getString(imageUrlIndex)
-                    val rating = it.getFloat(ratingIndex)
-                    val reviewCount = it.getInt(reviewCountIndex)
-                    restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount))
-                } else {
-                    Log.e("ResenaRepository", "One or more columns not found in getRecommendedRestaurants")
-                }
-            }
-        }
-        cursor?.close()
-        db.close()
-        return restaurants
-    }
-
-    fun getAllRestaurants(): List<Restaurant> { // Este método ya existía, pero se asegura su unicidad
+    fun getAllRestaurants(): List<Restaurant> {
         val restaurants = mutableListOf<Restaurant>()
         val db = dbHelper.readableDatabase
         val cursor: Cursor? = db.query(
@@ -456,22 +389,140 @@ class ResenaRepository(private val context: Context) {
 
         cursor?.use {
             while (it.moveToNext()) {
-                val idIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_ID)
-                val nameIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_NAME)
-                val imageUrlIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
-                val ratingIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_RATING)
-                val reviewCountIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val idIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                val nameIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                val imageUrlIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                val ratingIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                val reviewCountIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val foodTypeIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
 
-                if (idIndex != -1 && nameIndex != -1 && imageUrlIndex != -1 && ratingIndex != -1 && reviewCountIndex != -1) {
+                val id = it.getLong(idIndex)
+                val name = it.getString(nameIndex)
+                val imageUrl = it.getString(imageUrlIndex)
+                val rating = it.getFloat(ratingIndex)
+                val reviewCount = it.getInt(reviewCountIndex)
+                val foodType = it.getString(foodTypeIndex)
+                restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount, foodType))
+            }
+        }
+        cursor?.close()
+        db.close()
+        return restaurants
+    }
+
+    fun getRestaurantsByFoodTypes(foodTypes: List<String>): List<Restaurant> {
+        if (foodTypes.isEmpty()) {
+            return emptyList()
+        }
+
+        val restaurants = mutableListOf<Restaurant>()
+        val db = dbHelper.readableDatabase
+
+        val placeholders = foodTypes.joinToString { "?" }
+        val selection = "${DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE} IN ($placeholders)"
+        val selectionArgs = foodTypes.toTypedArray()
+
+        try {
+            val cursor: Cursor? = db.query(
+                DatabaseHelper.TABLE_RESTAURANTS,
+                null,
+                selection,
+                selectionArgs,
+                null, null,
+                "${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC, ${DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT} DESC"
+            )
+
+            cursor?.use {
+                while (it.moveToNext()) {
+                    val idIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                    val nameIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                    val imageUrlIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                    val ratingIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                    val reviewCountIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                    val foodTypeIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
+
                     val id = it.getLong(idIndex)
                     val name = it.getString(nameIndex)
                     val imageUrl = it.getString(imageUrlIndex)
                     val rating = it.getFloat(ratingIndex)
                     val reviewCount = it.getInt(reviewCountIndex)
-                    restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount))
-                } else {
-                    Log.e("ResenaRepository", "One or more columns not found in getAllRestaurants")
+                    val foodType = it.getString(foodTypeIndex)
+                    restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount, foodType))
                 }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+        return restaurants
+    }
+
+    fun buscarRestaurantsPorNombre(textoBusqueda: String): List<Restaurant> {
+        val restaurants = mutableListOf<Restaurant>()
+        val db = dbHelper.readableDatabase
+
+        try {
+            val cursor = db.query(
+                DatabaseHelper.TABLE_RESTAURANTS,
+                null,
+                "LOWER(${DatabaseHelper.COLUMN_RESTAURANT_NAME}) LIKE LOWER(?)",
+                arrayOf("%$textoBusqueda%"),
+                null, null,
+                "${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC"
+            )
+
+            while (cursor.moveToNext()) {
+                val idIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                val nameIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                val imageUrlIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                val ratingIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                val reviewCountIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val foodTypeIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
+
+                val id = cursor.getLong(idIndex)
+                val name = cursor.getString(nameIndex)
+                val imageUrl = cursor.getString(imageUrlIndex)
+                val rating = cursor.getFloat(ratingIndex)
+                val reviewCount = cursor.getInt(reviewCountIndex)
+                val foodType = cursor.getString(foodTypeIndex)
+                restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount, foodType))
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+        return restaurants
+    }
+
+    fun getRecommendedRestaurants(): List<Restaurant> {
+        val restaurants = mutableListOf<Restaurant>()
+        val db = dbHelper.readableDatabase
+        val cursor: Cursor? = db.query(
+            DatabaseHelper.TABLE_RESTAURANTS,
+            null, null, null, null, null,
+            "${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC",
+            "5"
+        )
+
+        cursor?.use {
+            while (it.moveToNext()) {
+                val idIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                val nameIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                val imageUrlIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                val ratingIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                val reviewCountIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val foodTypeIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
+
+                val id = it.getLong(idIndex)
+                val name = it.getString(nameIndex)
+                val imageUrl = it.getString(imageUrlIndex)
+                val rating = it.getFloat(ratingIndex)
+                val reviewCount = it.getInt(reviewCountIndex)
+                val foodType = it.getString(foodTypeIndex)
+                restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount, foodType))
             }
         }
         cursor?.close()
@@ -484,33 +535,27 @@ class ResenaRepository(private val context: Context) {
         val db = dbHelper.readableDatabase
         val cursor: Cursor? = db.query(
             DatabaseHelper.TABLE_RESTAURANTS,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "${DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT} DESC, ${DatabaseHelper.COLUMN_RESTAURANT_RATING} DESC", // Ordenar por conteo de reseñas y luego por calificación
-            "5" // Limitar a 5 para "populares"
+            null, null, null, null, null,
+            "${DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT} DESC",
+            "5"
         )
 
         cursor?.use {
             while (it.moveToNext()) {
-                val idIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_ID)
-                val nameIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_NAME)
-                val imageUrlIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
-                val ratingIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_RATING)
-                val reviewCountIndex = it.getColumnIndex(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val idIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_ID)
+                val nameIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_NAME)
+                val imageUrlIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_IMAGE_URL)
+                val ratingIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_RATING)
+                val reviewCountIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_REVIEW_COUNT)
+                val foodTypeIndex = it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESTAURANT_FOOD_TYPE)
 
-                if (idIndex != -1 && nameIndex != -1 && imageUrlIndex != -1 && ratingIndex != -1 && reviewCountIndex != -1) {
-                    val id = it.getLong(idIndex)
-                    val name = it.getString(nameIndex)
-                    val imageUrl = it.getString(imageUrlIndex)
-                    val rating = it.getFloat(ratingIndex)
-                    val reviewCount = it.getInt(reviewCountIndex)
-                    restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount))
-                } else {
-                    Log.e("ResenaRepository", "One or more columns not found in getPopularRestaurants")
-                }
+                val id = it.getLong(idIndex)
+                val name = it.getString(nameIndex)
+                val imageUrl = it.getString(imageUrlIndex)
+                val rating = it.getFloat(ratingIndex)
+                val reviewCount = it.getInt(reviewCountIndex)
+                val foodType = it.getString(foodTypeIndex)
+                restaurants.add(Restaurant(id, name, imageUrl, rating, reviewCount, foodType))
             }
         }
         cursor?.close()

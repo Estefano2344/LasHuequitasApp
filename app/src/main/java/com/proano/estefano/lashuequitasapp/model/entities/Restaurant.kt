@@ -9,4 +9,5 @@ data class Restaurant(
     val imageUrl: String,
     val rating: Float,
     val reviewCount: Int,
+    val foodType: String = "" // Added foodType with a default empty string
 ) : Serializable

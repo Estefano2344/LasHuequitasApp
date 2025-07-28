@@ -1,4 +1,3 @@
-// src/main/java/com/proano/estefano/lashuequitasapp/view/RecommendedRestaurantsAdapter.kt
 package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
@@ -17,7 +16,7 @@ class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
     RecyclerView.Adapter<RecommendedRestaurantsAdapter.RecommendedRestaurantViewHolder>() {
 
     class RecommendedRestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.restaurantImageView) // Asumiendo estos IDs en item_recommended_restaurant.xml
+        val imageView: ImageView = view.findViewById(R.id.restaurantImageView)
         val nameTextView: TextView = view.findViewById(R.id.restaurantNameTextView)
         val ratingTextView: TextView = view.findViewById(R.id.restaurantRatingTextView)
         val reviewCountTextView: TextView = view.findViewById(R.id.restaurantReviewCountTextView)
@@ -25,7 +24,7 @@ class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendedRestaurantViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_recommended_restaurant, parent, false) // Reutilizamos un layout similar o uno nuevo si es necesario
+            .inflate(R.layout.item_recommended_restaurant, parent, false)
         return RecommendedRestaurantViewHolder(view)
     }
 
@@ -35,7 +34,6 @@ class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
         holder.ratingTextView.text = holder.itemView.context.getString(R.string.puntuacion_format, restaurant.rating)
         holder.reviewCountTextView.text = holder.itemView.context.getString(R.string.resenas_format, restaurant.reviewCount)
 
-        // Cargar imagen usando Glide
         if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
             Glide.with(holder.itemView.context)
                 .load(Uri.parse(restaurant.imageUrl))
@@ -60,9 +58,10 @@ class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
             val context = holder.itemView.context
             val intent = Intent(context, RestaurantDetailActivity::class.java)
             intent.putExtra("restaurant_data", restaurant)
+            // IMPORTANTE: Si quieres que al hacer clic en una recomendación dentro del detalle,
+            // se reemplace la actividad actual de detalle, puedes añadir estas flags:
+            // intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
-            // Opcional: Si quieres que al hacer clic en una recomendación se reemplace la actividad actual de detalle,
-            // puedes añadir context.startActivity(intent) y luego (context as? Activity)?.finish() si context es Activity
         }
     }
 

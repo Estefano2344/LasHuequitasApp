@@ -15,7 +15,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder_restaurant"
         android:background="@drawable/rounded_corner_bg"
-        tools:src="@drawable/restaurante2" />
+        tools:src="@drawable/placeholder_restaurant" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -60,9 +60,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/plus_jakarta_sans"
-                android:textSize="13sp"
-                tools:text="(50 Reseñas)" />
+            android:fontFamily="@font/plus_jakarta_sans"
+            android:textSize="13sp"
+            tools:text="(50 Reseñas)" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

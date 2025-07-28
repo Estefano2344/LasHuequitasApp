@@ -2,7 +2,7 @@
 package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
-import android.net.Uri // Importar Uri
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +16,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.bumptech.glide.Glide // Importar Glide
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
@@ -86,12 +86,16 @@ class HomeActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.nav_home -> { true } // Already on Home
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     true
                 }
                 R.id.nav_populares -> {
-                    startActivity(Intent(this, PopularesActivity::class.java))
+                    val intent = Intent(this, PopularesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.nav_postear -> {
@@ -137,12 +141,21 @@ class HomeActivity : AppCompatActivity() {
             popularScroll.visibility = View.VISIBLE
             noRestaurantsMessage.visibility = View.GONE
 
-            displayRestaurants(recommendedList, recommendedRestaurantsContainer)
-            displayRestaurants(popularList, popularRestaurantsContainer)
+            displayRestaurants(recommendedList, recommendedRestaurantsContainer) { restaurant ->
+                val intent = Intent(this, RestaurantDetailActivity::class.java)
+                intent.putExtra("restaurant_data", restaurant)
+                startActivity(intent)
+            }
+            displayRestaurants(popularList, popularRestaurantsContainer) { restaurant ->
+                val intent = Intent(this, RestaurantDetailActivity::class.java)
+                intent.putExtra("restaurant_data", restaurant)
+                startActivity(intent)
+            }
         }
     }
 
-    private fun displayRestaurants(restaurants: List<Restaurant>, container: LinearLayout) {
+    // Modified displayRestaurants to accept a click listener for each item
+    private fun displayRestaurants(restaurants: List<Restaurant>, container: LinearLayout, clickListener: (Restaurant) -> Unit) {
         container.removeAllViews()
 
         val inflater = LayoutInflater.from(this)
@@ -159,16 +172,13 @@ class HomeActivity : AppCompatActivity() {
             ratingTextView.text = getString(R.string.puntuacion_format, restaurant.rating)
             reviewCountTextView.text = getString(R.string.resenas_format, restaurant.reviewCount)
 
-            // --- CAMBIO CLAVE AQUÍ: Usar Glide para cargar la imagen ---
             if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
-                // Si la URL es una URI de contenido o de archivo (guardada internamente)
                 Glide.with(this)
                     .load(Uri.parse(restaurant.imageUrl))
-                    .placeholder(R.drawable.placeholder_restaurant) // Imagen mientras carga
-                    .error(R.drawable.placeholder_restaurant)     // Imagen si hay error
+                    .placeholder(R.drawable.placeholder_restaurant)
+                    .error(R.drawable.placeholder_restaurant)
                     .into(imageView)
             } else {
-                // Si la URL es un nombre de drawable (como "placeholder_restaurant" o "restaurante1")
                 val imageResId = resources.getIdentifier(restaurant.imageUrl, "drawable", packageName)
                 if (imageResId != 0) {
                     Glide.with(this)
@@ -177,11 +187,14 @@ class HomeActivity : AppCompatActivity() {
                         .error(R.drawable.placeholder_restaurant)
                         .into(imageView)
                 } else {
-                    // Si no es una URI ni un drawable válido, usar solo el placeholder
                     imageView.setImageResource(R.drawable.placeholder_restaurant)
                 }
             }
-            // -----------------------------------------------------------
+
+            // Set the click listener for the item view
+            restaurantView.setOnClickListener {
+                clickListener(restaurant)
+            }
 
             container.addView(restaurantView)
         }

@@ -1,3 +1,4 @@
+// src/main/java/com/proano/estefano/lashuequitasapp/view/SearchActivity.kt
 package com.proano.estefano.lashuequitasapp.view
 
 import android.net.Uri
@@ -30,7 +31,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        // CAMBIO AQUÍ: Usar el nuevo ID de la vista raíz
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_search_layout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -54,22 +54,18 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No es necesario implementar nada aquí para esta funcionalidad
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Realizar la búsqueda cada vez que el texto cambia
                 performSearch(s.toString())
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                // No es necesario implementar nada aquí para esta funcionalidad
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
     }
 
     private fun setupRecyclerView() {
+        // The click listener is handled within RestaurantSearchAdapter itself
         searchResultsAdapter = RestaurantSearchAdapter(emptyList())
         recyclerViewSearchResults.layoutManager = LinearLayoutManager(this)
         recyclerViewSearchResults.adapter = searchResultsAdapter
@@ -82,29 +78,8 @@ class SearchActivity : AppCompatActivity() {
             return
         }
 
-        // Se usa buscarRestaurantsPorNombre si ya lo añadiste en ResenaRepository.kt
-        // De lo contrario, usa la lógica de mapeo de Resena a Restaurant
-        val results = resenaRepository.buscarRestaurantsPorNombre(query) // OPCIONAL: si ya agregaste este método a ResenaRepository
-
-        // Si no tienes el método buscarRestaurantsPorNombre en ResenaRepository, usa esta lógica:
-        /*
-        val results = resenaRepository.buscarResenasPorNombreRestaurante(query)
-            .map { resena ->
-                val imageUrlForRestaurant = if (resena.imagenes.isNotEmpty()) {
-                    resena.imagenes.split(",").firstOrNull() ?: "placeholder_restaurant"
-                } else {
-                    "placeholder_restaurant"
-                }
-                Restaurant(
-                    id = resena.id,
-                    name = resena.nombreRestaurante,
-                    imageUrl = imageUrlForRestaurant,
-                    rating = resena.calificacion,
-                    reviewCount = 1
-                )
-            }
-            .distinctBy { it.name }
-        */
+        // Use buscarRestaurantsPorNombre from ResenaRepository for direct restaurant search
+        val results = resenaRepository.buscarRestaurantsPorNombre(query)
 
         if (results.isEmpty()) {
             noResultsMessage.visibility = View.VISIBLE
