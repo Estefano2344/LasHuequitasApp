@@ -10,10 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
 import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
+import java.io.File
 
-class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
-    RecyclerView.Adapter<RecommendedRestaurantsAdapter.RecommendedRestaurantViewHolder>() {
+class RecommendedRestaurantsAdapter(
+    private var restaurants: List<Restaurant>,
+    private val resenaRepository: ResenaRepository
+) : RecyclerView.Adapter<RecommendedRestaurantsAdapter.RecommendedRestaurantViewHolder>() {
 
     class RecommendedRestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.restaurantImageView)
@@ -30,38 +34,61 @@ class RecommendedRestaurantsAdapter(private var restaurants: List<Restaurant>) :
 
     override fun onBindViewHolder(holder: RecommendedRestaurantViewHolder, position: Int) {
         val restaurant = restaurants[position]
-        holder.nameTextView.text = restaurant.name
-        holder.ratingTextView.text = holder.itemView.context.getString(R.string.puntuacion_format, restaurant.rating)
-        holder.reviewCountTextView.text = holder.itemView.context.getString(R.string.resenas_format, restaurant.reviewCount)
+        val context = holder.itemView.context
 
-        if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
-            Glide.with(holder.itemView.context)
-                .load(Uri.parse(restaurant.imageUrl))
-                .placeholder(R.drawable.placeholder_restaurant)
-                .error(R.drawable.placeholder_restaurant)
-                .into(holder.imageView)
-        } else {
-            val imageResId = holder.itemView.context.resources.getIdentifier(restaurant.imageUrl, "drawable", holder.itemView.context.packageName)
-            if (imageResId != 0) {
-                Glide.with(holder.itemView.context)
-                    .load(imageResId)
+        holder.nameTextView.text = restaurant.name
+        holder.ratingTextView.text = context.getString(R.string.puntuacion_format, restaurant.rating)
+        holder.reviewCountTextView.text = context.getString(R.string.resenas_format, restaurant.reviewCount)
+
+        // Obtener la imagen más reciente del restaurante desde las reseñas
+        val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
+
+        if (!latestImagePath.isNullOrEmpty()) {
+            // Si hay una imagen de reseña, usarla
+            val imageFile = File(latestImagePath)
+            if (imageFile.exists()) {
+                Glide.with(context)
+                    .load(imageFile)
                     .placeholder(R.drawable.placeholder_restaurant)
                     .error(R.drawable.placeholder_restaurant)
                     .into(holder.imageView)
             } else {
-                holder.imageView.setImageResource(R.drawable.placeholder_restaurant)
+                loadDefaultImage(context, restaurant, holder.imageView)
             }
+        } else {
+            // Si no hay imagen de reseña, usar la lógica original
+            loadDefaultImage(context, restaurant, holder.imageView)
         }
 
         // Listener para el click en el item recomendado
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
             val intent = Intent(context, RestaurantDetailActivity::class.java)
             intent.putExtra("restaurant_data", restaurant)
             // IMPORTANTE: Si quieres que al hacer clic en una recomendación dentro del detalle,
             // se reemplace la actividad actual de detalle, puedes añadir estas flags:
             // intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
+        }
+    }
+
+    private fun loadDefaultImage(context: android.content.Context, restaurant: Restaurant, imageView: ImageView) {
+        if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
+            Glide.with(context)
+                .load(Uri.parse(restaurant.imageUrl))
+                .placeholder(R.drawable.placeholder_restaurant)
+                .error(R.drawable.placeholder_restaurant)
+                .into(imageView)
+        } else {
+            val imageResId = context.resources.getIdentifier(restaurant.imageUrl, "drawable", context.packageName)
+            if (imageResId != 0) {
+                Glide.with(context)
+                    .load(imageResId)
+                    .placeholder(R.drawable.placeholder_restaurant)
+                    .error(R.drawable.placeholder_restaurant)
+                    .into(imageView)
+            } else {
+                imageView.setImageResource(R.drawable.placeholder_restaurant)
+            }
         }
     }
 

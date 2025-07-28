@@ -24,6 +24,7 @@ import com.proano.estefano.lashuequitasapp.R
 import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
 import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
 import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
+import java.io.File
 
 class HomeActivity : AppCompatActivity() {
 
@@ -155,6 +156,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     // Modified displayRestaurants to accept a click listener for each item
+    // Reemplazar el método displayRestaurants en HomeActivity con esta versión actualizada
+
+    // Reemplazar el método displayRestaurants en HomeActivity con esta versión actualizada
+// También agregar el import necesario: import java.io.File
+
     private fun displayRestaurants(restaurants: List<Restaurant>, container: LinearLayout, clickListener: (Restaurant) -> Unit) {
         container.removeAllViews()
 
@@ -172,23 +178,24 @@ class HomeActivity : AppCompatActivity() {
             ratingTextView.text = getString(R.string.puntuacion_format, restaurant.rating)
             reviewCountTextView.text = getString(R.string.resenas_format, restaurant.reviewCount)
 
-            if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
-                Glide.with(this)
-                    .load(Uri.parse(restaurant.imageUrl))
-                    .placeholder(R.drawable.placeholder_restaurant)
-                    .error(R.drawable.placeholder_restaurant)
-                    .into(imageView)
-            } else {
-                val imageResId = resources.getIdentifier(restaurant.imageUrl, "drawable", packageName)
-                if (imageResId != 0) {
+            // Obtener la imagen más reciente del restaurante desde las reseñas
+            val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
+
+            if (!latestImagePath.isNullOrEmpty()) {
+                // Si hay una imagen de reseña, usarla
+                val imageFile = File(latestImagePath)
+                if (imageFile.exists()) {
                     Glide.with(this)
-                        .load(imageResId)
+                        .load(imageFile)
                         .placeholder(R.drawable.placeholder_restaurant)
                         .error(R.drawable.placeholder_restaurant)
                         .into(imageView)
                 } else {
-                    imageView.setImageResource(R.drawable.placeholder_restaurant)
+                    loadDefaultRestaurantImage(restaurant, imageView)
                 }
+            } else {
+                // Si no hay imagen de reseña, usar la lógica original
+                loadDefaultRestaurantImage(restaurant, imageView)
             }
 
             // Set the click listener for the item view
@@ -197,6 +204,27 @@ class HomeActivity : AppCompatActivity() {
             }
 
             container.addView(restaurantView)
+        }
+    }
+
+    private fun loadDefaultRestaurantImage(restaurant: Restaurant, imageView: ImageView) {
+        if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
+            Glide.with(this)
+                .load(Uri.parse(restaurant.imageUrl))
+                .placeholder(R.drawable.placeholder_restaurant)
+                .error(R.drawable.placeholder_restaurant)
+                .into(imageView)
+        } else {
+            val imageResId = resources.getIdentifier(restaurant.imageUrl, "drawable", packageName)
+            if (imageResId != 0) {
+                Glide.with(this)
+                    .load(imageResId)
+                    .placeholder(R.drawable.placeholder_restaurant)
+                    .error(R.drawable.placeholder_restaurant)
+                    .into(imageView)
+            } else {
+                imageView.setImageResource(R.drawable.placeholder_restaurant)
+            }
         }
     }
 }

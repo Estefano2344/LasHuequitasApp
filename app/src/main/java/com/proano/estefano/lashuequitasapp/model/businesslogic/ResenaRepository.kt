@@ -232,6 +232,58 @@ class ResenaRepository(private val context: Context) {
         return imagenes
     }
 
+    // Agregar este método a la clase ResenaRepository existente
+
+    // Método para obtener la imagen más reciente de un restaurante
+    fun getLatestRestaurantImage(restaurantName: String): String? {
+        val db = dbHelper.readableDatabase
+        var imagePath: String? = null
+
+        try {
+            // Primero obtener la reseña más reciente del restaurante
+            val resenaCursor = db.query(
+                DatabaseHelper.TABLE_RESENAS,
+                arrayOf(DatabaseHelper.COLUMN_RESENA_ID),
+                "${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE} = ?",
+                arrayOf(restaurantName),
+                null, null,
+                "${DatabaseHelper.COLUMN_FECHA_CREACION} DESC",
+                "1" // Limitar a 1 resultado
+            )
+
+            if (resenaCursor.moveToFirst()) {
+                val resenaId = resenaCursor.getLong(
+                    resenaCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)
+                )
+
+                // Ahora obtener la primera imagen de esa reseña
+                val imagenCursor = db.query(
+                    DatabaseHelper.TABLE_IMAGENES_RESENAS,
+                    arrayOf(DatabaseHelper.COLUMN_RUTA_IMAGEN),
+                    "${DatabaseHelper.COLUMN_IMAGEN_RESENA_ID} = ?",
+                    arrayOf(resenaId.toString()),
+                    null, null,
+                    "${DatabaseHelper.COLUMN_ORDEN} ASC",
+                    "1" // Limitar a 1 resultado
+                )
+
+                if (imagenCursor.moveToFirst()) {
+                    imagePath = imagenCursor.getString(
+                        imagenCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RUTA_IMAGEN)
+                    )
+                }
+                imagenCursor.close()
+            }
+            resenaCursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+
+        return imagePath
+    }
+
     fun getResenaById(resenaId: Long): Resena? {
         val db = dbHelper.readableDatabase
         var resena: Resena? = null

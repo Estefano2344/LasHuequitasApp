@@ -21,8 +21,9 @@ import com.proano.estefano.lashuequitasapp.R
 import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
 import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
 import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
-import com.proano.estefano.lashuequitasapp.model.entities.Resena // Importar Resena para calcular estadísticas
+import com.proano.estefano.lashuequitasapp.model.entities.Resena
 import com.proano.estefano.lashuequitasapp.model.entities.User
+import java.io.File
 import java.util.Locale
 
 class RestaurantDetailActivity : AppCompatActivity() {
@@ -88,7 +89,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
         currentRestaurant?.let { restaurant ->
             populateRestaurantDetails(restaurant)
-            loadReviewStatistics(restaurant.name) // Cargar estadísticas de reseña
+            loadReviewStatistics(restaurant.name)
             loadRecommendedRestaurants()
         } ?: run {
             finish()
@@ -106,23 +107,25 @@ class RestaurantDetailActivity : AppCompatActivity() {
         tvTitle.text = restaurant.name
 
         val ivRestaurant: ImageView = findViewById(R.id.ivRestaurant)
-        if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
-            Glide.with(this)
-                .load(Uri.parse(restaurant.imageUrl))
-                .placeholder(R.drawable.placeholder_restaurant)
-                .error(R.drawable.placeholder_restaurant)
-                .into(ivRestaurant)
-        } else {
-            val imageResId = resources.getIdentifier(restaurant.imageUrl, "drawable", packageName)
-            if (imageResId != 0) {
+
+        // Obtener la imagen más reciente del restaurante desde las reseñas
+        val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
+
+        if (!latestImagePath.isNullOrEmpty()) {
+            // Si hay una imagen de reseña, usarla
+            val imageFile = File(latestImagePath)
+            if (imageFile.exists()) {
                 Glide.with(this)
-                    .load(imageResId)
+                    .load(imageFile)
                     .placeholder(R.drawable.placeholder_restaurant)
                     .error(R.drawable.placeholder_restaurant)
                     .into(ivRestaurant)
             } else {
-                ivRestaurant.setImageResource(R.drawable.placeholder_restaurant)
+                loadDefaultImage(restaurant, ivRestaurant)
             }
+        } else {
+            // Si no hay imagen de reseña, usar la lógica original
+            loadDefaultImage(restaurant, ivRestaurant)
         }
 
         val tvRatingValue: TextView = findViewById(R.id.tvRatingValue)
@@ -133,6 +136,27 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
         val tvReviewsCount: TextView = findViewById(R.id.tvReviewsCount)
         tvReviewsCount.text = getString(R.string.resenas_format, restaurant.reviewCount)
+    }
+
+    private fun loadDefaultImage(restaurant: Restaurant, imageView: ImageView) {
+        if (restaurant.imageUrl.startsWith("content://") || restaurant.imageUrl.startsWith("file://")) {
+            Glide.with(this)
+                .load(Uri.parse(restaurant.imageUrl))
+                .placeholder(R.drawable.placeholder_restaurant)
+                .error(R.drawable.placeholder_restaurant)
+                .into(imageView)
+        } else {
+            val imageResId = resources.getIdentifier(restaurant.imageUrl, "drawable", packageName)
+            if (imageResId != 0) {
+                Glide.with(this)
+                    .load(imageResId)
+                    .placeholder(R.drawable.placeholder_restaurant)
+                    .error(R.drawable.placeholder_restaurant)
+                    .into(imageView)
+            } else {
+                imageView.setImageResource(R.drawable.placeholder_restaurant)
+            }
+        }
     }
 
     private fun loadReviewStatistics(restaurantName: String) {
@@ -232,7 +256,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
     }
 
     private fun setupRecommendedRecyclerView() {
-        recommendedRestaurantsAdapter = RecommendedRestaurantsAdapter(emptyList())
+        recommendedRestaurantsAdapter = RecommendedRestaurantsAdapter(emptyList(), resenaRepository)
         recyclerViewRecommended.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewRecommended.adapter = recommendedRestaurantsAdapter
         recyclerViewRecommended.isNestedScrollingEnabled = false

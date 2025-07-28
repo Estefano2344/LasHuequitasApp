@@ -1,4 +1,3 @@
-// src/main/java/com/proano/estefano/lashuequitasapp/view/SearchActivity.kt
 package com.proano.estefano.lashuequitasapp.view
 
 import android.net.Uri
@@ -65,8 +64,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        // The click listener is handled within RestaurantSearchAdapter itself
-        searchResultsAdapter = RestaurantSearchAdapter(emptyList())
+        // Pasar resenaRepository al adapter
+        searchResultsAdapter = RestaurantSearchAdapter(emptyList(), resenaRepository)
         recyclerViewSearchResults.layoutManager = LinearLayoutManager(this)
         recyclerViewSearchResults.adapter = searchResultsAdapter
     }
