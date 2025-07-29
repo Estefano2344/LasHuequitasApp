@@ -340,20 +340,26 @@
 
             </LinearLayout>
 
+
+            <!-- Título Restaurantes recomendados -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnViewReviews"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android="layout_marginStart=16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:text="@string/view_review"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 app:backgroundTint="@color/fill_buttons"
-                app:cornerRadius="24dp" />
+                app:cornerRadius="24dp"
 
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/black" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFavorite"
@@ -362,18 +368,16 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                app:icon="@drawable/favoritol"
-                app:iconTint="@null"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:text="@string/agregar_favoritos"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 app:backgroundTint="@color/fill_buttons"
-                app:cornerRadius="24dp" />
-
-            <!-- Título Restaurantes recomendados -->
+                app:cornerRadius="24dp"
+                app:icon="@drawable/corazonw"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@null" />
 
             <TextView
                 android:id="@+id/tvRecommendedTitle"

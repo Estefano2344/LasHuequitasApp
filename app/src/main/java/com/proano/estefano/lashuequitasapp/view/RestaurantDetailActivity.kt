@@ -216,11 +216,11 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private fun actualizarBotonFavorito(esFavorito: Boolean, btn: MaterialButton) {
         if (esFavorito) {
             btn.backgroundTintList = ContextCompat.getColorStateList(this, R.color.orange_buttons_filledStars)
-            btn.setIconResource(R.drawable.favoritol)
+            btn.setIconResource(R.drawable.corazonb)
             btn.text = "En Favoritos"
         } else {
             btn.backgroundTintList = ContextCompat.getColorStateList(this, R.color.fill_buttons)
-            btn.setIconResource(R.drawable.favoritol) // Cambia si tienes un icono diferente para "no favorito"
+            btn.setIconResource(R.drawable.corazonw) // Cambia si tienes un icono diferente para "no favorito"
             btn.text = "Agregar a Favoritos"
         }
     }
