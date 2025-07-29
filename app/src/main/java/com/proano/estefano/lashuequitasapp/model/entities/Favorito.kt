@@ -2,7 +2,7 @@ package com.proano.estefano.lashuequitasapp.model
 
 data class Favorito(
     val nombre: String,
-    val imagenes: String,      // Cambia a String si es texto
+    val imagenUrl: String,
     val puntuacion: Double,
-    val comentarios: String    // Cambia a String si es texto
+    val comentarios: String
 )

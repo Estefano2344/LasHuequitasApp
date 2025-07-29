@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
 import com.proano.estefano.lashuequitasapp.model.businesslogic.FavoritosRepository
+import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
 import com.proano.estefano.lashuequitasapp.model.Favorito
+import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
 
 class FavoritosActivity : AppCompatActivity() {
+    private lateinit var listaRestaurantes: List<Restaurant>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,7 +29,6 @@ class FavoritosActivity : AppCompatActivity() {
             insets
         }
 
-        // Configuración del Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -67,17 +70,35 @@ class FavoritosActivity : AppCompatActivity() {
             finish()
         }
 
-        // --- Mostrar favoritos ---
+        cargarFavoritos()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cargarFavoritos()
+    }
+
+    private fun cargarFavoritos() {
         val userId = obtenerUserIdActual()
         val favoritosRepository = FavoritosRepository(this)
         val listaFavoritos = favoritosRepository.obtenerFavoritos(userId)
 
+        val resenaRepository = ResenaRepository(this)
+        listaRestaurantes = resenaRepository.getRecommendedRestaurants() + resenaRepository.getPopularRestaurants()
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavoritos)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = FavoritosAdapter(listaFavoritos)
+        recyclerView.adapter = FavoritosAdapter(listaFavoritos) { favorito ->
+            val restaurant = listaRestaurantes.find { it.name == favorito.nombre }
+            if (restaurant != null) {
+                val intent = Intent(this, RestaurantDetailActivity::class.java)
+                intent.putExtra("restaurant_data", restaurant)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun obtenerUserIdActual(): Long {
-        return 1L // Cambia esto por tu lógica real
+        return 1L // Cambia esto por tu lógica real de usuario
     }
 }

@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.proano.estefano.lashuequitasapp.R
-import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.proano.estefano.lashuequitasapp.model.businesslogic.UserRepository
@@ -34,6 +33,12 @@ class RecuperarContrasenaActivity : AppCompatActivity() {
             val email = emailEditText.text.toString()
             val nueva = nuevaContrasenaEditText.text.toString()
             val repetir = repetirContrasenaEditText.text.toString()
+
+            if (nueva.length < 6 || repetir.length < 6) {
+                Toast.makeText(this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             val userRepository = UserRepository(this)
             val resultado = userRepository.recuperarContrasena(email, nueva, repetir)
             Toast.makeText(this, resultado.second, Toast.LENGTH_LONG).show()
