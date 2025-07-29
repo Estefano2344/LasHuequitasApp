@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".view.RestaurantDetailActivity">
 
-    <!-- AppBar con botón de volver -->
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -38,7 +37,6 @@
                 android:contentDescription="@string/back_button"
                 android:src="@drawable/flecha_atras" />
 
-            <!-- Título centrado -->
             <TextView
                 android:id="@+id/detailTitle"
                 android:layout_width="0dp"
@@ -49,13 +47,10 @@
                 android:text="@string/restaurant"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+                android:textStyle="bold"
+                tools:text="Nombre del Restaurante" /></LinearLayout>
     </LinearLayout>
 
-
-    <!-- Contenido desplazable -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -71,7 +66,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Título de la reseña -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
@@ -83,9 +77,9 @@
                 android:text="@string/restaurante_uno"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Nombre del Restaurante" />
 
-            <!-- Imagen principal -->
             <ImageView
                 android:id="@+id/ivRestaurant"
                 android:layout_width="match_parent"
@@ -94,9 +88,9 @@
                 android:layout_marginTop="12dp"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/restaurante1" />
+                android:src="@drawable/restaurante1"
+                tools:src="@drawable/placeholder_restaurant" />
 
-            <!-- Contenedor HORIZONTAL para rating general + distribución -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,7 +99,6 @@
                 android:layout_margin="16dp"
                 android:weightSum="2">
 
-                <!-- IZQUIERDA: puntuación, estrellas y reseñas apilados verticalmente -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -114,7 +107,6 @@
                     android:gravity="center_horizontal"
                     android:padding="8dp">
 
-                    <!-- 1. Puntuación numérica -->
                     <TextView
                         android:id="@+id/tvRatingValue"
                         android:layout_width="wrap_content"
@@ -123,10 +115,11 @@
                         android:text="@string/puntuacion"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_marginBottom="4dp"
+                        tools:text="4.5" />
 
-                    <!-- 2. Estrellas -->
                     <androidx.appcompat.widget.AppCompatRatingBar
+                        android:id="@+id/ratingBarDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:numStars="5"
@@ -141,7 +134,6 @@
                         android:scaleX="0.5"
                         android:scaleY="0.5"/>
 
-                    <!-- 3. Número de reseñas -->
                     <TextView
                         android:id="@+id/tvReviewsCount"
                         android:layout_width="wrap_content"
@@ -149,12 +141,11 @@
                         android:fontFamily="@font/plus_jakarta_sans"
                         android:text="@string/resenas"
                         android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        tools:text="(120 Reseñas)" />
 
                 </LinearLayout>
 
-
-                <!-- DERECHA: distribución de calificaciones -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -163,7 +154,6 @@
                     android:paddingStart="16dp"
                     tools:ignore="RtlSymmetry">
 
-                    <!-- 5 estrellas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -180,26 +170,27 @@
                             android:textSize="14sp" />
 
                         <ProgressBar
+                            android:id="@+id/progressBar5Star"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="8dp"
                             android:layout_weight="1"
                             android:max="100"
-                            android:progress="50"
+                            android:progress="0" tools:progress="50"
                             android:progressBackgroundTint="@color/orange_ratingRestaurantTransparent"
                             android:progressTint="@color/orange_buttons_filledStars" />
 
                         <TextView
+                            android:id="@+id/tvPercentage5Star"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/_50"
                             android:textColor="@color/brown_textFillFields_percentRating"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            tools:text="50%" />
                     </LinearLayout>
 
-                    <!-- 4 estrellas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -216,26 +207,27 @@
                             android:textSize="14sp" />
 
                         <ProgressBar
+                            android:id="@+id/progressBar4Star"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="8dp"
                             android:layout_weight="1"
                             android:max="100"
-                            android:progress="50"
+                            android:progress="0" tools:progress="50"
                             android:progressBackgroundTint="@color/orange_ratingRestaurantTransparent"
                             android:progressTint="@color/orange_buttons_filledStars" />
 
                         <TextView
+                            android:id="@+id/tvPercentage4Star"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/_50"
                             android:textColor="@color/brown_textFillFields_percentRating"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            tools:text="50%" />
                     </LinearLayout>
 
-                    <!-- 3 estrellas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -252,6 +244,7 @@
                             android:textSize="14sp" />
 
                         <ProgressBar
+                            android:id="@+id/progressBar3Star"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="8dp"
@@ -260,9 +253,18 @@
                             android:progress="0"
                             android:progressBackgroundTint="@color/orange_ratingRestaurantTransparent"
                             android:progressTint="@color/orange_buttons_filledStars" />
+
+                        <TextView
+                            android:id="@+id/tvPercentage3Star"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/plus_jakarta_sans"
+                            android:textColor="@color/brown_textFillFields_percentRating"
+                            android:textSize="14sp"
+                            tools:text="0%" />
                     </LinearLayout>
 
-                    <!-- 2 estrellas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -279,6 +281,7 @@
                             android:textSize="14sp" />
 
                         <ProgressBar
+                            android:id="@+id/progressBar2Star"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="8dp"
@@ -287,8 +290,17 @@
                             android:progress="0"
                             android:progressBackgroundTint="@color/orange_ratingRestaurantTransparent"
                             android:progressTint="@color/orange_buttons_filledStars" />
+
+                        <TextView
+                            android:id="@+id/tvPercentage2Star"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/plus_jakarta_sans"
+                            android:textColor="@color/brown_textFillFields_percentRating"
+                            android:textSize="14sp"
+                            tools:text="0%" />
                     </LinearLayout>
-                    <!-- 1 estrella -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -304,6 +316,7 @@
                             android:textSize="14sp" />
 
                         <ProgressBar
+                            android:id="@+id/progressBar1Star"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="8dp"
@@ -312,17 +325,26 @@
                             android:progress="0"
                             android:progressBackgroundTint="@color/orange_ratingRestaurantTransparent"
                             android:progressTint="@color/orange_buttons_filledStars" />
+
+                        <TextView
+                            android:id="@+id/tvPercentage1Star"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/plus_jakarta_sans"
+                            android:textColor="@color/brown_textFillFields_percentRating"
+                            android:textSize="14sp"
+                            tools:text="0%" />
                     </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Botón Ver Reseñas -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnViewReviews"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginStart="16dp"
+                android="layout_marginStart=16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
@@ -331,6 +353,7 @@
                 android:textColor="@color/black"
                 app:backgroundTint="@color/fill_buttons"
                 app:cornerRadius="24dp" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFavorite"
@@ -351,6 +374,7 @@
                 app:cornerRadius="24dp" />
 
             <!-- Título Restaurantes recomendados -->
+
             <TextView
                 android:id="@+id/tvRecommendedTitle"
                 android:layout_width="match_parent"
@@ -363,152 +387,33 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <!-- Lista vertical de recomendados -->
-            <LinearLayout
-                android:id="@+id/recommendedList"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewRecommended"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_recommended_restaurant" />
 
-                <!-- Ítem 1 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="8dp"
-                    android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/noRecommendationsMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/no_recommendations_available"
+                android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/restaurante2"
-                        android:background="@drawable/rounded_corner_bg" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/restaurante_dos"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:importantForAccessibility="no"
-                                android:src="@drawable/estrellah" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="@string/calificacion_Restaurante_2"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="@string/reviews_Restaurante_2"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Divider opcional -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/barra_sup_inf"/>
-
-                <!-- Ítem 2 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="8dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/restaurante3"
-                        android:background="@drawable/rounded_corner_bg" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/restaurante_tres"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:importantForAccessibility="no"
-                                android:src="@drawable/estrellah" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="@string/califcacion_Restuarante_3"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:fontFamily="@font/plus_jakarta_sans"
-                                android:text="@string/reviews_Restaurante_3"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Barra de navegación inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"

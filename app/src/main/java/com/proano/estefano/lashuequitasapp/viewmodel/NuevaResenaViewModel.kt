@@ -1,3 +1,4 @@
+// src/main/java/com/proano/estefano/lashuequitasapp/viewmodel/NuevaResenaViewModel.kt
 package com.proano.estefano.lashuequitasapp.viewmodel
 
 import android.app.Application
@@ -7,17 +8,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
-import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager // Asume que tienes un SessionManager
+import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
 import com.proano.estefano.lashuequitasapp.model.entities.Resena
+import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
 class NuevaResenaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val resenaRepository = ResenaRepository(application)
-    private val sessionManager = SessionManager(application) // Asegúrate de tener esta clase
+    private val sessionManager = SessionManager(application)
 
     private val _saveResult = MutableLiveData<SaveResenaResult>()
     val saveResult: LiveData<SaveResenaResult> = _saveResult
@@ -36,7 +39,7 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
         nombreRestaurante: String,
         ubicacion: String,
         rangoPrecio: String,
-        tipoComida: String,
+        tipoComida: String, // Pass foodType from the review
         calificacion: Float,
         tituloResena: String,
         comentarios: String,
@@ -44,21 +47,18 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
     ) {
         _isLoading.value = true
 
-        // Validaciones
         if (!validarCampos(nombreRestaurante, ubicacion, tituloResena, calificacion)) {
             _isLoading.value = false
             return
         }
 
-        // Obtener el ID del usuario logueado
         val autorId = sessionManager.getUserId()
         if (autorId == -1L) {
-            _saveResult.value = SaveResenaResult.Error("Usuario no autenticado")
+            _saveResult.value = SaveResenaResult.Error("Usuario no autenticado. Por favor, inicia sesión de nuevo.")
             _isLoading.value = false
             return
         }
 
-        // Crear la reseña
         val fechaActual = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
         val resena = Resena(
@@ -70,20 +70,64 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
             tituloResena = tituloResena.trim(),
             comentarios = comentarios.trim(),
             autorId = autorId,
-            fechaCreacion = fechaActual
+            fechaCreacion = fechaActual,
+            imagenes = ""
         )
 
-        // Guardar en la base de datos en un hilo secundario
         viewModelScope.launch(Dispatchers.IO) {
-            val success = resenaRepository.insertResena(resena, imageUris)
-            _saveResult.postValue(
-                if (success) {
-                    SaveResenaResult.Success("Reseña guardada exitosamente")
+            try {
+                val resenaId = resenaRepository.insertResena(resena, imageUris)
+
+                if (resenaId > 0) {
+                    val existingRestaurant = resenaRepository.getRestaurantByName(nombreRestaurante)
+
+                    val restaurantImageUrl: String = if (imageUris.isNotEmpty()) {
+                        imageUris.first().toString()
+                    } else {
+                        existingRestaurant?.imageUrl ?: "placeholder_restaurant"
+                    }
+
+                    if (existingRestaurant == null) {
+                        val newRestaurant = Restaurant(
+                            id = 0,
+                            name = nombreRestaurante,
+                            imageUrl = restaurantImageUrl,
+                            rating = calificacion,
+                            reviewCount = 1,
+                            foodType = tipoComida // Save foodType for new restaurant
+                        )
+                        resenaRepository.insertRestaurant(newRestaurant)
+                    } else {
+                        val newReviewCount = existingRestaurant.reviewCount + 1
+                        val newAverageRating = ((existingRestaurant.rating * existingRestaurant.reviewCount) + calificacion) / newReviewCount
+
+                        val updatedRestaurant = existingRestaurant.copy(
+                            rating = newAverageRating,
+                            reviewCount = newReviewCount,
+                            imageUrl = restaurantImageUrl,
+                            foodType = tipoComida // Update foodType for existing restaurant
+                        )
+                        resenaRepository.updateRestaurant(updatedRestaurant)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        _saveResult.value = SaveResenaResult.Success("Reseña guardada exitosamente y restaurante actualizado.")
+                    }
                 } else {
-                    SaveResenaResult.Error("Error al guardar la reseña. Inténtalo de nuevo.")
+                    withContext(Dispatchers.Main) {
+                        _saveResult.value = SaveResenaResult.Error("Error al guardar la reseña. Inténtalo de nuevo.")
+                    }
                 }
-            )
-            _isLoading.postValue(false)
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _saveResult.value = SaveResenaResult.Error("Error inesperado: ${e.localizedMessage ?: "Desconocido"}")
+                }
+                e.printStackTrace()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    _isLoading.value = false
+                }
+            }
         }
     }
 
@@ -95,19 +139,19 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
     ): Boolean {
         return when {
             nombreRestaurante.trim().isEmpty() -> {
-                _saveResult.value = SaveResenaResult.Error("El nombre del restaurante es obligatorio")
+                _saveResult.value = SaveResenaResult.Error("El nombre del restaurante es obligatorio.")
                 false
             }
             ubicacion.trim().isEmpty() -> {
-                _saveResult.value = SaveResenaResult.Error("La ubicación es obligatoria")
+                _saveResult.value = SaveResenaResult.Error("La ubicación es obligatoria.")
                 false
             }
             titulo.trim().isEmpty() -> {
-                _saveResult.value = SaveResenaResult.Error("El título de la reseña es obligatorio")
+                _saveResult.value = SaveResenaResult.Error("El título de la reseña es obligatorio.")
                 false
             }
             calificacion == 0f -> {
-                _saveResult.value = SaveResenaResult.Error("La calificación es obligatoria")
+                _saveResult.value = SaveResenaResult.Error("La calificación es obligatoria y debe ser mayor a 0.")
                 false
             }
             else -> true
@@ -133,7 +177,6 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
     }
 }
 
-// Clase sellada para manejar los resultados del guardado
 sealed class SaveResenaResult {
     data class Success(val message: String) : SaveResenaResult()
     data class Error(val message: String) : SaveResenaResult()
