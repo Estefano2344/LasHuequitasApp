@@ -7,17 +7,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.FavoritosRepository
+import com.proano.estefano.lashuequitasapp.model.Favorito
 
 class FavoritosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Habilitar los bordes de pantalla completa
-        setContentView(R.layout.activity_favoritos) // Asegúrate de que el layout correcto esté asociado
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_favoritos)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars()) // Ajuste para los márgenes del sistema
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom) // Aplicar los márgenes del sistema
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
@@ -25,52 +29,55 @@ class FavoritosActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                // Navegar a la actividad de inicio (HomeActivity)
                 R.id.nav_home -> {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (FavoritosActivity)
+                    finish()
                     true
                 }
-                // Navegar a la pantalla de populares (PopularesActivity)
                 R.id.nav_populares -> {
                     val intent = Intent(this, PopularesActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (FavoritosActivity)
+                    finish()
                     true
                 }
-                // Navegar a la pantalla para postear una reseña (NuevaResenaActivity)
                 R.id.nav_postear -> {
                     val intent = Intent(this, NuevaResenaActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (FavoritosActivity)
+                    finish()
                     true
                 }
-                // Ya estamos en la pantalla de favoritos, no hacer nada
-                R.id.nav_favoritos -> {
-                    true  // No hace nada porque ya estamos en esta pantalla
-                }
-                // Navegar a la pantalla del perfil (PerfilActivity)
+                R.id.nav_favoritos -> true
                 R.id.nav_perfil -> {
                     val intent = Intent(this, PerfilActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()  // Cierra la actividad actual (FavoritosActivity)
+                    finish()
                     true
                 }
                 else -> false
             }
         }
 
-
-
-        // Botón de cerrar (que probablemente cierra esta actividad)
         val closeProfile = findViewById<ImageView>(R.id.closeProfile)
         closeProfile.setOnClickListener {
-            finish() // Finaliza la actividad actual (cerrar pantalla de favoritos)
+            finish()
         }
+
+        // --- Mostrar favoritos ---
+        val userId = obtenerUserIdActual()
+        val favoritosRepository = FavoritosRepository(this)
+        val listaFavoritos = favoritosRepository.obtenerFavoritos(userId)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavoritos)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = FavoritosAdapter(listaFavoritos)
+    }
+
+    private fun obtenerUserIdActual(): Long {
+        return 1L // Cambia esto por tu lógica real
     }
 }

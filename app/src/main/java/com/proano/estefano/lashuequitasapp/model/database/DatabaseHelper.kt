@@ -50,6 +50,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_COMENTARIO_AUTOR_ID = "autor_id"
         const val COLUMN_COMENTARIO_CONTENIDO = "contenido"
         const val COLUMN_COMENTARIO_FECHA_CREACION = "fecha_creacion"
+      
+              // Tabla favoritos
+        const val TABLE_FAVORITOS = "favoritos"
+        const val COLUMN_FAVORITO_ID = "id"
+        const val COLUMN_FAVORITO_USER_ID = "user_id"
+        const val COLUMN_FAVORITO_RESENA_ID = "resena_id"
+
 
         // Tabla para Restaurantes
         const val TABLE_RESTAURANTS = "restaurants"
@@ -59,6 +66,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_RESTAURANT_RATING = "rating"
         const val COLUMN_RESTAURANT_REVIEW_COUNT = "review_count"
         const val COLUMN_RESTAURANT_FOOD_TYPE = "food_type" // Added food_type column to restaurants table
+
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -94,6 +102,49 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(createResenasTable)
 
         val createImagenesResenasTable = """
+
+        CREATE TABLE $TABLE_IMAGENES_RESENAS (
+            $COLUMN_IMAGEN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_IMAGEN_RESENA_ID INTEGER NOT NULL,
+            $COLUMN_RUTA_IMAGEN TEXT NOT NULL,
+            $COLUMN_ORDEN INTEGER DEFAULT 0,
+            FOREIGN KEY($COLUMN_IMAGEN_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID)
+        )
+        
+    """.trimIndent()
+        val createComentariosTable = """
+        CREATE TABLE $TABLE_COMENTARIOS (
+            $COLUMN_COMENTARIO_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_COMENTARIO_RESENA_ID INTEGER NOT NULL,
+            $COLUMN_COMENTARIO_AUTOR_ID INTEGER NOT NULL,
+            $COLUMN_COMENTARIO_CONTENIDO TEXT NOT NULL,
+            $COLUMN_COMENTARIO_FECHA_CREACION TEXT NOT NULL,
+            FOREIGN KEY($COLUMN_COMENTARIO_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID),
+            FOREIGN KEY($COLUMN_COMENTARIO_AUTOR_ID) REFERENCES $TABLE_USERS($COLUMN_ID)
+        )
+    """.trimIndent()
+
+        val createFavoritosTable = """
+    CREATE TABLE $TABLE_FAVORITOS (
+        $COLUMN_FAVORITO_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $COLUMN_FAVORITO_USER_ID INTEGER NOT NULL,
+        $COLUMN_FAVORITO_RESENA_ID INTEGER NOT NULL,
+        FOREIGN KEY($COLUMN_FAVORITO_USER_ID) REFERENCES $TABLE_USERS($COLUMN_ID),
+        FOREIGN KEY($COLUMN_FAVORITO_RESENA_ID) REFERENCES $TABLE_RESENAS($COLUMN_RESENA_ID)
+    )
+""".trimIndent()
+
+        // Ejecutar las sentencias SQL para crear las tablas
+        try {
+            db.execSQL(createUsersTable)
+            db.execSQL(createResenasTable)
+            db.execSQL(createImagenesResenasTable)
+            db.execSQL(createComentariosTable)
+            db.execSQL(createFavoritosTable)
+        } catch (e: Exception) {
+            Log.e("DB_ERROR", "Error al crear las tablas", e)
+        }
+
             CREATE TABLE $TABLE_IMAGENES_RESENAS (
                 $COLUMN_IMAGEN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COLUMN_IMAGEN_RESENA_ID INTEGER NOT NULL,
@@ -103,6 +154,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             )
         """.trimIndent()
         db.execSQL(createImagenesResenasTable)
+
 
         val createComentariosTable = """
             CREATE TABLE $TABLE_COMENTARIOS (
@@ -137,11 +189,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         // Drop tables in reverse order of foreign key dependencies
         db.execSQL("DROP TABLE IF EXISTS $TABLE_COMENTARIOS")
+
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_FAVORITOS")
+        onCreate(db)
+
         db.execSQL("DROP TABLE IF EXISTS $TABLE_IMAGENES_RESENAS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENAS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESTAURANTS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USERS")
         onCreate(db) // Recreate all tables with the new schema
+
     }
 
     override fun onConfigure(db: SQLiteDatabase) {

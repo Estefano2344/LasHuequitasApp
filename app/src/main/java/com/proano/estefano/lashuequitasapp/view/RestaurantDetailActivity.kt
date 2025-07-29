@@ -8,8 +8,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+
+import android.widget.Toast
+import com.google.android.material.button.MaterialButton
+
+
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +24,13 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.proano.estefano.lashuequitasapp.R
+
+import com.proano.estefano.lashuequitasapp.model.businesslogic.FavoritosRepository
+
+class RestaurantDetailActivity : AppCompatActivity() {
+
+    private var nombreRestaurante: String = ""
+
 import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
 import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
 import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
@@ -48,6 +61,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private lateinit var tvPercentage1Star: TextView
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,6 +72,14 @@ class RestaurantDetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
+        nombreRestaurante = intent.getStringExtra("RESTAURANT_NAME") ?: ""
+        if (nombreRestaurante.isEmpty()) {
+            val tvTitle = findViewById<TextView>(R.id.tvTitle)
+            nombreRestaurante = tvTitle.text.toString()
+        }
+
 
         resenaRepository = ResenaRepository(this)
         sessionManager = SessionManager(this)
@@ -205,19 +227,54 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
 
     private fun setupListeners() {
+
         val closeDetail = findViewById<ImageView>(R.id.closeDetail)
-        closeDetail.setOnClickListener {
-            finish()
-        }
+        closeDetail.setOnClickListener { finish() }
 
         val btnViewReviews = findViewById<MaterialButton>(R.id.btnViewReviews)
         btnViewReviews.setOnClickListener {
+
+            val intent = Intent(this, RestaurantReviewsActivity::class.java)
+            intent.putExtra("RESTAURANT_NAME", nombreRestaurante)
+            startActivity(intent)
+        }
+
+        val btnFavorite = findViewById<MaterialButton>(R.id.btnFavorite)
+        var esFavorito = false
+
+        btnFavorite.setOnClickListener {
+            esFavorito = !esFavorito
+            if (esFavorito) {
+                btnFavorite.backgroundTintList = ContextCompat.getColorStateList(this, R.color.orange_buttons_filledStars)
+                btnFavorite.setIconResource(R.drawable.favoritol)
+                btnFavorite.text = "En Favoritos"
+
+                val userId = obtenerUserIdActual()
+                val repo = FavoritosRepository(this)
+                val resenaId = repo.obtenerResenaIdPorNombre(nombreRestaurante)
+                if (resenaId != null) {
+                    repo.agregarFavorito(userId, resenaId)
+                    Toast.makeText(this, "Agregado a favoritos", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "No se encontró la reseña", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                btnFavorite.backgroundTintList = ContextCompat.getColorStateList(this, R.color.fill_buttons)
+                btnFavorite.setIconResource(R.drawable.favoritol)
+                btnFavorite.text = "Agregar a Favoritos"
+                // Aquí podrías implementar eliminar de favoritos si lo deseas
+            }
+        }
+
+        setupBottomNavigation()
+
             currentRestaurant?.let {
                 val intent = Intent(this, RestaurantReviewsActivity::class.java)
                 intent.putExtra("RESTAURANT_NAME", it.name)
                 startActivity(intent)
             }
         }
+
     }
 
     private fun setupBottomNavigation() {
@@ -231,6 +288,9 @@ class RestaurantDetailActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
+                R.id.nav_populares -> true
+
                 R.id.nav_populares -> {
                     val intent = Intent(this, PopularesActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -238,6 +298,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.nav_postear -> {
                     startActivity(Intent(this, NuevaResenaActivity::class.java))
                     true
@@ -254,6 +315,10 @@ class RestaurantDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun obtenerUserIdActual(): Long {
+        return 1L // Cambia esto por tu lógica real
 
     private fun setupRecommendedRecyclerView() {
         recommendedRestaurantsAdapter = RecommendedRestaurantsAdapter(emptyList(), resenaRepository)
@@ -308,5 +373,6 @@ class RestaurantDetailActivity : AppCompatActivity() {
             recyclerViewRecommended.visibility = View.VISIBLE
             recommendedRestaurantsAdapter.updateData(filteredRecommended)
         }
+
     }
 }
