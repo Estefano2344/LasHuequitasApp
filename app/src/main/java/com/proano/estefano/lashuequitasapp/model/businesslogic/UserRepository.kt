@@ -5,7 +5,8 @@ import android.content.Context
 import com.proano.estefano.lashuequitasapp.model.database.DatabaseHelper
 import com.proano.estefano.lashuequitasapp.model.entities.User
 
-class UserRepository(context: Context) {
+
+class UserRepository(private val context: Context) {
     private val dbHelper = DatabaseHelper(context)
 
     fun insertUser(user: User): Boolean {
@@ -69,6 +70,38 @@ class UserRepository(context: Context) {
         }
     }
 
+
+
+    fun recuperarContrasena(email: String, nuevaContrasena: String, repetirContrasena: String): Pair<Boolean, String> {
+        if (!isEmailExists(email)) {
+            return Pair(false, "El correo no existe.")
+        }
+        if (nuevaContrasena != repetirContrasena) {
+            return Pair(false, "Las contraseñas no coinciden.")
+        }
+        val db = dbHelper.writableDatabase
+        return try {
+            val values = ContentValues().apply {
+                put(DatabaseHelper.COLUMN_PASSWORD, nuevaContrasena) // Ideal: hashear la contraseña
+            }
+            val rows = db.update(
+                DatabaseHelper.TABLE_USERS,
+                values,
+                "${DatabaseHelper.COLUMN_EMAIL} = ?",
+                arrayOf(email)
+            )
+            if (rows > 0) {
+                Pair(true, "Contraseña actualizada correctamente.")
+            } else {
+                Pair(false, "No se pudo actualizar la contraseña.")
+            }
+        } catch (e: Exception) {
+            Pair(false, "Error al actualizar la contraseña.")
+        } finally {
+            db.close()
+        }
+    }
+
     fun authenticateUser(emailOrUsername: String, password: String): User? {
         val db = dbHelper.readableDatabase
         return try {
@@ -93,6 +126,8 @@ class UserRepository(context: Context) {
                         preferenciasGastronomicas = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PREFERENCIAS)) ?: ""
                     )
                     cursor.close()
+                    // Guardar el id del usuario en SharedPreferences
+                    guardarUserIdEnPreferences(user.id)
                     user
                 } else {
                     cursor.close()
@@ -107,5 +142,10 @@ class UserRepository(context: Context) {
         } finally {
             db.close()
         }
+    }
+
+    private fun guardarUserIdEnPreferences(userId: Long) {
+        val prefs = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        prefs.edit().putLong("user_id", userId).apply()
     }
 }

@@ -155,6 +155,7 @@
     <string name="alejandro_reply">¿En serio son tan buenos? Supongo que me daré el tiempo de ir a probarlos.</string>
     <string name="add_comment">Agregar comentario</string>
     <string name="no_reviews_icon">No hay reseñas disponibles</string>
+    <string name="agregar_favoritos">Agregar a Favoritos</string>
     <string name="puntuacion_format">%.1f</string>
     <string name="resenas_format">(%d Reseñas)</string>
     <string name="placeholder_restaurant">Placeholder Restaurant Image</string>
