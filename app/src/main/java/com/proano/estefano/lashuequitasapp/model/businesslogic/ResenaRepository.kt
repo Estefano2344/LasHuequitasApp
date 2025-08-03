@@ -244,7 +244,7 @@ class ResenaRepository(private val context: Context) {
             val resenaCursor = db.query(
                 DatabaseHelper.TABLE_RESENAS,
                 arrayOf(DatabaseHelper.COLUMN_RESENA_ID),
-                "${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE} = ?",
+                "LOWER(${DatabaseHelper.COLUMN_NOMBRE_RESTAURANTE}) = LOWER(?)",
                 arrayOf(restaurantName),
                 null, null,
                 "${DatabaseHelper.COLUMN_FECHA_CREACION} DESC",
@@ -404,8 +404,8 @@ class ResenaRepository(private val context: Context) {
         val cursor = db.query(
             DatabaseHelper.TABLE_RESTAURANTS,
             null,
-            "${DatabaseHelper.COLUMN_RESTAURANT_NAME} = ?",
-            arrayOf(name),
+            "LOWER(${DatabaseHelper.COLUMN_RESTAURANT_NAME}) = LOWER(?)",
+            arrayOf(name.trim()),
             null, null, null
         )
         cursor?.use {
