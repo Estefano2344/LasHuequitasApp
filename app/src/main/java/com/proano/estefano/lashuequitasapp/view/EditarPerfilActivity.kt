@@ -1,6 +1,5 @@
 package com.proano.estefano.lashuequitasapp.view
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -11,11 +10,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.SessionManager
 import com.proano.estefano.lashuequitasapp.model.businesslogic.UserRepository
 import com.proano.estefano.lashuequitasapp.model.entities.User
 import java.io.File
@@ -29,6 +27,7 @@ class EditarPerfilActivity : AppCompatActivity() {
     private val REQUEST_GALLERY = 101
 
     private lateinit var userRepository: UserRepository
+    private lateinit var sessionManager: SessionManager
     private var currentUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,29 +35,23 @@ class EditarPerfilActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_editar_perfil)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         userRepository = UserRepository(this)
+        sessionManager = SessionManager(this)
 
         // Recuperar usuario logueado
-        val prefs = getSharedPreferences("user_session", Context.MODE_PRIVATE)
-        val userId = prefs.getLong("user_id", -1)
+        val userId = sessionManager.getUserId()
         currentUser = userRepository.getUserById(userId)
 
         imagePreview = findViewById(R.id.imagePreview)
 
-        // Precargar datos si existen
+        // Precargar datos en campos
         currentUser?.let { user ->
             findViewById<TextInputEditText>(R.id.editNombre).setText(user.nombre)
             findViewById<TextInputEditText>(R.id.editApellido).setText(user.apellido)
             findViewById<TextInputEditText>(R.id.editUsuario).setText(user.usuario)
             findViewById<TextInputEditText>(R.id.editEmail).setText(user.email)
 
-            // Precargar imagen si existe
+            // Si ya tiene foto, mostrarla
             user.foto?.let {
                 val file = File(it)
                 if (file.exists()) {
@@ -134,13 +127,14 @@ class EditarPerfilActivity : AppCompatActivity() {
             user.usuario = findViewById<TextInputEditText>(R.id.editUsuario).text.toString()
             user.email = findViewById<TextInputEditText>(R.id.editEmail).text.toString()
 
-            // Mantener foto anterior si no se cambió
             if (selectedImagePath != null) {
                 user.foto = selectedImagePath
             }
 
             val actualizado = userRepository.updateUser(user)
             if (actualizado) {
+                sessionManager.createLoginSession(user)
+
                 Toast.makeText(this, "Perfil actualizado", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, PerfilActivity::class.java))
                 finish()
