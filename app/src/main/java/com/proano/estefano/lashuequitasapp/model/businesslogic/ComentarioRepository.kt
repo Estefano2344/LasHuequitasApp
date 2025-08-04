@@ -34,7 +34,8 @@ class ComentarioRepository(context: Context) {
                    c.${DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION},
                    u.${DatabaseHelper.COLUMN_NOMBRE},
                    u.${DatabaseHelper.COLUMN_APELLIDO},
-                   u.${DatabaseHelper.COLUMN_USUARIO}
+                   u.${DatabaseHelper.COLUMN_USUARIO},
+                   u.${DatabaseHelper.COLUMN_FOTO}
             FROM ${DatabaseHelper.TABLE_COMENTARIOS} c
             INNER JOIN ${DatabaseHelper.TABLE_USERS} u 
                 ON c.${DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID} = u.${DatabaseHelper.COLUMN_ID}
@@ -48,13 +49,14 @@ class ComentarioRepository(context: Context) {
             if (it.moveToFirst()) {
                 do {
                     val comentario = Comentario(
-                        id = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_ID)),
-                        resenaId = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_RESENA_ID)),
-                        autorId = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID)),
-                        contenido = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_CONTENIDO)),
-                        fechaCreacion = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION)),
-                        autorNombre = "${it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE))} ${it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO))}",
-                        autorUsuario = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO))
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_ID)),
+                        resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_RESENA_ID)),
+                        autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID)),
+                        contenido = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_CONTENIDO)),
+                        fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION)),
+                        autorNombre = "${cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE))} ${cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO))}",
+                        autorUsuario = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO)),
+                        autorFoto = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FOTO))
                     )
                     comentarios.add(comentario)
                 } while (it.moveToNext())

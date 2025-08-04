@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.proano.estefano.lashuequitasapp.model.entities.Comentario
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,7 +41,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
     private lateinit var tvUbicacionDetail: TextView
     private lateinit var ratingBarDetail: androidx.appcompat.widget.AppCompatRatingBar
     private lateinit var progressBar: ProgressBar
-    private lateinit var comentariosContainer: LinearLayout // Este debe ser un contenedor ya en tu layout XML
+    private lateinit var comentariosContainer: LinearLayout
     private lateinit var tvCommentsTitle: TextView
     private lateinit var tvNoComments: TextView
     private lateinit var progressBarComments: ProgressBar
@@ -251,19 +252,37 @@ class ReviewDetailsActivity : AppCompatActivity() {
     private fun createComentarioView(comentario: Comentario): View {
         val comentarioView = layoutInflater.inflate(R.layout.item_comentario, comentariosContainer, false)
 
-        // Referencias a las vistas
         val tvCommenterName = comentarioView.findViewById<TextView>(R.id.tvCommenterName)
         val tvCommentDate = comentarioView.findViewById<TextView>(R.id.tvCommentDate)
         val tvCommentText = comentarioView.findViewById<TextView>(R.id.tvCommentText)
         val ivAvatarComment = comentarioView.findViewById<ImageView>(R.id.ivAvatarComment)
 
-        // Asignar los datos
         tvCommenterName.text = comentario.autorNombre
         tvCommentDate.text = formatDateRelative(comentario.fechaCreacion)
         tvCommentText.text = comentario.contenido
 
-        // Avatar por defecto (puedes personalizarlo más adelante)
-        ivAvatarComment.setImageResource(R.drawable.avatar_laura) // Asume que tienes un drawable para el avatar por defecto
+        // Cargar foto real del autor si existe
+        if (!comentario.autorFoto.isNullOrEmpty()) {
+            val file = File(comentario.autorFoto)
+            if (file.exists()) {
+                Glide.with(this)
+                    .load(file)
+                    .placeholder(R.drawable.avatar_laura)
+                    .circleCrop()
+                    .into(ivAvatarComment)
+            } else {
+                Glide.with(this)
+                    .load(comentario.autorFoto) // por si fuera URL
+                    .placeholder(R.drawable.avatar_laura)
+                    .circleCrop()
+                    .into(ivAvatarComment)
+            }
+        } else {
+            Glide.with(this)
+                .load(R.drawable.avatar_laura)
+                .circleCrop()
+                .into(ivAvatarComment)
+        }
 
         return comentarioView
     }

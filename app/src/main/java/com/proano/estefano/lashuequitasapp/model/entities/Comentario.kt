@@ -7,5 +7,6 @@ data class Comentario(
     val contenido: String,
     val fechaCreacion: String,
     val autorNombre: String = "",
-    val autorUsuario: String = ""
+    val autorUsuario: String = "",
+    val autorFoto: String? = null
 )
