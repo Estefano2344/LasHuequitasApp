@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- Barra superior -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -49,6 +50,7 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Contenido -->
     <ScrollView
         android:id="@+id/profileContentScroll"
         android:layout_width="0dp"
@@ -65,25 +67,47 @@
             android:padding="24dp"
             android:gravity="center_horizontal">
 
+            <!-- Imagen perfil -->
             <ImageView
                 android:id="@+id/profileImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/perfilexam" />
+                android:src="@drawable/perfilexam"
+                android:scaleType="centerCrop" />
 
+            <!-- Nombre completo -->
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/usuarioNombre"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <!-- Usuario -->
+            <TextView
+                android:id="@+id/profileUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/profileEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/plus_jakarta_sans"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <!-- Info reseñas y estrellas -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,48 +115,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/reviewsCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/plus_jakarta_sans"
-                    android:text="@string/resenasPerfil"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/starsCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:paddingStart="4dp"
-                        android:text="@string/cantidadEstrellas"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/estrellah" />
-
-                    <TextView
-                        android:id="@+id/starsCount2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/plus_jakarta_sans"
-                        android:paddingStart="4dp"
-                        android:text="@string/recibidas"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
+                <!-- Botón editar -->
                 <Button
                     android:id="@+id/editProfileButton"
                     android:layout_width="180dp"
@@ -148,13 +131,12 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Preferencias -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:gravity="start"
                 android:text="@string/preferencias"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -167,183 +149,33 @@
                 android:scrollbars="none">
 
                 <LinearLayout
+                    android:id="@+id/preferenciasContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/background_fields"
-                        android:gravity="center"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/italiana"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/background_fields"
-                        android:gravity="center"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/mexicana"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/background_fields"
-                        android:gravity="center"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/rapida"
-                        android:textColor="@color/black" />
-                </LinearLayout>
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
 
+            <!-- Reseñas recientes -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:gravity="start"
                 android:text="@string/resenasRecientes"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:id="@+id/resenasRecientesContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="@color/background_fields"
-                    android:orientation="horizontal"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/border_edittext"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/restaurante1" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/restaurante_uno"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/previewResena"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/border_edittext"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/restaurante2" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/restaurante_dos"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/previewResena"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/border_edittext"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/restaurante3" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/restaurante_tres"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plus_jakarta_sans"
-                            android:text="@string/previewResena"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+                android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
 
-
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"

@@ -2,85 +2,167 @@ package com.proano.estefano.lashuequitasapp.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
+import android.view.LayoutInflater
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.ResenaRepository
+import com.proano.estefano.lashuequitasapp.model.businesslogic.UserRepository
+import java.io.File
 
 class PerfilActivity : AppCompatActivity() {
+
+    private lateinit var userRepository: UserRepository
+    private lateinit var resenaRepository: ResenaRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
 
-        // Ajuste de inset para edge-to-edge sobre el root correcto
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Configuración de Bottom Navigation
+        userRepository = UserRepository(this)
+        resenaRepository = ResenaRepository(this)
+
+        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+        val userId = prefs.getLong("user_id", -1)
+
+        if (userId != -1L) {
+            val currentUser = userRepository.getUserById(userId)
+            if (currentUser != null) {
+                // Datos básicos
+                findViewById<TextView>(R.id.profileName).text =
+                    "${currentUser.nombre} ${currentUser.apellido}"
+                findViewById<TextView>(R.id.profileUsername).text = currentUser.usuario
+                findViewById<TextView>(R.id.profileEmail).text = currentUser.email
+
+                // Foto
+                currentUser.foto?.let {
+                    val file = File(it)
+                    if (file.exists()) {
+                        Glide.with(this)
+                            .load(file)
+                            .placeholder(R.drawable.perfilexam)
+                            .circleCrop()
+                            .into(findViewById(R.id.profileImage))
+                    }
+                }
+
+                // Preferencias gastronómicas
+                val prefsContainer = findViewById<LinearLayout>(R.id.preferenciasContainer)
+                prefsContainer.removeAllViews()
+                if (!currentUser.preferenciasGastronomicas.isNullOrEmpty()) {
+                    currentUser.preferenciasGastronomicas.split(",").forEach { pref ->
+                        val chip = TextView(this).apply {
+                            text = pref.trim()
+                            setPadding(24, 8, 24, 8)
+                            setBackgroundResource(R.color.background_fields)
+                            setTextColor(resources.getColor(R.color.black))
+
+                            val params = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            params.setMargins(8, 0, 8, 0)
+                            layoutParams = params
+                        }
+                        prefsContainer.addView(chip)
+                    }
+                } else {
+                    val noPrefs = TextView(this).apply {
+                        text = "Sin preferencias registradas"
+                        setTextColor(resources.getColor(R.color.black))
+                    }
+                    prefsContainer.addView(noPrefs)
+                }
+
+                // Reseñas recientes
+                val resenasContainer = findViewById<LinearLayout>(R.id.resenasRecientesContainer)
+                resenasContainer.removeAllViews()
+                val resenas = resenaRepository.getResenasByUserId(currentUser.id)
+                if (resenas.isNotEmpty()) {
+                    val inflater = LayoutInflater.from(this)
+                    resenas.take(3).forEach { resena ->
+                        val itemView = inflater.inflate(R.layout.item_resena_perfil, resenasContainer, false)
+                        val imageView = itemView.findViewById<ImageView>(R.id.resenaImage)
+                        val titleView = itemView.findViewById<TextView>(R.id.resenaTitle)
+                        val previewView = itemView.findViewById<TextView>(R.id.resenaPreview)
+
+                        // Imagen
+                        val primeraImagen = resena.imagenes.split(",").firstOrNull()
+                        if (!primeraImagen.isNullOrEmpty()) {
+                            val imgFile = File(primeraImagen)
+                            if (imgFile.exists()) {
+                                Glide.with(this).load(imgFile).into(imageView)
+                            }
+                        }
+
+                        // Título y preview
+                        titleView.text = resena.nombreRestaurante
+                        previewView.text = if (resena.comentarios.length > 50)
+                            "${resena.comentarios.take(50)}..."
+                        else resena.comentarios
+
+                        resenasContainer.addView(itemView)
+                    }
+                } else {
+                    val noResenas = TextView(this).apply {
+                        text = "Aún no tienes reseñas"
+                        setTextColor(resources.getColor(R.color.black))
+                    }
+                    resenasContainer.addView(noResenas)
+                }
+            } else {
+                Toast.makeText(this, "No se pudo cargar el perfil", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                // Navegar a la actividad de inicio (HomeActivity)
                 R.id.nav_home -> {
-                    // Aquí cerramos la actividad actual y navegamos a HomeActivity
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()  // Finaliza la actividad actual
+                    startActivity(Intent(this, HomeActivity::class.java)
+                        .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK })
+                    finish()
                     true
                 }
-                // Navegar a la pantalla de populares (PopularesActivity)
                 R.id.nav_populares -> {
-                    val intent = Intent(this, PopularesActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()  // Cierra la actividad actual (FavoritosActivity)
+                    startActivity(Intent(this, PopularesActivity::class.java)
+                        .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK })
+                    finish()
                     true
                 }
-                // Navegar a la pantalla para postear una reseña (NuevaResenaActivity)
                 R.id.nav_postear -> {
-                    val intent = Intent(this, NuevaResenaActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()  // Finaliza la actividad actual
+                    startActivity(Intent(this, NuevaResenaActivity::class.java)
+                        .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK })
+                    finish()
                     true
                 }
-                // Navegar a la pantalla de favoritos (FavoritosActivity)
                 R.id.nav_favoritos -> {
-                    val intent = Intent(this, FavoritosActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()  // Cierra la actividad actual (PopularesActivity)
+                    startActivity(Intent(this, FavoritosActivity::class.java)
+                        .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK })
+                    finish()
                     true
                 }
-                // Navegar a la pantalla del perfil (PerfilActivity)
-                R.id.nav_perfil -> {
-                    // Ya estamos en la pantalla de perfil, no hacer nada
-                    true
-                }
+                R.id.nav_perfil -> true
                 else -> false
             }
         }
 
-        // Botón de cerrar la actividad al pulsar el ícono de cerrar (flechita)
-        val closeProfile = findViewById<ImageView>(R.id.closeProfile)
-        closeProfile.setOnClickListener {
-            finish() // Finaliza la actividad (cierra la pantalla actual)
-        }
-
-        // Botón de edición de perfil
-        val editProfileButton = findViewById<Button>(R.id.editProfileButton)
-        editProfileButton.setOnClickListener {
-            val intent = Intent(this, EditarPerfilActivity::class.java) // Navegar a la actividad de edición de perfil
-            startActivity(intent)
+        findViewById<ImageView>(R.id.closeProfile).setOnClickListener { finish() }
+        findViewById<Button>(R.id.editProfileButton).setOnClickListener {
+            startActivity(Intent(this, EditarPerfilActivity::class.java))
         }
     }
 }
