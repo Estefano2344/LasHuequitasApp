@@ -1,12 +1,9 @@
-// src/main/java/com/proano/estefano/lashuequitasapp/model/businesslogic/ResenaRepository.kt
 package com.proano.estefano.lashuequitasapp.model.businesslogic
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.util.Log
 import com.proano.estefano.lashuequitasapp.model.database.DatabaseHelper
 import com.proano.estefano.lashuequitasapp.model.entities.Resena
 import com.proano.estefano.lashuequitasapp.model.entities.Restaurant
@@ -14,13 +11,10 @@ import com.proano.estefano.lashuequitasapp.model.entities.User
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ResenaRepository(private val context: Context) {
     private val dbHelper = DatabaseHelper(context)
 
-    // Método para obtener un usuario por ID (necesario para las preferencias)
     fun getUserById(userId: Long): User? {
         val db = dbHelper.readableDatabase
         var user: User? = null
@@ -49,7 +43,6 @@ class ResenaRepository(private val context: Context) {
         return user
     }
 
-    // --- Operaciones de Reseña ---
     fun insertResena(resena: Resena, imageUris: List<Uri>): Long {
         val db = dbHelper.writableDatabase
         var resenaId: Long = -1L
@@ -232,15 +225,11 @@ class ResenaRepository(private val context: Context) {
         return imagenes
     }
 
-    // Agregar este método a la clase ResenaRepository existente
-
-    // Método para obtener la imagen más reciente de un restaurante
     fun getLatestRestaurantImage(restaurantName: String): String? {
         val db = dbHelper.readableDatabase
         var imagePath: String? = null
 
         try {
-            // Primero obtener la reseña más reciente del restaurante
             val resenaCursor = db.query(
                 DatabaseHelper.TABLE_RESENAS,
                 arrayOf(DatabaseHelper.COLUMN_RESENA_ID),
@@ -256,7 +245,6 @@ class ResenaRepository(private val context: Context) {
                     resenaCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_RESENA_ID)
                 )
 
-                // Ahora obtener la primera imagen de esa reseña
                 val imagenCursor = db.query(
                     DatabaseHelper.TABLE_IMAGENES_RESENAS,
                     arrayOf(DatabaseHelper.COLUMN_RUTA_IMAGEN),
@@ -264,7 +252,7 @@ class ResenaRepository(private val context: Context) {
                     arrayOf(resenaId.toString()),
                     null, null,
                     "${DatabaseHelper.COLUMN_ORDEN} ASC",
-                    "1" // Limitar a 1 resultado
+                    "1"
                 )
 
                 if (imagenCursor.moveToFirst()) {

@@ -10,8 +10,6 @@ class FavoritosRepository(private val context: Context) {
     fun obtenerFavoritos(userId: Long): List<Favorito> {
         val favoritos = mutableListOf<Favorito>()
         val db = dbHelper.readableDatabase
-
-        // Este repositorio es necesario para buscar la imagen de la última reseña
         val resenaRepository = ResenaRepository(context)
 
         val query = """
@@ -25,21 +23,15 @@ class FavoritosRepository(private val context: Context) {
 
         while (cursor.moveToNext()) {
             val nombre = cursor.getString(0)
-            val defaultImagen = cursor.getString(1) // Imagen por defecto
+            val defaultImagen = cursor.getString(1)
             val puntuacion = cursor.getDouble(2)
             val comentarios = cursor.getString(3)
-
-            // --- INICIO DE LA CORRECCIÓN ---
-            // 1. Busca la imagen más reciente de una reseña para este restaurante.
             val imagenDeResena = resenaRepository.getLatestRestaurantImage(nombre)
-
-            // 2. Decide qué imagen usar: la de la reseña si existe, o la de por defecto si no.
             val imagenFinal = if (!imagenDeResena.isNullOrEmpty()) {
                 imagenDeResena
             } else {
                 defaultImagen
             }
-            // --- FIN DE LA CORRECCIÓN ---
 
             favoritos.add(Favorito(nombre, imagenFinal, puntuacion, comentarios))
         }

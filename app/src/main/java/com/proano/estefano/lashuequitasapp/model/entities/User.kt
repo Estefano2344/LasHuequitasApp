@@ -7,6 +7,6 @@ data class User(
     var email: String,
     val password: String,
     var usuario: String,
-    val preferenciasGastronomicas: String, // Las preferencias separadas por comas
+    val preferenciasGastronomicas: String,
     var foto: String? = null
 )

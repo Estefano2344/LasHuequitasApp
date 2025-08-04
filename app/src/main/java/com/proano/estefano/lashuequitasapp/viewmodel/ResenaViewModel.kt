@@ -14,19 +14,15 @@ class ResenaViewModel(application: Application) : AndroidViewModel(application) 
 
     private val resenaRepository = ResenaRepository(application)
 
-    // LiveData para las reseñas
     private val _resenas = MutableLiveData<List<Resena>>()
     val resenas: LiveData<List<Resena>> = _resenas
 
-    // LiveData para estados de carga
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    // LiveData para errores
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    // Método para obtener reseñas por nombre de restaurante
     fun getResenasByRestauranteName(nombreRestaurante: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -44,7 +40,6 @@ class ResenaViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // Método para obtener todas las reseñas
     fun getAllResenas() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -62,7 +57,6 @@ class ResenaViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // Método para obtener reseña específica por ID
     fun getResenaById(resenaId: Long): LiveData<Resena?> {
         val resenaLiveData = MutableLiveData<Resena?>()
 
@@ -79,7 +73,6 @@ class ResenaViewModel(application: Application) : AndroidViewModel(application) 
         return resenaLiveData
     }
 
-    // Método para limpiar errores
     fun clearError() {
         _error.value = null
     }

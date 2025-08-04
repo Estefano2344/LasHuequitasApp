@@ -9,7 +9,7 @@ data class Resena(
     val calificacion: Float,
     val tituloResena: String,
     val comentarios: String,
-    val autorId: Long, // ID del usuario que escribió la reseña
+    val autorId: Long,
     val fechaCreacion: String,
-    val imagenes: String = "" // URLs de imágenes separadas por comas
+    val imagenes: String = ""
 )

@@ -22,17 +22,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun login(emailOrUsername: String, password: String) {
         _isLoading.value = true
 
-        // Validaciones básicas
         if (!validarCampos(emailOrUsername, password)) {
             _isLoading.value = false
             return
         }
 
-        // Intentar autenticar al usuario
         val user = userRepository.authenticateUser(emailOrUsername.trim(), password)
 
         if (user != null) {
-            // Crear sesión del usuario
             sessionManager.createLoginSession(user)
             _loginResult.value = LoginResult.Success(user)
         } else {
@@ -61,7 +58,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 }
 
-// Clase sellada para manejar los resultados del login
 sealed class LoginResult {
     data class Success(val user: User) : LoginResult()
     data class Error(val message: String) : LoginResult()

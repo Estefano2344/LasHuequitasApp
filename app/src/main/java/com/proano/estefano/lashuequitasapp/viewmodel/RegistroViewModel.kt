@@ -26,37 +26,32 @@ class RegistroViewModel(application: Application) : AndroidViewModel(application
     ) {
         _isLoading.value = true
 
-        // Validaciones básicas
         if (!validarCampos(nombre, apellido, email, password, usuario)) {
             _isLoading.value = false
             return
         }
 
-        // Verificar si el email ya existe
         if (userRepository.isEmailExists(email)) {
             _registroResult.value = RegistroResult.Error("El email ya está registrado")
             _isLoading.value = false
             return
         }
 
-        // Verificar si el usuario ya existe
         if (userRepository.isUsernameExists(usuario)) {
             _registroResult.value = RegistroResult.Error("El nombre de usuario ya está en uso")
             _isLoading.value = false
             return
         }
 
-        // Crear el usuario
         val user = User(
             nombre = nombre.trim(),
             apellido = apellido.trim(),
             email = email.trim().lowercase(),
-            password = password, // En producción, aquí deberías encriptar la contraseña
+            password = password,
             usuario = usuario.trim(),
             preferenciasGastronomicas = preferencias.joinToString(",")
         )
 
-        // Intentar guardar en la base de datos
         val success = userRepository.insertUser(user)
 
         _registroResult.value = if (success) {

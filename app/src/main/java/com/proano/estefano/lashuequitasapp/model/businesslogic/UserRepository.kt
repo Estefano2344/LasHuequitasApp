@@ -131,8 +131,6 @@ class UserRepository(private val context: Context) {
         }
     }
 
-
-
     fun recuperarContrasena(email: String, nuevaContrasena: String, repetirContrasena: String): Pair<Boolean, String> {
         if (!isEmailExists(email)) {
             return Pair(false, "El correo no existe.")
@@ -168,7 +166,7 @@ class UserRepository(private val context: Context) {
         return try {
             val cursor = db.query(
                 DatabaseHelper.TABLE_USERS,
-                null, // Seleccionar todas las columnas
+                null,
                 "${DatabaseHelper.COLUMN_EMAIL} = ? OR ${DatabaseHelper.COLUMN_USUARIO} = ?",
                 arrayOf(emailOrUsername, emailOrUsername),
                 null, null, null
@@ -176,7 +174,7 @@ class UserRepository(private val context: Context) {
 
             if (cursor.moveToFirst()) {
                 val storedPassword = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PASSWORD))
-                if (storedPassword == password) { // En producción, comparar hash de contraseñas
+                if (storedPassword == password) {
                     val user = User(
                         id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID)),
                         nombre = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE)),
@@ -187,7 +185,6 @@ class UserRepository(private val context: Context) {
                         preferenciasGastronomicas = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PREFERENCIAS)) ?: ""
                     )
                     cursor.close()
-                    // Guardar el id del usuario en SharedPreferences
                     guardarUserIdEnPreferences(user.id)
                     user
                 } else {

@@ -1,4 +1,3 @@
-// src/main/java/com/proano/estefano/lashuequitasapp/viewmodel/NuevaResenaViewModel.kt
 package com.proano.estefano.lashuequitasapp.viewmodel
 
 import android.app.Application
@@ -39,7 +38,7 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
         nombreRestaurante: String,
         ubicacion: String,
         rangoPrecio: String,
-        tipoComida: String, // Pass foodType from the review
+        tipoComida: String,
         calificacion: Float,
         tituloResena: String,
         comentarios: String,
@@ -94,7 +93,7 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
                             imageUrl = restaurantImageUrl,
                             rating = calificacion,
                             reviewCount = 1,
-                            foodType = tipoComida // Save foodType for new restaurant
+                            foodType = tipoComida
                         )
                         resenaRepository.insertRestaurant(newRestaurant)
                     } else {
@@ -105,7 +104,7 @@ class NuevaResenaViewModel(application: Application) : AndroidViewModel(applicat
                             rating = newAverageRating,
                             reviewCount = newReviewCount,
                             imageUrl = restaurantImageUrl,
-                            foodType = tipoComida // Update foodType for existing restaurant
+                            foodType = tipoComida
                         )
                         resenaRepository.updateRestaurant(updatedRestaurant)
                     }
