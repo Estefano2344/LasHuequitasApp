@@ -3,12 +3,16 @@ package com.proano.estefano.lashuequitasapp.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.proano.estefano.lashuequitasapp.R
+import com.proano.estefano.lashuequitasapp.model.businesslogic.UserRepository
 import com.proano.estefano.lashuequitasapp.model.entities.Resena
+import java.io.File
 
 class ReviewAdapter(
     private var resenas: List<Resena> = emptyList(),
@@ -16,6 +20,7 @@ class ReviewAdapter(
 ) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     class ReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val ivAuthorAvatar: ImageView = itemView.findViewById(R.id.ivAuthorAvatar)
         val tvReviewTitle: TextView = itemView.findViewById(R.id.tvReviewTitle)
         val tvReviewDate: TextView = itemView.findViewById(R.id.tvReviewDate)
         val ratingBar: AppCompatRatingBar = itemView.findViewById(R.id.ratingBar)
@@ -36,56 +41,67 @@ class ReviewAdapter(
         val resena = resenas[position]
 
         with(holder) {
-            // Título de la reseña
+            // Buscar al autor en la BD para obtener su foto
+            val userRepo = UserRepository(itemView.context)
+            val autor = userRepo.getUserById(resena.autorId)
+
+            if (autor?.foto != null && autor.foto!!.isNotEmpty()) {
+                val file = File(autor.foto!!)
+                if (file.exists()) {
+                    Glide.with(itemView.context)
+                        .load(file)
+                        .placeholder(R.drawable.avatar_julia)
+                        .circleCrop()
+                        .into(ivAuthorAvatar)
+                } else {
+                    Glide.with(itemView.context)
+                        .load(autor.foto)
+                        .placeholder(R.drawable.avatar_julia)
+                        .circleCrop()
+                        .into(ivAuthorAvatar)
+                }
+            } else {
+                Glide.with(itemView.context)
+                    .load(R.drawable.avatar_julia)
+                    .circleCrop()
+                    .into(ivAuthorAvatar)
+            }
+
+            // Título
             tvReviewTitle.text = resena.tituloResena
 
-            // Fecha de creación
+            // Fecha
             tvReviewDate.text = formatearFecha(resena.fechaCreacion)
 
             // Calificación
             ratingBar.rating = resena.calificacion
 
-            // Comentario (limitado para preview)
+            // Preview comentario
             tvReviewText.text = if (resena.comentarios.length > 100) {
                 "${resena.comentarios.take(100)}..."
             } else {
                 resena.comentarios
             }
 
-            // Información adicional
+            // Datos adicionales
             tvTipoComida.text = resena.tipoComida
             tvRangoPrecio.text = resena.rangoPrecio
             tvUbicacion.text = resena.ubicacion
 
-            // Click listener para ver reseña completa
-            btnViewFullReview.setOnClickListener {
-                onViewReviewClick(resena)
-            }
-
-            // También puedes hacer click en toda la tarjeta
-            itemView.setOnClickListener {
-                onViewReviewClick(resena)
-            }
+            // Click ver más
+            btnViewFullReview.setOnClickListener { onViewReviewClick(resena) }
+            itemView.setOnClickListener { onViewReviewClick(resena) }
         }
     }
 
     override fun getItemCount(): Int = resenas.size
 
-    // Método para actualizar las reseñas
     fun updateResenas(nuevasResenas: List<Resena>) {
         resenas = nuevasResenas
         notifyDataSetChanged()
     }
 
-    // Método auxiliar para formatear fecha
     private fun formatearFecha(fecha: String): String {
-        // Aquí puedes implementar la lógica para formatear la fecha
-        // Por ejemplo, convertir "2024-01-15" a "Hace 3 días"
-        return try {
-            // Implementa tu lógica de formateo aquí
-            fecha // Por ahora devuelve la fecha tal como está
-        } catch (e: Exception) {
-            fecha
-        }
+        return fecha
     }
 }

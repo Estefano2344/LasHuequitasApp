@@ -18,11 +18,9 @@
             android:id="@+id/ivAuthorAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/avatar_julia"
             android:contentDescription="@string/nombre_usuario"
             android:scaleType="centerCrop"
-            android:background="@drawable/circle_mask"
-            android:clipToOutline="true"/>
+            android:clipToOutline="false"/>
 
         <LinearLayout
             android:layout_width="0dp"
