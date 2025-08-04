@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ComentarioRepository(context: Context) {
-    private val dbHelper = DatabaseHelper(context)
+    private val dbHelper = DatabaseHelper(context.applicationContext)
 
     fun insertarComentario(comentario: Comentario): Long {
         val db = dbHelper.writableDatabase
@@ -19,10 +19,7 @@ class ComentarioRepository(context: Context) {
             put(DatabaseHelper.COLUMN_COMENTARIO_CONTENIDO, comentario.contenido)
             put(DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION, comentario.fechaCreacion)
         }
-
-        val id = db.insert(DatabaseHelper.TABLE_COMENTARIOS, null, values)
-        db.close()
-        return id
+        return db.insert(DatabaseHelper.TABLE_COMENTARIOS, null, values)
     }
 
     fun getComentariosByResenaId(resenaId: Long): List<Comentario> {
@@ -39,30 +36,31 @@ class ComentarioRepository(context: Context) {
                    u.${DatabaseHelper.COLUMN_APELLIDO},
                    u.${DatabaseHelper.COLUMN_USUARIO}
             FROM ${DatabaseHelper.TABLE_COMENTARIOS} c
-            INNER JOIN ${DatabaseHelper.TABLE_USERS} u ON c.${DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID} = u.${DatabaseHelper.COLUMN_ID}
+            INNER JOIN ${DatabaseHelper.TABLE_USERS} u 
+                ON c.${DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID} = u.${DatabaseHelper.COLUMN_ID}
             WHERE c.${DatabaseHelper.COLUMN_COMENTARIO_RESENA_ID} = ?
             ORDER BY c.${DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION} DESC
         """.trimIndent()
 
         val cursor: Cursor = db.rawQuery(query, arrayOf(resenaId.toString()))
 
-        if (cursor.moveToFirst()) {
-            do {
-                val comentario = Comentario(
-                    id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_ID)),
-                    resenaId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_RESENA_ID)),
-                    autorId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID)),
-                    contenido = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_CONTENIDO)),
-                    fechaCreacion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION)),
-                    autorNombre = "${cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE))} ${cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO))}",
-                    autorUsuario = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO))
-                )
-                comentarios.add(comentario)
-            } while (cursor.moveToNext())
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    val comentario = Comentario(
+                        id = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_ID)),
+                        resenaId = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_RESENA_ID)),
+                        autorId = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_AUTOR_ID)),
+                        contenido = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_CONTENIDO)),
+                        fechaCreacion = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_COMENTARIO_FECHA_CREACION)),
+                        autorNombre = "${it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE))} ${it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO))}",
+                        autorUsuario = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO))
+                    )
+                    comentarios.add(comentario)
+                } while (it.moveToNext())
+            }
         }
 
-        cursor.close()
-        db.close()
         return comentarios
     }
 
@@ -86,7 +84,6 @@ class ComentarioRepository(context: Context) {
             "${DatabaseHelper.COLUMN_COMENTARIO_ID} = ?",
             arrayOf(comentarioId.toString())
         )
-        db.close()
         return resultado > 0
     }
 }
