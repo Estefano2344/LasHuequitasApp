@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="Actualizar foto de perfil"
+                android:text="@string/actualizar_foto_de_perfil"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
@@ -222,14 +222,14 @@
                         android:id="@+id/btnCamara"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cámara" />
+                        android:text="@string/camera" />
 
                     <Button
                         android:id="@+id/btnGaleria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Galería" />
+                        android:text="@string/galery" />
                 </LinearLayout>
             </LinearLayout>
 

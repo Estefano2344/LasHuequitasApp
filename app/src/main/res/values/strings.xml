@@ -166,5 +166,8 @@
     <string name="no_preferences_set">Define tus preferencias gastronómicas para obtener recomendaciones.</string>
     <string name="precio_no_disponible">Precio no disponible</string>
     <string name="imagen_resena">imagen_reseña</string>
+    <string name="actualizar_foto_de_perfil">Actualizar foto de perfil</string>
+    <string name="camera">Cámara</string>
+    <string name="galery">Galería</string>
 
 </resources>
