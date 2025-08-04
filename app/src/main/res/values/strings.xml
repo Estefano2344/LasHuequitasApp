@@ -165,5 +165,6 @@
     <string name="login_for_recommendations">Inicia sesión para ver recomendaciones personalizadas.</string>
     <string name="no_preferences_set">Define tus preferencias gastronómicas para obtener recomendaciones.</string>
     <string name="precio_no_disponible">Precio no disponible</string>
+    <string name="imagen_resena">imagen_reseña</string>
 
 </resources>

@@ -10,7 +10,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "lashuequitas.db"
-        private const val DATABASE_VERSION = 6 // Increment to ensure onUpgrade is called
+        private const val DATABASE_VERSION = 7 // Increment to ensure onUpgrade is called
 
         // Tabla de usuarios
         const val TABLE_USERS = "users"
@@ -21,6 +21,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_PASSWORD = "password"
         const val COLUMN_USUARIO = "usuario"
         const val COLUMN_PREFERENCIAS = "preferencias_gastronomicas"
+        const val COLUMN_FOTO = "foto"
 
         // Tabla de reseñas
         const val TABLE_RESENAS = "resenas"
@@ -78,7 +79,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             $COLUMN_EMAIL TEXT NOT NULL UNIQUE,
             $COLUMN_PASSWORD TEXT NOT NULL,
             $COLUMN_USUARIO TEXT NOT NULL UNIQUE,
-            $COLUMN_PREFERENCIAS TEXT
+            $COLUMN_PREFERENCIAS TEXT,
+            $COLUMN_FOTO TEXT
         )
     """.trimIndent()
 

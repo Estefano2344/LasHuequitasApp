@@ -19,12 +19,73 @@ class UserRepository(private val context: Context) {
                 put(DatabaseHelper.COLUMN_PASSWORD, user.password)
                 put(DatabaseHelper.COLUMN_USUARIO, user.usuario)
                 put(DatabaseHelper.COLUMN_PREFERENCIAS, user.preferenciasGastronomicas)
+                put(DatabaseHelper.COLUMN_FOTO, user.foto)
             }
 
             val result = db.insert(DatabaseHelper.TABLE_USERS, null, values)
             result != -1L
         } catch (e: Exception) {
             false
+        } finally {
+            db.close()
+        }
+    }
+
+    fun updateUser(user: User): Boolean {
+        val db = dbHelper.writableDatabase
+        return try {
+            val values = ContentValues().apply {
+                put(DatabaseHelper.COLUMN_NOMBRE, user.nombre)
+                put(DatabaseHelper.COLUMN_APELLIDO, user.apellido)
+                put(DatabaseHelper.COLUMN_EMAIL, user.email)
+                put(DatabaseHelper.COLUMN_USUARIO, user.usuario)
+                put(DatabaseHelper.COLUMN_PREFERENCIAS, user.preferenciasGastronomicas)
+                put(DatabaseHelper.COLUMN_FOTO, user.foto)
+            }
+            val rows = db.update(
+                DatabaseHelper.TABLE_USERS,
+                values,
+                "${DatabaseHelper.COLUMN_ID} = ?",
+                arrayOf(user.id.toString())
+            )
+            rows > 0
+        } catch (e: Exception) {
+            false
+        } finally {
+            db.close()
+        }
+    }
+
+    fun getUserById(userId: Long): User? {
+        val db = dbHelper.readableDatabase
+        return try {
+            val cursor = db.query(
+                DatabaseHelper.TABLE_USERS,
+                null,
+                "${DatabaseHelper.COLUMN_ID} = ?",
+                arrayOf(userId.toString()),
+                null, null, null
+            )
+
+            if (cursor.moveToFirst()) {
+                val user = User(
+                    id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID)),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NOMBRE)),
+                    apellido = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_APELLIDO)),
+                    email = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EMAIL)),
+                    password = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PASSWORD)),
+                    usuario = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USUARIO)),
+                    preferenciasGastronomicas = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PREFERENCIAS)) ?: "",
+                    foto = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_FOTO))
+                )
+                cursor.close()
+                user
+            } else {
+                cursor.close()
+                null
+            }
+        } catch (e: Exception) {
+            null
         } finally {
             db.close()
         }
