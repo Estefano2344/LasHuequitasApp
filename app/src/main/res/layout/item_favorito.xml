@@ -13,7 +13,7 @@
         android:layout_height="40dp"
         android:background="@drawable/border_edittext"
         android:scaleType="centerCrop"
-        android:src="@drawable/restaurante1" />
+        android:src="@drawable/placeholder_restaurant" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -26,7 +26,7 @@
             android:id="@+id/tvNombreRestaurante"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre Restaurante"
+            android:text="@string/nombre_restaurante"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -40,7 +40,6 @@
                 android:id="@+id/tvPuntuacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.5"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -55,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="(23 reseñas)"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>

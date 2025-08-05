@@ -17,7 +17,7 @@
         android:layout_gravity="top|end"
         android:layout_margin="4dp"
         android:background="@drawable/btn_background"
-        android:contentDescription="Eliminar imagen"
+        android:contentDescription="@string/eliminar_imagen"
         android:padding="4dp"
         android:src="@drawable/cerrar" />
 </FrameLayout>

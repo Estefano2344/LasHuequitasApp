@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:background="#BDBDBD"
             android:scaleType="centerCrop"
-            android:src="@drawable/perfilexam"/>
+            android:src="@drawable/circle_mask"/>
     </androidx.cardview.widget.CardView>
 
     <TextView

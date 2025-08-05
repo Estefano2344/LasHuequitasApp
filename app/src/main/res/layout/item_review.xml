@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="Título de la reseña"
+                android:text="@string/ttulo__resena"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="Hace 2 días"
+
                 android:textSize="14sp"
                 android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"/>
         </LinearLayout>
@@ -57,7 +57,6 @@
         android:layout_marginBottom="8dp"
         android:numStars="5"
         android:stepSize="0.1"
-        android:rating="5"
         android:isIndicator="true"
         style="?attr/ratingBarStyleIndicator"
         android:progressTint="@color/orange_buttons_filledStars"
@@ -74,7 +73,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/plus_jakarta_sans"
-        android:text="Esta es una preview del comentario de la reseña..."
         android:textSize="14sp"
         android:textColor="@color/black"
         android:maxLines="3"
@@ -93,7 +91,6 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/plus_jakarta_sans"
             android:padding="6dp"
-            android:text="Italiana"
             android:textColor="@color/brown_textFillFields_percentRating"
             android:textSize="12sp" />
 
@@ -104,7 +101,6 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/plus_jakarta_sans"
             android:padding="6dp"
-            android:text="$$"
             android:textColor="@color/brown_textFillFields_percentRating"
             android:textSize="12sp" />
 
@@ -113,7 +109,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Centro"
             android:textSize="12sp"
             android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
             android:fontFamily="@font/plus_jakarta_sans"

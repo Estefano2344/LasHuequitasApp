@@ -171,5 +171,12 @@
     <string name="actualizar_foto_de_perfil">Actualizar foto de perfil</string>
     <string name="camera">Cámara</string>
     <string name="galery">Galería</string>
+    <string name="nombre_del_restaurante">Nombre del Restaurante</string>
+    <string name="no_hay_comentarios">No hay comentarios aún.</string>
+    <string name="nombre_del_usuario">Nombre del Usuario</string>
+    <string name="contenido_del_comentario">Contenido del comentario</string>
+    <string name="nombre_restaurante">Nombre Restaurante</string>
+    <string name="eliminar_imagen">Eliminar imagen</string>
+    <string name="ttulo__resena">Título de la reseña</string>
 
 </resources>

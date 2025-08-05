@@ -16,7 +16,7 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder_restaurant"
-        tools:src="@drawable/papa_johns" />
+        tools:src="@drawable/placeholder_restaurant" />
 
     <!-- Restaurant Information -->
     <LinearLayout
@@ -33,7 +33,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="Papa John's" />
+            />
 
         <TextView
             android:id="@+id/restaurantPriceRangeTextView"
@@ -43,7 +43,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="2dp"
-            tools:text="$10 - $25" />
+            />
 
         <TextView
             android:id="@+id/restaurantFoodTypeTextView"
@@ -53,7 +53,7 @@
             android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
             android:textSize="14sp"
             android:layout_marginTop="2dp"
-            tools:text="Pizza, Comida Rápida" />
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                tools:text="4.3" />
+                />
 
             <ImageView
                 android:layout_width="18dp"
@@ -86,7 +86,7 @@
                 android:fontFamily="@font/plus_jakarta_sans"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                tools:text="(125 Reseñas)" />
+                />
         </LinearLayout>
 
         <!-- Button to view Restaurant -->

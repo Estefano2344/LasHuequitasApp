@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/plus_jakarta_sans"
-                    android:text="Nombre del Restaurante"
+                    android:text="@string/nombre_del_restaurante"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -130,7 +130,6 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/plus_jakarta_sans"
                     android:padding="6dp"
-                    android:text="Italiana"
                     android:textColor="@color/brown_textFillFields_percentRating"
                     android:textSize="12sp" />
 
@@ -141,7 +140,6 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/plus_jakarta_sans"
                     android:padding="6dp"
-                    android:text="$$"
                     android:textColor="@color/brown_textFillFields_percentRating"
                     android:textSize="12sp" />
 
@@ -150,7 +148,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Centro"
                     android:textSize="12sp"
                     android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                     android:fontFamily="@font/plus_jakarta_sans"
@@ -175,7 +172,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/title_review"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
@@ -187,7 +183,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="Hace 2 días"
                 android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                 android:textSize="14sp"/>
 
@@ -198,7 +193,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="@string/desc_review"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:lineSpacingExtra="4dp"/>
@@ -230,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/plus_jakarta_sans"
-                android:text="No hay comentarios aún. ¡Sé el primero en comentar!"
+                android:text="@string/no_hay_comentarios"
                 android:textColor="@color/brown_reviewsDescription_textIcons_profileDetails"
                 android:textSize="14sp"
                 android:textStyle="italic"
@@ -246,7 +240,7 @@
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"/>
 
-            <!-- Botón + texto "Agregar Comentario" -->
+            <!-- Botón Agregar Comentario -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -278,7 +272,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Barra de navegación inferior -->
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
