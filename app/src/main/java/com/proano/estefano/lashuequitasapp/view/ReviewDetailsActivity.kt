@@ -53,7 +53,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_review_details)
 
-        // Ajuste de inset para edge-to-edge sobre el root correcto
         ViewCompat.setOnApplyWindowInsetsListener(
             findViewById(R.id.detail_root)
         ) { v, insets ->
@@ -67,7 +66,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
         setupObservers()
         setupListeners()
 
-        // Obtener el ID de la reseña desde el Intent
         resenaId = intent.getLongExtra("resena_id", -1)
 
         if (resenaId != -1L) {
@@ -81,7 +79,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Recargar comentarios al volver de la actividad de nuevo comentario
         if (resenaId != -1L) {
             loadComentarios()
         }
@@ -99,12 +96,9 @@ class ReviewDetailsActivity : AppCompatActivity() {
         ratingBarDetail = findViewById(R.id.ratingBarDetail)
         progressBar = findViewById(R.id.progressBar)
         tvCommentsTitle = findViewById(R.id.tvCommentsTitle)
-        comentariosContainer = findViewById(R.id.comentariosContainer) // Asumimos que tienes un LinearLayout con este ID en tu XML
+        comentariosContainer = findViewById(R.id.comentariosContainer)
         tvNoComments = findViewById(R.id.tvNoComments)
         progressBarComments = findViewById(R.id.progressBarComments)
-
-        // El contenedor dinámico para comentarios ya debería estar en tu XML
-        // y lo referenciamos aquí con findViewById. No se crea dinámicamente aquí.
     }
 
     private fun setupViewModels() {
@@ -113,12 +107,10 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observer para comentarios
         comentarioViewModel.comentarios.observe(this) { comentarios ->
             displayComentarios(comentarios)
         }
 
-        // Observer para errores de comentarios
         comentarioViewModel.error.observe(this) { error ->
             error?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
@@ -128,23 +120,19 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Cerrar Activity al pulsar la flecha de atrás
         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             finish()
         }
 
-        // botón añadir comentario
         findViewById<ImageButton>(R.id.btnAddComment).setOnClickListener {
             val intent = Intent(this, NuevoComentarioActivity::class.java)
             intent.putExtra("resena_id", resenaId)
             startActivity(intent)
         }
 
-        // Configuración del Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                // Navegar a la actividad de inicio (HomeActivity)
                 R.id.nav_home -> {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -152,27 +140,22 @@ class ReviewDetailsActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                // Navegar a la pantalla de populares (PopularesActivity)
                 R.id.nav_populares -> {
                     startActivity(Intent(this, PopularesActivity::class.java))
                     true
                 }
-                // Navegar a la pantalla para postear una reseña (NuevaResenaActivity)
                 R.id.nav_postear -> {
                     startActivity(Intent(this, NuevaResenaActivity::class.java))
                     true
                 }
-                // Navegar a la pantalla de favoritos (FavoritosActivity)
                 R.id.nav_favoritos -> {
                     startActivity(Intent(this, FavoritosActivity::class.java))
                     true
                 }
-                // Navegar a la pantalla del perfil (PerfilActivity)
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     true
                 }
-
                 else -> false
             }
         }
@@ -191,7 +174,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
             }
         }
 
-        // Observar errores
         resenaViewModel.error.observe(this) { error ->
             error?.let {
                 progressBar.visibility = View.GONE
@@ -206,21 +188,15 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun displayReviewDetails(resena: Resena) {
-        // Información principal de la reseña
         tvReviewTitle.text = resena.tituloResena
         tvReviewDescription.text = resena.comentarios
-
-        // Información del restaurante
         tvRestaurantName.text = resena.nombreRestaurante
         tvTipoComidaDetail.text = resena.tipoComida
         tvRangoPrecioDetail.text = resena.rangoPrecio
         tvUbicacionDetail.text = resena.ubicacion
         ratingBarDetail.rating = resena.calificacion
-
-        // Formatear y mostrar fecha
         tvReviewDateDetail.text = formatDate(resena.fechaCreacion)
 
-        // Cargar la primera imagen si existe
         if (resena.imagenes.isNotEmpty()) {
             val imagePaths = resena.imagenes.split(",")
             if (imagePaths.isNotEmpty() && imagePaths[0].isNotEmpty()) {
@@ -230,7 +206,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
     }
 
     private fun displayComentarios(comentarios: List<Comentario>) {
-        // Limpiar el contenedor antes de agregar nuevos comentarios
         comentariosContainer.removeAllViews()
 
         progressBarComments.visibility = View.GONE
@@ -242,7 +217,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
             tvNoComments.visibility = View.GONE
         }
 
-        // Agregar cada comentario dinámicamente
         comentarios.forEach { comentario ->
             val comentarioView = createComentarioView(comentario)
             comentariosContainer.addView(comentarioView)
@@ -261,7 +235,6 @@ class ReviewDetailsActivity : AppCompatActivity() {
         tvCommentDate.text = formatDateRelative(comentario.fechaCreacion)
         tvCommentText.text = comentario.contenido
 
-        // Cargar foto real del autor si existe
         if (!comentario.autorFoto.isNullOrEmpty()) {
             val file = File(comentario.autorFoto)
             if (file.exists()) {
@@ -272,7 +245,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
                     .into(ivAvatarComment)
             } else {
                 Glide.with(this)
-                    .load(comentario.autorFoto) // por si fuera URL
+                    .load(comentario.autorFoto)
                     .placeholder(R.drawable.avatar_laura)
                     .circleCrop()
                     .into(ivAvatarComment)
@@ -303,8 +276,7 @@ class ReviewDetailsActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // Mantener la imagen por defecto si hay error o cargar un placeholder
-            ivReviewImage.setImageResource(R.drawable.avatar_alejandro) // Asume un placeholder
+            ivReviewImage.setImageResource(R.drawable.avatar_alejandro)
         }
     }
 

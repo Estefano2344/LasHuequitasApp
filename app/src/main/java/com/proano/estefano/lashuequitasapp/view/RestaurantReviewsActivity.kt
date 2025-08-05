@@ -36,7 +36,6 @@ class RestaurantReviewsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_restaurant_reviews)
 
-        // Ajuste de inset para edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -49,12 +48,8 @@ class RestaurantReviewsActivity : AppCompatActivity() {
         setupObservers()
         setupListeners()
 
-        // Obtener el nombre del restaurante desde el Intent
-
         nombreRestaurante = intent.getStringExtra("RESTAURANT_NAME") ?: ""
         tvToolbarTitle.text = "Reseñas - $nombreRestaurante"
-
-        // Cargar las reseñas
         loadReviews()
     }
 
@@ -71,7 +66,6 @@ class RestaurantReviewsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         reviewsAdapter = ReviewAdapter { resena ->
-            // Callback cuando se presiona "Ver reseña completa"
             val intent = Intent(this, ReviewDetailsActivity::class.java)
             intent.putExtra("resena_id", resena.id)
             startActivity(intent)
@@ -84,7 +78,6 @@ class RestaurantReviewsActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observar las reseñas
         resenaViewModel.resenas.observe(this) { resenas ->
             if (resenas.isNotEmpty()) {
                 reviewsAdapter.updateResenas(resenas)
@@ -96,12 +89,10 @@ class RestaurantReviewsActivity : AppCompatActivity() {
             }
         }
 
-        // Observar el estado de carga
         resenaViewModel.isLoading.observe(this) { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Observar errores
         resenaViewModel.error.observe(this) { error ->
             error?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
@@ -111,12 +102,10 @@ class RestaurantReviewsActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Botón de retroceso
         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             finish()
         }
 
-        // Configuración del Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -152,7 +141,6 @@ class RestaurantReviewsActivity : AppCompatActivity() {
         if (nombreRestaurante.isNotEmpty()) {
             resenaViewModel.getResenasByRestauranteName(nombreRestaurante)
         } else {
-            // Si no hay nombre específico, cargar todas las reseñas
             resenaViewModel.getAllResenas()
         }
     }

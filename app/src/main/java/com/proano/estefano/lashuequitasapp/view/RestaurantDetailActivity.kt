@@ -29,13 +29,9 @@ import java.io.File
 import java.util.Locale
 
 class RestaurantDetailActivity : AppCompatActivity() {
-
-    // Propiedades de la clase
     private var currentRestaurant: Restaurant? = null
     private lateinit var resenaRepository: ResenaRepository
     private lateinit var sessionManager: SessionManager
-
-    // Componentes de la UI
     private lateinit var recyclerViewRecommended: RecyclerView
     private lateinit var noRecommendationsMessage: TextView
     private lateinit var recommendedRestaurantsAdapter: RecommendedRestaurantsAdapter
@@ -54,33 +50,23 @@ class RestaurantDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_restaurant_detail)
-
-        // Ajustar paddings para la interfaz edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // Inicializar lógica de negocio y sesión
         resenaRepository = ResenaRepository(this)
         sessionManager = SessionManager(this)
-
-        // Obtener datos del restaurante pasados en el Intent
         currentRestaurant = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("restaurant_data", Restaurant::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("restaurant_data") as? Restaurant
         }
-
-        // Inicializar todas las vistas y configurar los listeners
         initializeViews()
         setupRecommendedRecyclerView()
         setupListeners()
         setupBottomNavigation()
-
-        // Si el restaurante existe, poblar la UI. Si no, cerrar la actividad.
         currentRestaurant?.let { restaurant ->
             populateRestaurantDetails(restaurant)
             loadReviewStatistics(restaurant.name)
@@ -109,10 +95,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private fun populateRestaurantDetails(restaurant: Restaurant) {
         findViewById<TextView>(R.id.detailTitle).text = restaurant.name
         findViewById<TextView>(R.id.tvTitle).text = restaurant.name
-
         val ivRestaurant: ImageView = findViewById(R.id.ivRestaurant)
         val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
-
         if (!latestImagePath.isNullOrEmpty()) {
             val imageFile = File(latestImagePath)
             if (imageFile.exists()) {
@@ -123,7 +107,6 @@ class RestaurantDetailActivity : AppCompatActivity() {
         } else {
             loadDefaultImage(restaurant, ivRestaurant)
         }
-
         findViewById<TextView>(R.id.tvRatingValue).text = String.format(Locale.getDefault(), "%.1f", restaurant.rating)
         findViewById<androidx.appcompat.widget.AppCompatRatingBar>(R.id.ratingBarDetail).rating = restaurant.rating
         findViewById<TextView>(R.id.tvReviewsCount).text = getString(R.string.resenas_format, restaurant.reviewCount)
@@ -145,9 +128,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private fun loadReviewStatistics(restaurantName: String) {
         val reviews = resenaRepository.buscarResenasPorNombreRestaurante(restaurantName)
         val totalReviews = reviews.size
-
         if (totalReviews == 0) {
-
             val starViews = listOf(5 to (progressBar5Star to tvPercentage5Star), 4 to (progressBar4Star to tvPercentage4Star), 3 to (progressBar3Star to tvPercentage3Star), 2 to (progressBar2Star to tvPercentage2Star), 1 to (progressBar1Star to tvPercentage1Star))
             starViews.forEach { (_, views) ->
                 views.first.progress = 0
@@ -155,23 +136,19 @@ class RestaurantDetailActivity : AppCompatActivity() {
             }
             return
         }
-
         val starCounts = mutableMapOf<Int, Int>()
         (1..5).forEach { starCounts[it] = 0 }
-
         reviews.forEach { resena ->
             val rating = resena.calificacion.toInt()
             if (starCounts.containsKey(rating)) {
                 starCounts[rating] = starCounts.getOrDefault(rating, 0) + 1
             }
         }
-
         fun updateStarView(progressBar: ProgressBar, percentageTextView: TextView, count: Int) {
             val percentage = (count.toFloat() / totalReviews * 100).toInt()
             progressBar.progress = percentage
             percentageTextView.text = "$percentage%"
         }
-
         updateStarView(progressBar5Star, tvPercentage5Star, starCounts[5]!!)
         updateStarView(progressBar4Star, tvPercentage4Star, starCounts[4]!!)
         updateStarView(progressBar3Star, tvPercentage3Star, starCounts[3]!!)
@@ -181,7 +158,6 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         findViewById<ImageView>(R.id.closeDetail).setOnClickListener { finish() }
-
         findViewById<MaterialButton>(R.id.btnViewReviews).setOnClickListener {
             currentRestaurant?.let { restaurant ->
                 val intent = Intent(this, RestaurantReviewsActivity::class.java)
@@ -189,16 +165,12 @@ class RestaurantDetailActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
         val btnFavorite = findViewById<MaterialButton>(R.id.btnFavorite)
         val userId = obtenerUserIdActual()
         val repo = FavoritosRepository(this)
         val restaurantId = currentRestaurant?.id ?: -1L
-
-        // Consultar si ya es favorito
         var esFavorito = repo.estaEnFavoritos(userId, restaurantId)
         actualizarBotonFavorito(esFavorito, btnFavorite)
-
         btnFavorite.setOnClickListener {
             if (esFavorito) {
                 repo.eliminarDeFavoritos(userId, restaurantId)
@@ -220,7 +192,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
             btn.text = "En Favoritos"
         } else {
             btn.backgroundTintList = ContextCompat.getColorStateList(this, R.color.fill_buttons)
-            btn.setIconResource(R.drawable.corazonw) // Cambia si tienes un icono diferente para "no favorito"
+            btn.setIconResource(R.drawable.corazonw)
             btn.text = "Agregar a Favoritos"
         }
     }
@@ -261,14 +233,11 @@ class RestaurantDetailActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun obtenerUserIdActual(): Long {
         return sessionManager.getUserId()
     }
 
     private fun setupRecommendedRecyclerView() {
-        // Asumiendo que RecommendedRestaurantsAdapter existe y está correctamente implementado
         recommendedRestaurantsAdapter = RecommendedRestaurantsAdapter(emptyList(), resenaRepository)
         recyclerViewRecommended.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewRecommended.adapter = recommendedRestaurantsAdapter
@@ -284,7 +253,6 @@ class RestaurantDetailActivity : AppCompatActivity() {
             noRecommendationsMessage.visibility = View.VISIBLE
             return
         }
-
         val currentUser: User? = resenaRepository.getUserById(userId)
         if (currentUser == null) {
             findViewById<TextView>(R.id.tvRecommendedTitle).visibility = View.GONE
@@ -293,9 +261,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
             noRecommendationsMessage.visibility = View.VISIBLE
             return
         }
-
         val userPreferences = currentUser.preferenciasGastronomicas?.split(",")?.map { it.trim() } ?: emptyList()
-
         if (userPreferences.isEmpty()) {
             findViewById<TextView>(R.id.tvRecommendedTitle).visibility = View.GONE
             recyclerViewRecommended.visibility = View.GONE
@@ -303,10 +269,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
             noRecommendationsMessage.visibility = View.VISIBLE
             return
         }
-
         val allRecommended = resenaRepository.getRestaurantsByFoodTypes(userPreferences)
         val filteredRecommended = allRecommended.filter { it.name != currentRestaurant?.name }
-
         if (filteredRecommended.isEmpty()) {
             noRecommendationsMessage.visibility = View.VISIBLE
             recyclerViewRecommended.visibility = View.GONE

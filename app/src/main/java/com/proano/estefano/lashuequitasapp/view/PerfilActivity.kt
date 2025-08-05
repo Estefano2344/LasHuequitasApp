@@ -40,13 +40,11 @@ class PerfilActivity : AppCompatActivity() {
         if (userId != -1L) {
             val currentUser = userRepository.getUserById(userId)
             if (currentUser != null) {
-                // Datos básicos
                 findViewById<TextView>(R.id.profileName).text =
                     "${currentUser.nombre} ${currentUser.apellido}"
                 findViewById<TextView>(R.id.profileUsername).text = currentUser.usuario
                 findViewById<TextView>(R.id.profileEmail).text = currentUser.email
 
-                // Foto
                 currentUser.foto?.let {
                     val file = File(it)
                     if (file.exists()) {
@@ -58,7 +56,6 @@ class PerfilActivity : AppCompatActivity() {
                     }
                 }
 
-                // Preferencias gastronómicas
                 val prefsContainer = findViewById<LinearLayout>(R.id.preferenciasContainer)
                 prefsContainer.removeAllViews()
                 if (!currentUser.preferenciasGastronomicas.isNullOrEmpty()) {
@@ -86,7 +83,6 @@ class PerfilActivity : AppCompatActivity() {
                     prefsContainer.addView(noPrefs)
                 }
 
-                // Reseñas recientes
                 val resenasContainer = findViewById<LinearLayout>(R.id.resenasRecientesContainer)
                 resenasContainer.removeAllViews()
                 val resenas = resenaRepository.getResenasByUserId(currentUser.id)
@@ -98,7 +94,6 @@ class PerfilActivity : AppCompatActivity() {
                         val titleView = itemView.findViewById<TextView>(R.id.resenaTitle)
                         val previewView = itemView.findViewById<TextView>(R.id.resenaPreview)
 
-                        // Imagen
                         val primeraImagen = resena.imagenes.split(",").firstOrNull()
                         if (!primeraImagen.isNullOrEmpty()) {
                             val imgFile = File(primeraImagen)
@@ -107,7 +102,6 @@ class PerfilActivity : AppCompatActivity() {
                             }
                         }
 
-                        // Título y preview
                         titleView.text = resena.nombreRestaurante
                         previewView.text = if (resena.comentarios.length > 50)
                             "${resena.comentarios.take(50)}..."
@@ -127,7 +121,6 @@ class PerfilActivity : AppCompatActivity() {
             }
         }
 
-        // Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {

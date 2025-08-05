@@ -41,7 +41,6 @@ class ReviewAdapter(
         val resena = resenas[position]
 
         with(holder) {
-            // Buscar al autor en la BD para obtener su foto
             val userRepo = UserRepository(itemView.context)
             val autor = userRepo.getUserById(resena.autorId)
 
@@ -67,28 +66,17 @@ class ReviewAdapter(
                     .into(ivAuthorAvatar)
             }
 
-            // Título
             tvReviewTitle.text = resena.tituloResena
-
-            // Fecha
             tvReviewDate.text = formatearFecha(resena.fechaCreacion)
-
-            // Calificación
             ratingBar.rating = resena.calificacion
-
-            // Preview comentario
             tvReviewText.text = if (resena.comentarios.length > 100) {
                 "${resena.comentarios.take(100)}..."
             } else {
                 resena.comentarios
             }
-
-            // Datos adicionales
             tvTipoComida.text = resena.tipoComida
             tvRangoPrecio.text = resena.rangoPrecio
             tvUbicacion.text = resena.ubicacion
-
-            // Click ver más
             btnViewFullReview.setOnClickListener { onViewReviewClick(resena) }
             itemView.setOnClickListener { onViewReviewClick(resena) }
         }

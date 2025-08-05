@@ -40,11 +40,9 @@ class RecommendedRestaurantsAdapter(
         holder.ratingTextView.text = context.getString(R.string.puntuacion_format, restaurant.rating)
         holder.reviewCountTextView.text = context.getString(R.string.resenas_format, restaurant.reviewCount)
 
-        // Obtener la imagen más reciente del restaurante desde las reseñas
         val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
 
         if (!latestImagePath.isNullOrEmpty()) {
-            // Si hay una imagen de reseña, usarla
             val imageFile = File(latestImagePath)
             if (imageFile.exists()) {
                 Glide.with(context)
@@ -56,17 +54,12 @@ class RecommendedRestaurantsAdapter(
                 loadDefaultImage(context, restaurant, holder.imageView)
             }
         } else {
-            // Si no hay imagen de reseña, usar la lógica original
             loadDefaultImage(context, restaurant, holder.imageView)
         }
 
-        // Listener para el click en el item recomendado
         holder.itemView.setOnClickListener {
             val intent = Intent(context, RestaurantDetailActivity::class.java)
             intent.putExtra("restaurant_data", restaurant)
-            // IMPORTANTE: Si quieres que al hacer clic en una recomendación dentro del detalle,
-            // se reemplace la actividad actual de detalle, puedes añadir estas flags:
-            // intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }
     }

@@ -16,8 +16,6 @@ import com.proano.estefano.lashuequitasapp.viewmodel.LoginViewModel
 class PantallaInicioDeSesionActivity : AppCompatActivity() {
 
     private lateinit var viewModel: LoginViewModel
-
-    // Referencias a las vistas
     private lateinit var emailEditText: TextInputEditText
     private lateinit var passwordEditText: TextInputEditText
     private lateinit var loginButton: Button
@@ -27,22 +25,15 @@ class PantallaInicioDeSesionActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_pantalla_inicio_de_sesion)
 
-        // Inicializar ViewModel
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
-        // Verificar si el usuario ya está logueado
         if (viewModel.isUserLoggedIn()) {
             navigateToHome()
             return
         }
 
-        // Inicializar vistas
         initViews()
-
-        // Configurar observadores
         setupObservers()
-
-        // Configurar listeners
         setupListeners()
     }
 
@@ -53,7 +44,6 @@ class PantallaInicioDeSesionActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observar el resultado del login
         viewModel.loginResult.observe(this) { result ->
             when (result) {
                 is LoginResult.Success -> {
@@ -66,7 +56,6 @@ class PantallaInicioDeSesionActivity : AppCompatActivity() {
             }
         }
 
-        // Observar el estado de carga
         viewModel.isLoading.observe(this) { isLoading ->
             loginButton.isEnabled = !isLoading
             if (isLoading) {
@@ -78,20 +67,14 @@ class PantallaInicioDeSesionActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Listener para el botón de iniciar sesión
         loginButton.setOnClickListener {
             val emailOrUsername = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-
             viewModel.login(emailOrUsername, password)
         }
-
-        // Listener para "Olvidaste tu contraseña"
         findViewById<TextView>(R.id.textoOlvidasteC).setOnClickListener {
             startActivity(Intent(this, RecuperarContrasenaActivity::class.java))
         }
-
-        // Listener para "Crear cuenta"
         findViewById<TextView>(R.id.textoCrearCuenta).setOnClickListener {
             startActivity(Intent(this, RegistroActivity::class.java))
         }

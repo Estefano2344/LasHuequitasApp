@@ -64,7 +64,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        // Pasar resenaRepository al adapter
         searchResultsAdapter = RestaurantSearchAdapter(emptyList(), resenaRepository)
         recyclerViewSearchResults.layoutManager = LinearLayoutManager(this)
         recyclerViewSearchResults.adapter = searchResultsAdapter
@@ -76,10 +75,7 @@ class SearchActivity : AppCompatActivity() {
             noResultsMessage.visibility = View.GONE
             return
         }
-
-        // Use buscarRestaurantsPorNombre from ResenaRepository for direct restaurant search
         val results = resenaRepository.buscarRestaurantsPorNombre(query)
-
         if (results.isEmpty()) {
             noResultsMessage.visibility = View.VISIBLE
         } else {

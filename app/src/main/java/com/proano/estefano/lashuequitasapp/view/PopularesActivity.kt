@@ -33,24 +33,20 @@ class PopularesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_populares)
 
-        // Ajuste de inset para edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Inicializar repositorios y session manager
         sessionManager = SessionManager(this)
         resenaRepository = ResenaRepository(this)
 
-        // Verificar si el usuario está logueado
         if (!sessionManager.isLoggedIn()) {
             navigateToLogin()
             return
         }
 
-        // Inicializar vistas
         popularRestaurantsContainer = findViewById(R.id.popularRestaurantsContainer)
         noRestaurantsMessage = findViewById(R.id.noRestaurantsMessage)
 
@@ -72,7 +68,6 @@ class PopularesActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Cerrar Activity al pulsar la flecha de atrás
         findViewById<ImageView>(R.id.closeProfile).setOnClickListener {
             finish()
         }
@@ -80,7 +75,7 @@ class PopularesActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNav.selectedItemId = R.id.nav_populares // Marcar como seleccionado
+        bottomNav.selectedItemId = R.id.nav_populares
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -92,7 +87,6 @@ class PopularesActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_populares -> {
-                    // Ya estamos en la pantalla de populares
                     true
                 }
                 R.id.nav_postear -> {
@@ -147,7 +141,6 @@ class PopularesActivity : AppCompatActivity() {
             reviewCountTextView.text = getString(R.string.resenas_format, restaurant.reviewCount)
             foodTypeTextView.text = restaurant.foodType
 
-            // Obtener información adicional del restaurante desde las reseñas
             val restaurantReviews = resenaRepository.buscarResenasPorNombreRestaurante(restaurant.name)
             val priceRange = if (restaurantReviews.isNotEmpty()) {
                 restaurantReviews.first().rangoPrecio
@@ -156,7 +149,6 @@ class PopularesActivity : AppCompatActivity() {
             }
             priceRangeTextView.text = priceRange
 
-            // Obtener la imagen más reciente del restaurante desde las reseñas
             val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
 
             if (!latestImagePath.isNullOrEmpty()) {
@@ -174,7 +166,6 @@ class PopularesActivity : AppCompatActivity() {
                 loadDefaultRestaurantImage(restaurant, imageView)
             }
 
-            // Configurar el botón "Ver Restaurante"
             viewRestaurantButton.setOnClickListener {
                 val intent = Intent(this, RestaurantDetailActivity::class.java)
                 intent.putExtra("restaurant_data", restaurant)

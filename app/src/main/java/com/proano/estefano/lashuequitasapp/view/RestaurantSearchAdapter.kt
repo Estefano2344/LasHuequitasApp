@@ -40,11 +40,9 @@ class RestaurantSearchAdapter(
         holder.ratingTextView.text = context.getString(R.string.puntuacion_format, restaurant.rating)
         holder.reviewCountTextView.text = context.getString(R.string.resenas_format, restaurant.reviewCount)
 
-        // Obtener la imagen más reciente del restaurante desde las reseñas
         val latestImagePath = resenaRepository.getLatestRestaurantImage(restaurant.name)
 
         if (!latestImagePath.isNullOrEmpty()) {
-            // Si hay una imagen de reseña, usarla
             val imageFile = File(latestImagePath)
             if (imageFile.exists()) {
                 Glide.with(context)
@@ -56,11 +54,9 @@ class RestaurantSearchAdapter(
                 loadDefaultImage(context, restaurant, holder.imageView)
             }
         } else {
-            // Si no hay imagen de reseña, usar la lógica original
             loadDefaultImage(context, restaurant, holder.imageView)
         }
 
-        // Agregar el click listener para abrir el detalle del restaurante
         holder.itemView.setOnClickListener {
             val intent = Intent(context, RestaurantDetailActivity::class.java)
             intent.putExtra("restaurant_data", restaurant)

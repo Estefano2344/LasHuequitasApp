@@ -44,7 +44,7 @@ class RegistroActivity : AppCompatActivity() {
         initViews()
         setupObservers()
         setupListeners()
-        setupChipColorFeedback() // ← NUEVO
+        setupChipColorFeedback()
     }
 
     private fun initViews() {
