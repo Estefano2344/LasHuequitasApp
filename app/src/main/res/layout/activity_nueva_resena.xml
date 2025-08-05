@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calificación"
+                android:text="@string/title_calificacion"
                 android:textSize="16sp"
                 android:textColor="@color/brown_textFillFields_percentRating"
                 android:layout_marginTop="16dp"/>
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fotografías"
+                android:text="@string/title_fotografia"
                 android:textSize="16sp"
                 android:textColor="@color/brown_textFillFields_percentRating"
                 android:layout_marginTop="16dp"/>
@@ -140,7 +140,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Cámara"
+                        android:text="@string/camera"
                         android:textColor="@color/white"
                         android:background="@drawable/btn_background"
                         android:layout_marginEnd="4dp"/>
@@ -150,7 +150,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Galería"
+                        android:text="@string/galery"
                         android:textColor="@color/white"
                         android:background="@drawable/btn_background"
                         android:layout_marginStart="4dp"/>
@@ -171,7 +171,7 @@
                 android:id="@+id/comentariosResena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Escribe tu opinión..."
+                android:hint="@string/escribeTuOpinion"
                 android:padding="12dp"
                 android:minLines="3"
                 android:gravity="top|start"

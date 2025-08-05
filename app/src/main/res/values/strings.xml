@@ -38,6 +38,7 @@
     <string name="hint_ubicacion">Ubicación</string>
     <string name="hint_subir_imagen">Subir Imagen</string>
     <string name="title_calificacion">Calificación</string>
+    <string name="title_fotografia">Fotografías</string>
     <string name="title_subir">Agrega una foto de tu comida</string>
     <string name="title_populares">Populares</string>
     <string name="hintPrecio">$$ • Rápida</string>
@@ -119,6 +120,7 @@
     <string name="agregarComentario">Agregar comentario</string>
     <string name="calificarResena">Calificar Reseña</string>
     <string name="escribeTuComentario">Escribe tu comentario...</string>
+    <string name="escribeTuOpinion">Escribe tu opinión...</string>
     <string name="restaurantes_recomendados">Restaurantes recomendados</string>
     <string name="restaurant">Restaurante</string>
     <string name="view_review">Ver Reseñas</string>
