@@ -35,7 +35,6 @@ class NuevoComentarioActivity : AppCompatActivity() {
             insets
         }
 
-        // Obtener el ID de la reseña desde el Intent
         resenaId = intent.getLongExtra("resena_id", -1)
 
         if (resenaId == -1L) {
@@ -105,7 +104,6 @@ class NuevoComentarioActivity : AppCompatActivity() {
             return
         }
 
-        // Verificar que el usuario esté logueado
         if (!sessionManager.isLoggedIn()) {
             Toast.makeText(this, "Debes iniciar sesión para comentar", Toast.LENGTH_SHORT).show()
             finish()
@@ -118,7 +116,6 @@ class NuevoComentarioActivity : AppCompatActivity() {
             return
         }
 
-        // Crear el comentario
         comentarioViewModel.crearComentario(resenaId, userId, contenidoComentario)
     }
 }

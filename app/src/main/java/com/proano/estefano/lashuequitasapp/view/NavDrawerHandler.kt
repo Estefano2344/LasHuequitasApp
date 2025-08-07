@@ -41,11 +41,9 @@ class NavDrawerHandler(
                     .placeholder(R.drawable.perfilexam) // Imagen por defecto
                     .into(imageView)
             } else {
-                // Si el archivo no existe, mostrar imagen por defecto
                 imageView.setImageResource(R.drawable.perfilexam)
             }
         } else {
-            // Si no hay ruta, mostrar imagen por defecto
             imageView.setImageResource(R.drawable.perfilexam)
         }
     }

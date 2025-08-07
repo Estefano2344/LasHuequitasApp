@@ -27,7 +27,6 @@ class ImageAdapter(
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.imageView.setImageURI(imageList[position])
 
-        // Configurar botón de eliminar si existe
         holder.removeButton?.setOnClickListener {
             onImageRemove?.invoke(position)
         }

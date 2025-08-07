@@ -27,11 +27,8 @@ import com.proano.estefano.lashuequitasapp.viewmodel.SaveResenaResult
 
 class NuevaResenaActivity : AppCompatActivity() {
 
-    // ViewModel
     private lateinit var viewModel: NuevaResenaViewModel
     private lateinit var sessionManager: SessionManager
-
-    // Definir las vistas
     private lateinit var nombreRestaurante: EditText
     private lateinit var ubicacion: EditText
     private lateinit var rangoPrecio: Spinner
@@ -43,20 +40,12 @@ class NuevaResenaActivity : AppCompatActivity() {
     private lateinit var ratingBar: RatingBar
     private lateinit var comentariosResena: EditText
     private lateinit var recyclerViewImages: RecyclerView
-
-    // Botones para cámara y galería
     private lateinit var btnCamara: Button
     private lateinit var btnGaleria: Button
-
-    // Adaptador para las imágenes
     private lateinit var imageAdapter: ImageAdapter
-
-    // Constantes para permisos y solicitudes
     private val CAMERA_PERMISSION_REQUEST = 100
-    private val STORAGE_PERMISSION_REQUEST = 101 // Usado para READ_EXTERNAL_STORAGE o READ_MEDIA_IMAGES
-
-    // Variables para las imágenes
-    private var imageUri: Uri? = null // Para almacenar la URI de la imagen capturada por la cámara
+    private val STORAGE_PERMISSION_REQUEST = 101
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,13 +103,11 @@ class NuevaResenaActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observar el resultado del guardado
         viewModel.saveResult.observe(this) { result ->
             when (result) {
                 is SaveResenaResult.Success -> {
                     Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
                     clearFields()
-                    // Opcional: navegar de vuelta al home
                     navigateToHome()
                 }
                 is SaveResenaResult.Error -> {
@@ -129,7 +116,6 @@ class NuevaResenaActivity : AppCompatActivity() {
             }
         }
 
-        // Observar el estado de carga
         viewModel.isLoading.observe(this) { isLoading ->
             btnSubir.isEnabled = !isLoading
             if (isLoading) {
@@ -139,7 +125,6 @@ class NuevaResenaActivity : AppCompatActivity() {
             }
         }
 
-        // Observar la lista de imágenes
         viewModel.imagesList.observe(this) { images ->
             imageAdapter.updateImages(images)
             updateImageVisibility(images)
@@ -171,14 +156,12 @@ class NuevaResenaActivity : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
-        // Configurar Spinner para "Rango de Precio"
         val rangoAdapter = ArrayAdapter.createFromResource(
             this, R.array.rango_precio, android.R.layout.simple_spinner_item
         )
         rangoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         rangoPrecio.adapter = rangoAdapter
 
-        // Configurar Spinner para "Tipo de Comida"
         val tipoAdapter = ArrayAdapter.createFromResource(
             this, R.array.tipo_comida, android.R.layout.simple_spinner_item
         )
@@ -236,7 +219,6 @@ class NuevaResenaActivity : AppCompatActivity() {
         }
     }
 
-    // === MÉTODOS DE PERMISOS Y CÁMARA ===
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
             PackageManager.PERMISSION_GRANTED
@@ -315,7 +297,6 @@ class NuevaResenaActivity : AppCompatActivity() {
         }
     }
 
-    // Manejar respuestas de permisos
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

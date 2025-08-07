@@ -155,12 +155,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    // Modified displayRestaurants to accept a click listener for each item
-    // Reemplazar el método displayRestaurants en HomeActivity con esta versión actualizada
-
-    // Reemplazar el método displayRestaurants en HomeActivity con esta versión actualizada
-// También agregar el import necesario: import java.io.File
-
     private fun displayRestaurants(restaurants: List<Restaurant>, container: LinearLayout, clickListener: (Restaurant) -> Unit) {
         container.removeAllViews()
 
